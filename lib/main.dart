@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:job_finder/views/components/job_details.dart';
 import 'package:job_finder/views/pages/home_page.dart';
 
 import 'consts/colors.dart';
