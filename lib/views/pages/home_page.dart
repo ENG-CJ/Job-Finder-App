@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:job_finder/consts/colors.dart';
+import 'package:job_finder/mixins/no_data_found_error.dart';
 import 'package:job_finder/util/helpers/text_helper.dart';
 import 'package:job_finder/util/icon_image.dart';
 import 'package:job_finder/util/icon_text.dart';
@@ -10,6 +11,7 @@ import 'package:job_finder/util/text.dart';
 import 'package:job_finder/views/components/banner_top.dart';
 
 import '../../consts/menus_list.dart';
+import '../../mixins/listview_builder_job_card.dart';
 import '../../modals/jobs/job_modal.dart';
 import '../../util/buton.dart';
 import '../../util/categories.dart';
@@ -20,7 +22,7 @@ import 'package:timeago/timeago.dart' as timeago;
 
 import '../components/login_mode_profile.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatelessWidget with BuildListViewJobCard {
   const Home({super.key});
   static var categories = [
     "Software Engineering",
@@ -75,7 +77,9 @@ class Home extends StatelessWidget {
               fontSize: 20),
         ),
         actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.search)),
+          IconButton(onPressed: () {
+            showSearch(context: context, delegate: JobSearchDelegate(jobList: jobs));
+          }, icon: Icon(Icons.search)),
           IconButton(onPressed: () {}, icon: Icon(Icons.refresh)),
         ],
       ),
@@ -199,19 +203,75 @@ class Home extends StatelessWidget {
                     family: "Poppins SemiBold"),
               ),
             ),
-            ListView.builder(
-                itemCount: jobs.length,
-                shrinkWrap: true,
-                primary: false,
-                itemBuilder: (_, index) {
-                  return JobCard(job: jobs[index]);
-                })
+            buildJobListView(context,jobs)
           ],
         ),
       ),
     );
   }
+
 }
+
+
+
+class JobSearchDelegate extends SearchDelegate with BuildListViewJobCard,NoDataErrorMixin{
+  final List<Job> jobList;
+  JobSearchDelegate({required this.jobList}):super(
+  keyboardType: TextInputType.text
+);
+
+
+@override
+  String? get searchFieldLabel => "Search Job...";
+
+  @override
+  TextStyle? get searchFieldStyle => TextStyle(
+    color: colors['secondary'],
+    fontFamily: "Poppins Medium",
+    fontSize: 18
+  );
+
+  @override
+  List<Widget>? buildActions(BuildContext context) {
+
+    return[
+      IconButton(onPressed: (){
+        query='';
+      }, icon: FaIcon(FontAwesomeIcons.xmark))
+    ];
+  }
+
+  @override
+  Widget? buildLeading(BuildContext context) {
+   return IconButton(onPressed: (){
+     close(context, null);
+   }, icon: FaIcon(FontAwesomeIcons.angleLeft));
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    return buildJobListView(context, jobList);
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    List<Job> matchedResults=[];
+    for(var item in jobList) {
+      if(item.jobTitle.toLowerCase().contains(query.toLowerCase())) {
+        matchedResults.add(item);
+      }
+    }
+    if(matchedResults.isNotEmpty) {
+      return buildJobListView(context, matchedResults);
+    }
+
+    return noDataError(context,close);
+  }
+
+
+
+}
+
 
 
 
