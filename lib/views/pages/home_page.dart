@@ -50,6 +50,14 @@ class Home extends StatelessWidget with BuildListViewJobCard {
             "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate",
         numberOfApplicants: 100,
         timePosted: timeago.format(DateTime.now().subtract(Duration(days: 2)))),
+
+
+    Job(jobTitle: "Social Media Marketer", corporation: "Hilaal, Inc", companyLogoPath: "assets/hilal.png",
+        jobDescription: "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate",
+        numberOfApplicants: 300 ,
+        softSkills: ["Design","Teaching","Blender","Copy Writing","Canva"],
+        about: "We are seeking a talented Social Media Marketer to elevate our brand's online presence and engagement. In this role, you'll be responsible for crafting captivating content, managing social media platforms, and driving meaningful interactions with our target audience. Your creative approach and strategic thinking will play a pivotal role in expanding our brand's influence in the digital landscape. As a Social Media Marketer, you'll have the exciting opportunity to develop and implement dynamic social media strategies across various platforms. Your eye for engaging visuals and ability to craft compelling captions will help us effectively convey our brand's message and values. By staying up-to-date with the latest social media trends, you'll ensure our content remains fresh and relevant. Join our team and shape the way our audience perceives and engages with our brand on social media.",
+
     Job(
         jobTitle: "Social Media Marketer",
         corporation: "Hilaal, Inc",
@@ -57,6 +65,7 @@ class Home extends StatelessWidget with BuildListViewJobCard {
         jobDescription:
             "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate",
         numberOfApplicants: 300,
+
         timePosted: timeago.format(DateTime.now().subtract(Duration(days: 6))))
   ];
 
