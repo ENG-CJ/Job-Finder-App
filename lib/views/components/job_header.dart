@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../consts/colors.dart';
@@ -8,11 +9,15 @@ import '../../util/text.dart';
 
 class JobHeader extends StatelessWidget {
   final String jobTitle,company,logo;
+  final void Function()? onClickIcon;
+  final IconData icon;
   const JobHeader({
     super.key,
     required this.jobTitle,
     required this.company,
     required this.logo,
+    this.icon=FontAwesomeIcons.bookmark,
+    this.onClickIcon
   });
 
   @override
@@ -52,7 +57,10 @@ class JobHeader extends StatelessWidget {
             )
           ],
         ),
-        FaIcon(FontAwesomeIcons.bookmark)
+        InkWell(
+          onTap: onClickIcon,
+          child: FaIcon(icon),
+        )
       ],
     );
   }
