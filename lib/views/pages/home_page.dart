@@ -3,12 +3,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:job_finder/consts/colors.dart';
+import 'package:job_finder/mixins/bottom_navigation_mixin.dart';
 import 'package:job_finder/mixins/no_data_found_error.dart';
 import 'package:job_finder/util/helpers/text_helper.dart';
 import 'package:job_finder/util/icon_image.dart';
 import 'package:job_finder/util/icon_text.dart';
 import 'package:job_finder/util/text.dart';
 import 'package:job_finder/views/components/banner_top.dart';
+import 'package:job_finder/views/pages/applied_page.dart';
+import 'package:job_finder/views/pages/home_view.dart';
 
 import '../../consts/menus_list.dart';
 import '../../mixins/listview_builder_job_card.dart';
@@ -18,57 +21,23 @@ import '../../util/categories.dart';
 import '../../util/profile.dart';
 import '../components/job_card.dart';
 import '../components/job_header.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 import '../components/login_mode_profile.dart';
 
-class Home extends StatelessWidget with BuildListViewJobCard {
-  const Home({super.key});
-  static var categories = [
-    "Software Engineering",
-    "UI/UX Designer",
-    "Database Admin",
-    "Graphic Designer",
-    "Analytical",
-    "Help Desk"
+class Home extends StatefulWidget  {
+  const  Home({super.key});
+
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> with BottomNavigationBarMixin {
+
+  final pages=[
+    HomePage(),
+    AppliedPage(),
   ];
-  static List<Job> jobs = [
-    Job(
-        jobTitle: "Agency Business Lead",
-        corporation: "Google, Inc",
-        companyLogoPath: "assets/google.png",
-        jobDescription:
-            "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying",
-        numberOfApplicants: 19,
-        timePosted:
-            timeago.format(DateTime.now().subtract(Duration(minutes: 6)))),
-    Job(
-        jobTitle: "Software Tester",
-        corporation: "Afro Tech",
-        companyLogoPath: "assets/afro.png",
-        jobDescription:
-            "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate",
-        numberOfApplicants: 100,
-        timePosted: timeago.format(DateTime.now().subtract(Duration(days: 2)))),
-
-
-    Job(jobTitle: "Social Media Marketer", corporation: "Hilaal, Inc", companyLogoPath: "assets/hilal.png",
-        jobDescription: "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate",
-        numberOfApplicants: 300 ,
-        softSkills: ["Design","Teaching","Blender","Copy Writing","Canva"],
-        about: "We are seeking a talented Social Media Marketer to elevate our brand's online presence and engagement. In this role, you'll be responsible for crafting captivating content, managing social media platforms, and driving meaningful interactions with our target audience. Your creative approach and strategic thinking will play a pivotal role in expanding our brand's influence in the digital landscape. As a Social Media Marketer, you'll have the exciting opportunity to develop and implement dynamic social media strategies across various platforms. Your eye for engaging visuals and ability to craft compelling captions will help us effectively convey our brand's message and values. By staying up-to-date with the latest social media trends, you'll ensure our content remains fresh and relevant. Join our team and shape the way our audience perceives and engages with our brand on social media.",
-      timePosted: '3days',
-    ),
-    Job(
-        jobTitle: "Social Media Marketer",
-        corporation: "Hilaal, Inc",
-        companyLogoPath: "assets/hilal.png",
-        jobDescription:
-            "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate",
-        numberOfApplicants: 300,
-
-        timePosted: timeago.format(DateTime.now().subtract(Duration(days: 6))))
-  ];
+  int currentIndex=0;
 
 
   @override
@@ -88,33 +57,20 @@ class Home extends StatelessWidget with BuildListViewJobCard {
         ),
         actions: [
           IconButton(onPressed: () {
-            showSearch(context: context, delegate: JobSearchDelegate(jobList: jobs));
+            showSearch(context: context, delegate: JobSearchDelegate(jobList: HomePage.jobs));
           }, icon: Icon(Icons.search)),
           IconButton(onPressed: () {}, icon: Icon(Icons.refresh)),
         ],
       ),
-      bottomNavigationBar: CurvedNavigationBar(
-        backgroundColor: colors['white-color'] as Color,
-        color: colors['primary'] as Color,
-        animationCurve: Curves.ease,
-        items: [
-          FaIcon(
-            FontAwesomeIcons.house,
-            color: Colors.white,
-          ),
-          FaIcon(
-            FontAwesomeIcons.suitcase,
-            color: Colors.white,
-          ),
-          FaIcon(
-            FontAwesomeIcons.bookmark,
-            color: Colors.white,
-          ),
-          FaIcon(
-            FontAwesomeIcons.user,
-            color: Colors.white,
-          ),
-        ],
+      bottomNavigationBar: curvedNavigationBar(currentIndex,
+      onClickIndex: (index){
+        if(index>1)
+          return;
+     setState(() {
+       currentIndex=index;
+     });
+      }
+
       ),
       drawer: Drawer(
         backgroundColor: Colors.white,
@@ -163,64 +119,12 @@ class Home extends StatelessWidget with BuildListViewJobCard {
           ],
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TopBanner(),
-            Padding(
-              padding: const EdgeInsets.only(top: 10, left: 15),
-              child: CText(
-                text: "Categories",
-                decorations: TextDecorations(
-                    color: colors['secondary'] as Color,
-                    fontSize: 22,
-                    family: "Poppins SemiBold"),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 15, left: 15),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    SizedBox(
-                      height: 50,
-                      child: ListView.separated(
-                        scrollDirection: Axis.horizontal,
-                        shrinkWrap: true,
-                        primary: false,
-                        itemBuilder: (_, index) {
-                          return Categories(categoryName: categories[index]);
-                        },
-                        separatorBuilder: (_, index) => SizedBox(
-                          width: 5,
-                        ),
-                        itemCount: categories.length,
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 20, left: 16),
-              child: CText(
-                text: "Poppular Jobs",
-                decorations: TextDecorations(
-                    color: colors['secondary'] as Color,
-                    fontSize: 22,
-                    family: "Poppins SemiBold"),
-              ),
-            ),
-            buildJobListView(context,jobs)
-          ],
-        ),
-      ),
+      body: pages[currentIndex],
     );
   }
-
 }
+
+
 
 
 
