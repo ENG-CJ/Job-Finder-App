@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:job_finder/util/buton.dart';
 import 'package:job_finder/util/helpers/text_helper.dart';
-import 'package:job_finder/util/messages.dart';
 import 'package:job_finder/util/text.dart';
 
 import '../../consts/colors.dart';
+import '../../mixins/messages.dart';
 import '../../modals/jobs/applied_jobs.dart';
 import '../../modals/jobs/job_modal.dart';
 import '../../util/icon_text.dart';
 import 'job_header.dart';
 
-class AppliedJobCard extends StatelessWidget {
+class AppliedJobCard extends StatelessWidget with Messages {
   final  AppliedJobs job;
   const AppliedJobCard({super.key,required this.job});
 
@@ -39,7 +39,7 @@ class AppliedJobCard extends StatelessWidget {
           JobHeader(
             onClickIcon: ()async{
               await showDialog(context: context, builder: (_){
-               return Messages.
+               return
                showConfirmation(
                    context, "Confirm To Delete This Repo Instead of Gardle? click yes or no", 
                    "Are You Sure",
