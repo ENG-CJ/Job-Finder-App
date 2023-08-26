@@ -66,8 +66,11 @@ class _LoginState extends State<Login> with TextFieldBorderDecorator, Messages {
           Positioned(
             top: -10,
             child: SizedBox(
-              child: Image.asset(
-                "assets/login-2.png",
+              child: Hero(
+                tag: "image-1",
+                child: Image.asset(
+                  "assets/login-2.png",
+                ),
               ),
             ),
           ),

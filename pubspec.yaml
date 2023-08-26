@@ -39,6 +39,7 @@ dependencies:
   font_awesome_flutter: ^10.5.0
   timeago: ^3.5.0
   line_awesome_flutter: ^2.0.0
+  flutter_onboarding_slider: ^1.0.10
 
 dev_dependencies:
   flutter_test:
