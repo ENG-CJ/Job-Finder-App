@@ -24,6 +24,53 @@ import '../components/job_header.dart';
 
 import '../components/login_mode_profile.dart';
 
+
+class Home extends StatelessWidget with BuildListViewJobCard {
+  const Home({super.key});
+  static var categories = [
+    "Software Engineering",
+    "UI/UX Designer",
+    "Database Admin",
+    "Graphic Designer",
+    "Analytical",
+    "Help Desk"
+  ];
+  static List<Job> jobs = [
+    Job(
+        jobTitle: "Agency Business Lead",
+        corporation: "Google, Inc",
+        companyLogoPath: "assets/google.png",
+        jobDescription:
+            "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying",
+        numberOfApplicants: 19,
+        timePosted:
+            timeago.format(DateTime.now().subtract(Duration(minutes: 6)))),
+    Job(
+        jobTitle: "Software Tester",
+        corporation: "Afro Tech",
+        companyLogoPath: "assets/afro.png",
+        jobDescription:
+            "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate",
+        numberOfApplicants: 100,
+        timePosted: timeago.format(DateTime.now().subtract(Duration(days: 2)))),
+
+
+    Job(jobTitle: "Social Media Marketer", corporation: "Hilaal, Inc", companyLogoPath: "assets/hilal.png",
+        jobDescription: "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate",
+        numberOfApplicants: 300 ,
+        softSkills: ["Design","Teaching","Blender","Copy Writing","Canva"],
+        about: "We are seeking a talented Social Media Marketer to elevate our brand's online presence and engagement. In this role, you'll be responsible for crafting captivating content, managing social media platforms, and driving meaningful interactions with our target audience. Your creative approach and strategic thinking will play a pivotal role in expanding our brand's influence in the digital landscape. As a Social Media Marketer, you'll have the exciting opportunity to develop and implement dynamic social media strategies across various platforms. Your eye for engaging visuals and ability to craft compelling captions will help us effectively convey our brand's message and values. By staying up-to-date with the latest social media trends, you'll ensure our content remains fresh and relevant. Join our team and shape the way our audience perceives and engages with our brand on social media.",
+        timePosted: timeago.format(DateTime.now().subtract(Duration(days: 2)))),
+    Job(
+        jobTitle: "Web Developer",
+        corporation: "Tombal ICT",
+        companyLogoPath: "assets/hilal.png",
+        jobDescription:
+            "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate",
+        numberOfApplicants: 300,
+
+        timePosted: timeago.format(DateTime.now().subtract(Duration(days: 6))))
+
 class Home extends StatefulWidget  {
   const  Home({super.key});
 
@@ -36,6 +83,7 @@ class _HomeState extends State<Home> with BottomNavigationBarMixin {
   final pages=[
     HomePage(),
     AppliedPage(),
+
   ];
   int currentIndex=0;
 
@@ -80,7 +128,7 @@ class _HomeState extends State<Home> with BottomNavigationBarMixin {
           children: [
             SizedBox(
               width: double.maxFinite,
-              height: 230,
+              height: 280,
               child: DrawerHeader(
                 decoration: BoxDecoration(
                     color: colors['primary']!.withOpacity(0.8) as Color,
@@ -102,7 +150,9 @@ class _HomeState extends State<Home> with BottomNavigationBarMixin {
                     itemBuilder: (_,index){
                     var menu=menus[index];
                       return ListTile(
-                        onTap: menu['onClick'],
+                        onTap: menu['onClick'] != null
+                          ? ()=> menu['onClick'](context)
+                          : null,
                         iconColor: colors['primary']!.withOpacity(0.7),
                         leading: menu['menuIcon'],
                         title: CText(text: menu['menuTitle'],
