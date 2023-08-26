@@ -172,7 +172,7 @@ class JobDetails extends StatelessWidget {
                 )
               ],
             ),
-            const SizedBox(
+             SizedBox(
               height: 10,
             ),
             /*  Soft Skills  */

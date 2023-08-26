@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:job_finder/views/components/job_details.dart';
+import 'package:job_finder/views/pages/applied_page.dart';
 import 'package:job_finder/views/pages/home_page.dart';
+import 'package:job_finder/views/pages/login_page.dart';
+import 'package:job_finder/views/pages/on_boarding.dart';
+import 'package:job_finder/views/pages/user_type_page.dart';
 
 import 'consts/colors.dart';
 
@@ -16,9 +20,12 @@ class JobFinder extends StatelessWidget {
   const JobFinder({super.key});
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return  MaterialApp(
+      theme: ThemeData().copyWith(
+        scaffoldBackgroundColor: const Color(0xfff4f4f4)
+      ),
       debugShowCheckedModeBanner: false,
-      home: Home(),
+      home: OnBoarding(),
     );
   }
 }

@@ -3,12 +3,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:job_finder/consts/colors.dart';
+import 'package:job_finder/mixins/bottom_navigation_mixin.dart';
 import 'package:job_finder/mixins/no_data_found_error.dart';
 import 'package:job_finder/util/helpers/text_helper.dart';
 import 'package:job_finder/util/icon_image.dart';
 import 'package:job_finder/util/icon_text.dart';
 import 'package:job_finder/util/text.dart';
 import 'package:job_finder/views/components/banner_top.dart';
+import 'package:job_finder/views/pages/applied_page.dart';
+import 'package:job_finder/views/pages/home_view.dart';
 
 import '../../consts/menus_list.dart';
 import '../../mixins/listview_builder_job_card.dart';
@@ -18,9 +21,9 @@ import '../../util/categories.dart';
 import '../../util/profile.dart';
 import '../components/job_card.dart';
 import '../components/job_header.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 import '../components/login_mode_profile.dart';
+
 
 class Home extends StatelessWidget with BuildListViewJobCard {
   const Home({super.key});
@@ -67,7 +70,22 @@ class Home extends StatelessWidget with BuildListViewJobCard {
         numberOfApplicants: 300,
 
         timePosted: timeago.format(DateTime.now().subtract(Duration(days: 6))))
+
+class Home extends StatefulWidget  {
+  const  Home({super.key});
+
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> with BottomNavigationBarMixin {
+
+  final pages=[
+    HomePage(),
+    AppliedPage(),
+
   ];
+  int currentIndex=0;
 
 
   @override
@@ -87,33 +105,20 @@ class Home extends StatelessWidget with BuildListViewJobCard {
         ),
         actions: [
           IconButton(onPressed: () {
-            showSearch(context: context, delegate: JobSearchDelegate(jobList: jobs));
+            showSearch(context: context, delegate: JobSearchDelegate(jobList: HomePage.jobs));
           }, icon: Icon(Icons.search)),
           IconButton(onPressed: () {}, icon: Icon(Icons.refresh)),
         ],
       ),
-      bottomNavigationBar: CurvedNavigationBar(
-        backgroundColor: colors['white-color'] as Color,
-        color: colors['primary'] as Color,
-        animationCurve: Curves.ease,
-        items: [
-          FaIcon(
-            FontAwesomeIcons.house,
-            color: Colors.white,
-          ),
-          FaIcon(
-            FontAwesomeIcons.suitcase,
-            color: Colors.white,
-          ),
-          FaIcon(
-            FontAwesomeIcons.bookmark,
-            color: Colors.white,
-          ),
-          FaIcon(
-            FontAwesomeIcons.user,
-            color: Colors.white,
-          ),
-        ],
+      bottomNavigationBar: curvedNavigationBar(currentIndex,
+      onClickIndex: (index){
+        if(index>1)
+          return;
+     setState(() {
+       currentIndex=index;
+     });
+      }
+
       ),
       drawer: Drawer(
         backgroundColor: Colors.white,
@@ -164,64 +169,12 @@ class Home extends StatelessWidget with BuildListViewJobCard {
           ],
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TopBanner(),
-            Padding(
-              padding: const EdgeInsets.only(top: 10, left: 15),
-              child: CText(
-                text: "Categories",
-                decorations: TextDecorations(
-                    color: colors['secondary'] as Color,
-                    fontSize: 22,
-                    family: "Poppins SemiBold"),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 15, left: 15),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    SizedBox(
-                      height: 50,
-                      child: ListView.separated(
-                        scrollDirection: Axis.horizontal,
-                        shrinkWrap: true,
-                        primary: false,
-                        itemBuilder: (_, index) {
-                          return Categories(categoryName: categories[index]);
-                        },
-                        separatorBuilder: (_, index) => SizedBox(
-                          width: 5,
-                        ),
-                        itemCount: categories.length,
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 20, left: 16),
-              child: CText(
-                text: "Poppular Jobs",
-                decorations: TextDecorations(
-                    color: colors['secondary'] as Color,
-                    fontSize: 22,
-                    family: "Poppins SemiBold"),
-              ),
-            ),
-            buildJobListView(context,jobs)
-          ],
-        ),
-      ),
+      body: pages[currentIndex],
     );
   }
-
 }
+
+
 
 
 

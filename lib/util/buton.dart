@@ -9,10 +9,14 @@ class CButton extends StatelessWidget {
   final Widget widget;
   final double? width,height,radius,padding;
   final Color? backgroundColor;
+  final Color? selectedColor;
   final Function()? onClicked;
+  final bool selected;
   const CButton({
     super.key,
+    this.selected=false,
     required this.widget,
+    this.selectedColor,
     this.onClicked,
     this.backgroundColor,
     this.height,this.width,this.radius,this.padding
@@ -26,7 +30,8 @@ class CButton extends StatelessWidget {
         width: width??100,
         padding: EdgeInsets.all(padding??10),
         decoration: BoxDecoration(
-            color: backgroundColor??colors['light-blue'],
+
+            color: selected? selectedColor : backgroundColor??colors['light-blue'],
             borderRadius: BorderRadius.circular(radius??10)
         ),
         child: widget,

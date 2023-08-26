@@ -41,6 +41,7 @@ class JobCard extends StatelessWidget {
             color: colors['white-color'],
             borderRadius: const BorderRadius.all(Radius.circular(16))),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             JobHeader(
               company: job.corporation,
