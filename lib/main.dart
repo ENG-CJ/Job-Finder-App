@@ -5,6 +5,7 @@ import 'package:job_finder/views/pages/applied_page.dart';
 import 'package:job_finder/views/pages/home_page.dart';
 import 'package:job_finder/views/pages/login_page.dart';
 import 'package:job_finder/views/pages/on_boarding.dart';
+import 'package:job_finder/views/pages/user_type_page.dart';
 
 import 'consts/colors.dart';
 

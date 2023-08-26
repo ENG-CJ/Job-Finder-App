@@ -5,6 +5,7 @@ import 'package:job_finder/consts/colors.dart';
 import 'package:job_finder/util/helpers/text_helper.dart';
 import 'package:job_finder/util/text.dart';
 import 'package:job_finder/views/pages/login_page.dart';
+import 'package:job_finder/views/pages/user_type_page.dart';
 class OnBoarding extends StatelessWidget {
   const OnBoarding({super.key});
 
@@ -15,7 +16,7 @@ class OnBoarding extends StatelessWidget {
      pageBackgroundColor: Colors.white,
       finishButtonText: "Get Started",
       trailingFunction: ()=> Navigator.push(context, MaterialPageRoute(builder: (_)=> Login())),
-      onFinish: ()=> Navigator.push(context, MaterialPageRoute(builder: (_)=> Login())),
+      onFinish: ()=> Navigator.push(context, MaterialPageRoute(builder: (_)=> UserTypePage())),
       finishButtonStyle: FinishButtonStyle(
         backgroundColor: colors['primary'] as Color,
         elevation: 8,
