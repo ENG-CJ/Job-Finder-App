@@ -8,7 +8,6 @@ final  List<Map<String,dynamic>> menus=[
     "menuIcon": FaIcon(FontAwesomeIcons.house),
     "menuTitle": "Home",
     "trailing": FaIcon(FontAwesomeIcons.angleRight),
-    "onClick" : ()=> print('Hello Clciked From Map')
   },
   {
     "menuIcon": FaIcon(FontAwesomeIcons.bookJournalWhills),

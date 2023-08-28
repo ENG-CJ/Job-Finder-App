@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:job_finder/util/buton.dart';
 import 'package:job_finder/util/helpers/text_helper.dart';
 import 'package:job_finder/util/text.dart';
 
 import '../consts/colors.dart';
+import '../util/icon_text.dart';
 
 mixin Messages{
 
@@ -79,6 +81,48 @@ mixin Messages{
       actions: [
         CButton(
             onClicked: ()=> Navigator.pop(context),
+            backgroundColor:  colors['primary'] as Color,
+            widget: Center(child: CText(text: "Ok",
+              decorations: TextDecorations(
+                  color:  colors['white-color'] as Color,
+                  family: "Poppins SemiBold"
+              ),
+            ))),
+      ],
+    );
+  }
+
+
+  AlertDialog showInfo(BuildContext context,String message,[String infoTitle="Job Finder",void Function()? onOk]){
+    return AlertDialog(
+      title:IconText(icon: FontAwesomeIcons.info,iconLabel: infoTitle),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(17)
+      ),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          CText(text: message,
+            decorations: TextDecorations(
+                color: colors['secondary']!.withOpacity(0.8) as Color,
+                fontSize: 17,
+                family: "Poppins SemiBold",
+                height: 1.3
+            ),)
+        ],
+      ),
+      actions: [
+        CButton(
+            onClicked: (){
+              if(onOk!=null) {
+                onOk();
+
+              }
+              else {
+                Navigator.pop(context);
+              }
+            },
             backgroundColor:  colors['primary'] as Color,
             widget: Center(child: CText(text: "Ok",
               decorations: TextDecorations(

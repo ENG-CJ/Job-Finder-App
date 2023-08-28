@@ -31,3 +31,37 @@ const tOtherSkills= "Other Skills";
 const tBio= "bio";
 
 const tSaveBtn= "Save";
+
+//? -> User Registration
+String signUpTxt = "Sign Up";
+const tPassTxt = "Password";
+const tRegBtn = "Save";
+const welcomeTxt = "Almost there, please enter your  credentials \nto continue.";
+
+const signUpFullNameTft = "Enter your fullname";
+const signUpEmailTft = "Enter your e-mail";
+const signUpPasswordTft = "Enter your e-mail";
+const tSelectCity = "Enter City";
+const signUpTermsTxt = "Agree to our";
+const signUpConditionTxt = "I agree  to the";
+const tTermsAndConditions = "Terms of service";
+const signUpLoginTxt = "Login";
+const signUpHaveAnAccountTxt = "Already have an account?";
+const signUpWithGoogle = "Sign in with Google";
+const signUpWithApple = "Sign up with Apple";
+const signUpWithFacebook = "Sign up with Facebook";
+
+//? -> Company Registration
+String comRegTitle = "Welcome";
+String comSubTitle = "Enter Company or individual credentials to proceed";
+
+String comName = "Enter Company Name";
+String comEmail = "example@companyName.com";
+String comAddress = "Enter Address of the company";
+String comPhone = "Enter phone number of company";
+String comCity = "Enter City e.g Mogadishu";
+String comCountry = "Enter Country e.g Somalia";
+
+
+String comAddresses = "Location:";
+String comIndustry = "Industry Type:";
