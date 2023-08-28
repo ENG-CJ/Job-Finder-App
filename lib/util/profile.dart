@@ -5,21 +5,6 @@ class ProfileImage extends StatelessWidget {
   final Color? color;
   final String imagePath;
   final double? paddingAll;
-
-
-  const ProfileImage(
-      {super.key,
-      required this.imagePath,
-      this.color,
-      this.paddingAll,
-   });
-
-  @override
-  Widget build(BuildContext context) {
-    return CircleAvatar(
-      radius: 60,
-      backgroundColor: color ?? Colors.white,
-
   final bool asBackgroundImage;
   final double radius;
   const ProfileImage({
