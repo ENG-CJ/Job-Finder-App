@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:job_finder/consts/texts.dart';
+import 'package:job_finder/mixins/messages.dart';
 import 'package:job_finder/util/buton.dart';
 import 'package:job_finder/util/helpers/custom_text_field.dart';
 import 'package:job_finder/util/helpers/text_helper.dart';
@@ -10,7 +11,7 @@ import 'package:job_finder/util/text.dart';
 import '../../../consts/colors.dart';
 import '../login_page.dart';
 
-class UserReg extends StatelessWidget {
+class UserReg extends StatelessWidget  with Messages{
   const UserReg({super.key});
 
   @override
@@ -145,6 +146,18 @@ class UserReg extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: CButton(
+                  onClicked: (){
+                    showDialog(context: context, builder: (context){
+                      return showInfo(context,"No Database Configured, Only Click Ok to Continue😊","Jon Finder",
+                          () {
+                        Navigator.pop(context);
+                            Navigator.push(context, MaterialPageRoute(builder: (_)=> Login()));
+                          }
+
+                          );
+                    });
+
+                  },
                     width: double.maxFinite,
                     padding: 14,
                     radius: 4,

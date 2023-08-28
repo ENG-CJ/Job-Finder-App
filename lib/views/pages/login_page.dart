@@ -7,6 +7,7 @@ import 'package:job_finder/mixins/messages.dart';
 import 'package:job_finder/util/buton.dart';
 import 'package:job_finder/util/helpers/text_helper.dart';
 import 'package:job_finder/util/text.dart';
+import 'package:job_finder/views/pages/home_page.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -176,10 +177,15 @@ class _LoginState extends State<Login> with TextFieldBorderDecorator, Messages {
             padding: const EdgeInsets.only(top: 25, right: 10),
             child: CButton(
                 onClicked: () {
-                  showDialog(
-                      context: context,
-                      builder: (context) => showError(context,
-                          "You Provided Incorrect Email Address And Password"));
+                  showDialog(context: context, builder: (context){
+                    return showInfo(context,"No Database Configured, Only Click Ok to Continue😊","Jon Finder",
+                            () {
+                          Navigator.pop(context);
+                          Navigator.push(context, MaterialPageRoute(builder: (_)=> Home()));
+                        }
+
+                    );
+                  });
                 },
                 width: double.maxFinite,
                 padding: 20,

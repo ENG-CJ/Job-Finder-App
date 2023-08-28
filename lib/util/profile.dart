@@ -5,8 +5,6 @@ class ProfileImage extends StatelessWidget {
   final Color? color;
   final String imagePath;
   final double? paddingAll;
-
-
   final bool asBackgroundImage;
   final double radius;
   const ProfileImage({

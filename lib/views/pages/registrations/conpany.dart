@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:job_finder/consts/texts.dart';
+import 'package:job_finder/mixins/messages.dart';
 import 'package:job_finder/util/helpers/custom_text_field.dart';
 import 'package:job_finder/util/helpers/text_helper.dart';
 import 'package:job_finder/util/text.dart';
 
 import '../../../consts/colors.dart';
 import '../../../util/buton.dart';
+import '../login_page.dart';
 
-class RegisterCompany extends StatelessWidget {
+class RegisterCompany extends StatelessWidget with Messages{
   const RegisterCompany({super.key});
 
   @override
@@ -264,6 +266,17 @@ class RegisterCompany extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: CButton(
+                        onClicked: (){
+                          showDialog(context: context, builder: (context){
+                            return showInfo(context,"No Database Configured, Only Click Ok to Continue😊","Jon Finder",
+                                    () {
+                                  Navigator.pop(context);
+                                  Navigator.push(context, MaterialPageRoute(builder: (_)=> Login()));
+                                }
+
+                            );
+                          });
+                        },
                           width: double.maxFinite,
                           padding: 14,
                           radius: 4,
