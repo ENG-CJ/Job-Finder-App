@@ -7,6 +7,8 @@ import 'package:job_finder/util/buton.dart';
 import 'package:job_finder/util/helpers/text_helper.dart';
 import 'package:job_finder/util/radio_listile_button.dart';
 import 'package:job_finder/util/text.dart';
+import 'package:job_finder/views/pages/registrations/conpany.dart';
+import 'package:job_finder/views/pages/registrations/user_reg.dart';
 
 class UserTypePage extends StatefulWidget {
   const UserTypePage({super.key});
@@ -103,6 +105,14 @@ class _UserTypePageState extends State<UserTypePage> {
               CButton(
                 onClicked: (){
                   if(isSelected){
+                    if(user_profile == USER_PROFILE.company){
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterCompany()));
+                    }
+                    else{
+                      if(user_profile == USER_PROFILE.applicant){
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => UserReg()));
+                      }
+                    }
                     // route registration page, with the value of Selected Profile
                     return;
                   }

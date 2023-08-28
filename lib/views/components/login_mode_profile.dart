@@ -20,7 +20,7 @@ class LoginModeProfile extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.only(top: 10),
-          child: ProfileImage(imagePath: "assets/google.png",imgHeight: 20,imgWidth: 20),
+          child: ProfileImage(imagePath: "assets/google.png"),
         ),
 
         SizedBox(height: 4,),

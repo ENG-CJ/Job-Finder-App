@@ -157,6 +157,7 @@ class _LoginState extends State<Login> with TextFieldBorderDecorator, Messages {
                           icon: FaIcon(FontAwesomeIcons.eyeSlash),
                           onPressed: _showOrHidePassword,
                         ),
+
                   hintText: "Your Passcode",
                   border: OutlineInputBorder(),
                   enabledBorder: decorateBorder(
