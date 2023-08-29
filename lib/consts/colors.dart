@@ -3,6 +3,8 @@
 
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
+
 final colors=<String,Color>{
   "primary": Color(0xff7165d7),
   "white-color": Color(0xfffafafa),
@@ -13,5 +15,6 @@ final colors=<String,Color>{
   "orange-color": Color(0xffF6635C),
   "yellow-color": Color(0xffFFC436),
   "success-color": Color(0xff5D9C59),
+  "red-accent": Colors.redAccent,
 };
 
