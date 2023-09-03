@@ -12,7 +12,9 @@ class CustomTextField extends StatelessWidget
     required this.prefixIcon,
     this.obscureTxt,
     this.isHidenTxt,
-    this.showOrHidePassword,
+    this.showOrHidePassword, required this.controller,
+     this.validator, 
+      this.isRequired = false,
   });
 
   final TextInputType txtInputType;
@@ -21,6 +23,9 @@ class CustomTextField extends StatelessWidget
   final bool? obscureTxt;
   final bool? isHidenTxt;
   final VoidCallback? showOrHidePassword;
+  final TextEditingController controller;
+  final FormFieldValidator<String>? validator ;
+  final bool? isRequired;
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +38,7 @@ class CustomTextField extends StatelessWidget
         borderRadius: BorderRadius.circular(4),
       ),
       child: TextFormField(
+        controller: controller,
         keyboardType: txtInputType,
         textAlign: TextAlign.start,
         obscureText: obscureTxt ?? false,
@@ -55,6 +61,16 @@ class CustomTextField extends StatelessWidget
               : null,
           prefixIcon: prefixIcon,
         ),
+        validator: validator != null 
+          ?(value) {
+            if(isRequired! && (value == null || value.isEmpty)) {
+            return 'This field is required';
+          }
+          if(validator!(value) != null){
+            return 'Invalid input';
+          }
+          return null;
+        } : null,
       ),
     );
   }

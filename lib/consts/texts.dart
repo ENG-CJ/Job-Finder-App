@@ -1,4 +1,6 @@
-
+//? -> Shared
+String signUpTxt = "Sign Up";
+const tPassTxt = "Password";
 
 
 
@@ -33,8 +35,7 @@ const tBio= "bio";
 const tSaveBtn= "Save";
 
 //? -> User Registration
-String signUpTxt = "Sign Up";
-const tPassTxt = "Password";
+
 const tRegBtn = "Save";
 const welcomeTxt = "Almost there, please enter your  credentials \nto continue.";
 
@@ -61,6 +62,7 @@ String comAddress = "Enter Address of the company";
 String comPhone = "Enter phone number of company";
 String comCity = "Enter City e.g Mogadishu";
 String comCountry = "Enter Country e.g Somalia";
+String comPassword = "Enter Country e.g Somalia";
 
 
 String comAddresses = "Location:";
