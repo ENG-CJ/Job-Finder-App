@@ -2,8 +2,6 @@
 String signUpTxt = "Sign Up";
 const tPassTxt = "Password";
 
-
-
 //? ->  Details Page
 const detailPgTitle = "Details";
 const applyJobTxt = "Apply";
@@ -29,15 +27,16 @@ const tCity = "City";
 const tProfession = "Profession";
 const tDOP = "Date Of Birth";
 const tLanguages = "Languages";
-const tOtherSkills= "Other Skills";
-const tBio= "bio";
+const tOtherSkills = "Other Skills";
+const tBio = "bio";
 
-const tSaveBtn= "Save";
+const tSaveBtn = "Save";
 
 //? -> User Registration
 
 const tRegBtn = "Save";
-const welcomeTxt = "Almost there, please enter your  credentials \nto continue.";
+const welcomeTxt =
+    "Almost there, please enter your  credentials \nto continue.";
 
 const signUpFullNameTft = "Enter your fullname";
 const signUpEmailTft = "Enter your e-mail";
@@ -61,9 +60,9 @@ String comEmail = "example@companyName.com";
 String comAddress = "Enter Address of the company";
 String comPhone = "Enter phone number of company";
 String comCity = "Enter City e.g Mogadishu";
-String comCountry = "Enter Country e.g Somalia";
+String comCountry = "Enter Region/City";
 String comPassword = "Enter Country e.g Somalia";
-
 
 String comAddresses = "Location:";
 String comIndustry = "Industry Type:";
+String descriptionDetails = "Profile Description (optional)";
