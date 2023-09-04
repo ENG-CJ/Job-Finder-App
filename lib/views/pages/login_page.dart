@@ -4,10 +4,13 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:job_finder/consts/colors.dart';
 import 'package:job_finder/mixins/input_border_decoration.dart';
 import 'package:job_finder/mixins/messages.dart';
+import 'package:job_finder/providers/users/user_provider.dart';
+import 'package:job_finder/services/local/local_storage.dart';
 import 'package:job_finder/util/buton.dart';
 import 'package:job_finder/util/helpers/text_helper.dart';
 import 'package:job_finder/util/text.dart';
 import 'package:job_finder/views/pages/home_page.dart';
+import 'package:provider/provider.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -83,7 +86,11 @@ class _LoginState extends State<Login> with TextFieldBorderDecorator, Messages {
   void _showOrHidePassword() => setState(() {
         _isHiddenText = !_isHiddenText;
       });
+  var email = TextEditingController();
+  var pass = TextEditingController();
   Widget _buildLoginContent(BuildContext context) {
+    var provider = Provider.of<UserProvider>(context);
+
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -113,6 +120,7 @@ class _LoginState extends State<Login> with TextFieldBorderDecorator, Messages {
           Padding(
             padding: const EdgeInsets.only(top: 10, right: 10),
             child: TextFormField(
+              controller: email,
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
                   suffixIconColor: colors['primary']!.withOpacity(0.7) as Color,
@@ -145,6 +153,7 @@ class _LoginState extends State<Login> with TextFieldBorderDecorator, Messages {
           Padding(
             padding: const EdgeInsets.only(top: 10, right: 10),
             child: TextFormField(
+              controller: pass,
               obscureText: _isHiddenText,
               keyboardType: TextInputType.visiblePassword,
               decoration: InputDecoration(
@@ -158,7 +167,6 @@ class _LoginState extends State<Login> with TextFieldBorderDecorator, Messages {
                           icon: FaIcon(FontAwesomeIcons.eyeSlash),
                           onPressed: _showOrHidePassword,
                         ),
-
                   hintText: "Your Passcode",
                   border: OutlineInputBorder(),
                   enabledBorder: decorateBorder(
@@ -176,15 +184,28 @@ class _LoginState extends State<Login> with TextFieldBorderDecorator, Messages {
           Padding(
             padding: const EdgeInsets.only(top: 25, right: 10),
             child: CButton(
-                onClicked: () {
-                  showDialog(context: context, builder: (context){
-                    return showInfo(context,"No Database Configured, Only Click Ok to Continue😊","Jon Finder",
-                            () {
-                          Navigator.pop(context);
-                          Navigator.push(context, MaterialPageRoute(builder: (_)=> Home()));
-                        }
-
-                    );
+                onClicked: () async {
+                  provider.login({
+                    "email": email.text,
+                    "password": pass.text,
+                  }).whenComplete(() {
+                    if (provider.user == null) {
+                      showDialog(
+                          context: context,
+                          builder: (_) => showError(
+                                context,
+                                "Email or Password is Incorrect, Please Provide Valid Account",
+                              ));
+                    } else {
+                      LocalStorageSharedPref().storeUserDetails({
+                        "type": provider.user!.type,
+                        "email": provider.user!.email,
+                        "username": provider.user!.username,
+                      }).whenComplete(() {
+                        Navigator.push(
+                            context, MaterialPageRoute(builder: (_) => Home()));
+                      });
+                    }
                   });
                 },
                 width: double.maxFinite,
@@ -192,13 +213,15 @@ class _LoginState extends State<Login> with TextFieldBorderDecorator, Messages {
                 radius: 20,
                 backgroundColor: colors['primary'] as Color,
                 widget: Center(
-                    child: CText(
-                  text: "LOGIN",
-                  decorations: TextDecorations(
-                      fontSize: 18,
-                      family: "Poppins SemiBold",
-                      color: Colors.white),
-                ))),
+                    child: provider.isSaving
+                        ? CircularProgressIndicator()
+                        : CText(
+                            text: "LOGIN",
+                            decorations: TextDecorations(
+                                fontSize: 18,
+                                family: "Poppins SemiBold",
+                                color: Colors.white),
+                          ))),
           )
         ],
       ),

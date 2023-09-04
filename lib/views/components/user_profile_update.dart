@@ -6,27 +6,15 @@ import 'package:job_finder/util/helpers/text_helper.dart';
 import 'package:job_finder/util/text.dart';
 import 'package:intl/intl.dart';
 
+import '../../modals/users/user.dart';
+
 class UserProfileUpdate extends StatelessWidget {
-  const UserProfileUpdate({super.key});
+  final User? user;
+
+  const UserProfileUpdate({super.key, this.user});
 
   @override
-
-
-
   Widget build(BuildContext context) {
-    final TextEditingController _dobController = TextEditingController();
-    Future<void> _selectDate(BuildContext context) async {
-      final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime(1900),
-        lastDate: DateTime.now(),
-      );
-
-      if (picked != null) {
-        _dobController.text = DateFormat('dd/MM/yyyy').format(picked);
-      }
-    }
     return Scaffold(
       appBar: AppBar(
         title: CText(
@@ -84,7 +72,7 @@ class UserProfileUpdate extends StatelessWidget {
                   child: Column(
                 children: [
                   TextFormField(
-                    initialValue: UserProfileData.mohamed.userName,
+                    initialValue: user?.username,
                     decoration: const InputDecoration(
                         labelText: tFullname,
                         hintText: tFullname,
@@ -92,11 +80,11 @@ class UserProfileUpdate extends StatelessWidget {
                         prefixIcon: Icon(FontAwesomeIcons.user)),
                   ),
                   const SizedBox(
-                    height: 10,
+                    height: 20,
                   ),
                   TextFormField(
                     maxLines: 5,
-                    initialValue: UserProfileData.mohamed.bio,
+                    initialValue: user?.description!,
                     decoration: const InputDecoration(
                       labelText: tBio,
                       hintText: tBio,
@@ -105,10 +93,10 @@ class UserProfileUpdate extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(
-                    height: 10,
+                    height: 20,
                   ),
                   TextFormField(
-                    initialValue: UserProfileData.mohamed.userEmail,
+                    initialValue: user?.email,
                     decoration: const InputDecoration(
                         labelText: tEmail,
                         hintText: tEmail,
@@ -116,10 +104,10 @@ class UserProfileUpdate extends StatelessWidget {
                         prefixIcon: Icon(Icons.email_outlined)),
                   ),
                   const SizedBox(
-                    height: 10,
+                    height: 20,
                   ),
                   TextFormField(
-                    initialValue: UserProfileData.mohamed.phone,
+                    initialValue: user?.mobile.toString(),
                     decoration: const InputDecoration(
                         labelText: tPhone,
                         hintText: tPhone,
@@ -127,58 +115,15 @@ class UserProfileUpdate extends StatelessWidget {
                         prefixIcon: Icon(FontAwesomeIcons.phone)),
                   ),
                   const SizedBox(
-                    height: 10,
+                    height: 20,
                   ),
                   TextFormField(
-                    initialValue: UserProfileData.mohamed.city,
+                    initialValue: user?.regionOrCity,
                     decoration: const InputDecoration(
                         labelText: tCity,
                         hintText: tCity,
                         border: OutlineInputBorder(),
                         prefixIcon: Icon(FontAwesomeIcons.city)),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    initialValue: UserProfileData.mohamed.professional,
-                    decoration: const InputDecoration(
-                        labelText: tProfession,
-                        hintText: tProfession,
-                        border: OutlineInputBorder(),
-                        prefixIcon: Icon(Icons.work)),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    initialValue: UserProfileData.mohamed.languages != null
-                        ? UserProfileData.mohamed.languages!.join(",")
-                        : null,
-                    decoration: const InputDecoration(
-                        labelText: tLanguages,
-                        hintText: tLanguages,
-                        border: OutlineInputBorder(),
-                        prefixIcon: Icon(FontAwesomeIcons.language)),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    controller: _dobController,
-                    // initialValue: UserProfileData.mohamed.DOB != null
-                    //     ? DateFormat('yyyy-MM-dd')
-                    //         .format(UserProfileData.mohamed.DOB!)
-                    //     : null,
-                    onTap: ()=> _selectDate(context),
-                    decoration: const InputDecoration(
-                        labelText: tDOP,
-                        hintText: tDOP,
-                        border: OutlineInputBorder(),
-                        prefixIcon: Icon(FontAwesomeIcons.cakeCandles)),
-                  ),
-                  const SizedBox(
-                    height: 10,
                   ),
                 ],
               ))

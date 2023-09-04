@@ -4,12 +4,15 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:job_finder/consts/texts.dart';
 import 'package:job_finder/mixins/messages.dart';
+import 'package:job_finder/modals/users/user.dart';
+import 'package:job_finder/providers/users/user_provider.dart';
 import 'package:job_finder/util/buton.dart';
-import 'package:job_finder/util/helpers/custom_text_field.dart';
+import 'package:job_finder/util/custom_text_field.dart';
 import 'package:job_finder/util/helpers/text_helper.dart';
 import 'package:job_finder/util/icon_image.dart';
 import 'package:job_finder/util/text.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import '../../../consts/colors.dart';
 import '../login_page.dart';
 
@@ -24,44 +27,11 @@ class UserReg extends StatelessWidget with Messages {
   TextEditingController passwordController = TextEditingController();
   TextEditingController cityController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
-
-  Future<void> registerUser(String fullName, String email, String password,
-       String phone,String city) async {
-    final url = Uri.parse('http://192.168.100.7:9999/api/register');
-
-    // Create a Map to represent your request body
-    final Map<String, dynamic> requestBody = {
-      "username": fullName,
-      "email": email,
-      "password": password,
-      "type": type,
-      "phone": phone,
-      "city": city,
-    };
-
-    // Encode the request body as JSON
-    final String jsonBody = jsonEncode(requestBody);
-
-    final response = await http.post(
-      url,
-      headers: {
-        'Content-Type': 'application/json', // Set the content type to JSON
-      },
-      body: jsonBody,
-    );
-
-    print('Response Status Code: ${response.statusCode}');
-    print('Response Body: ${response.body}');
-
-    if (response.statusCode == 200) {
-      print("User with the userName: ${fullName} is registered successfully.");
-    } else {
-      print("Registration failed");
-    }
-  }
+  TextEditingController descriptionController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<UserProvider>(context);
     bool _termsAndCondChecked = false;
     return Scaffold(
       body: SafeArea(
@@ -189,6 +159,17 @@ class UserReg extends StatelessWidget with Messages {
               const SizedBox(
                 height: 12,
               ),
+              CustomTextField(
+                minLines: 1,
+                maxLines: 13,
+                controller: descriptionController,
+                txtInputType: TextInputType.text,
+                hintText: "Profile Description (optional)",
+                prefixIcon: const Icon(Icons.flag),
+              ),
+              const SizedBox(
+                height: 12,
+              ),
               Row(
                 children: [
                   Checkbox(
@@ -234,26 +215,35 @@ class UserReg extends StatelessWidget with Messages {
                 padding: const EdgeInsets.all(8.0),
                 child: CButton(
                     onClicked: () async {
-                      registerUser(
-                        fullNameController.text,
-                        emailController.text,
-                        passwordController.text,
-                        phoneController.text,
-                        cityController.text
-                      );
+                      var user = User(
+                          description: descriptionController.text,
+                          username: fullNameController.text,
+                          email: emailController.text,
+                          password: passwordController.text,
+                          regionOrCity: cityController.text,
+                          mobile: int.parse(phoneController.text));
+                      provider.createUser(user).whenComplete(() {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (_) => Login()));
+                      });
                     },
                     width: double.maxFinite,
                     padding: 14,
                     radius: 4,
                     backgroundColor: colors['primary'],
                     widget: Center(
-                      child: CText(
-                        text: tRegBtn,
-                        decorations: TextDecorations(
-                            fontSize: 20,
-                            family: 'Roboto-Regular',
-                            color: Colors.white),
-                      ),
+                      child: provider.isSaving
+                          ? CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 3,
+                            )
+                          : CText(
+                              text: tRegBtn,
+                              decorations: TextDecorations(
+                                  fontSize: 20,
+                                  family: 'Roboto-Regular',
+                                  color: Colors.white),
+                            ),
                     )),
               ),
               const SizedBox(
