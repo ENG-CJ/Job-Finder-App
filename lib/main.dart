@@ -27,7 +27,7 @@ class JobFinder extends StatelessWidget {
         scaffoldBackgroundColor: const Color(0xfff4f4f4)
       ),
       debugShowCheckedModeBanner: false,
-      home: UserTypePage(),
+      home: const UserTypePage(),
 
     );
   }

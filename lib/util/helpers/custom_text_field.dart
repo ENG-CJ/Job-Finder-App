@@ -3,19 +3,24 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:job_finder/mixins/input_border_decoration.dart';
 import '../../consts/colors.dart';
 import '../../mixins/messages.dart';
+
 class CustomTextField extends StatelessWidget
     with TextFieldBorderDecorator, Messages {
-  const CustomTextField({
-    Key? key,
-    required this.txtInputType,
-    required this.hintText,
-    required this.prefixIcon,
-    this.obscureTxt,
-    this.isHidenTxt,
-    this.showOrHidePassword, required this.controller,
-     this.validator, 
-      this.isRequired = false,
-  });
+  const CustomTextField(
+      {Key? key,
+      required this.txtInputType,
+      required this.hintText,
+      required this.prefixIcon,
+      this.obscureTxt,
+      this.isHidenTxt,
+      this.showOrHidePassword,
+      required this.controller,
+      this.validator,
+      
+      required,
+      // required this.formKey,
+      })
+      : super(key: key);
 
   final TextInputType txtInputType;
   final String hintText;
@@ -24,13 +29,13 @@ class CustomTextField extends StatelessWidget
   final bool? isHidenTxt;
   final VoidCallback? showOrHidePassword;
   final TextEditingController controller;
-  final FormFieldValidator<String>? validator ;
-  final bool? isRequired;
+  final FormFieldValidator<String>? validator;
+  
+  // final GlobalKey<FormState> formKey;
 
   @override
   Widget build(BuildContext context) {
     bool isPasswordType = txtInputType == TextInputType.visiblePassword;
-
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 10),
       decoration: BoxDecoration(
@@ -47,30 +52,20 @@ class CustomTextField extends StatelessWidget
           border: InputBorder.none,
           focusedBorder: InputBorder.none,
           hintText: hintText,
-
           suffixIcon: isPasswordType
               ? (isHidenTxt ?? false
-              ? IconButton(
-            icon: FaIcon(FontAwesomeIcons.eye),
-            onPressed: showOrHidePassword,
-          )
-              : IconButton(
-            icon: FaIcon(FontAwesomeIcons.eyeSlash),
-            onPressed: showOrHidePassword,
-          ))
+                  ? IconButton(
+                      icon: const FaIcon(FontAwesomeIcons.eye),
+                      onPressed: showOrHidePassword,
+                    )
+                  : IconButton(
+                      icon: const FaIcon(FontAwesomeIcons.eyeSlash),
+                      onPressed: showOrHidePassword,
+                    ))
               : null,
           prefixIcon: prefixIcon,
         ),
-        validator: validator != null 
-          ?(value) {
-            if(isRequired! && (value == null || value.isEmpty)) {
-            return 'This field is required';
-          }
-          if(validator!(value) != null){
-            return 'Invalid input';
-          }
-          return null;
-        } : null,
+        validator: validator,
       ),
     );
   }
