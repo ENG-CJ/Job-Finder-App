@@ -9,10 +9,13 @@ class CustomTextField extends StatelessWidget
     Key? key,
     required this.txtInputType,
     required this.hintText,
-    required this.prefixIcon,
+    this.prefixIcon,
+    this.suffixIcon,
+    this.suffixIconFunction,
     this.obscureTxt,
     this.isHidenTxt,
     this.showOrHidePassword,
+    this.initialValue,
     required this.controller,
     this.validator,
     this.maxLines,
@@ -22,7 +25,9 @@ class CustomTextField extends StatelessWidget
 
   final TextInputType txtInputType;
   final String hintText;
-  final Icon prefixIcon;
+  final Icon? prefixIcon;
+  final Icon? suffixIcon;
+  final void Function()? suffixIconFunction;
   final bool? obscureTxt;
   final bool? isHidenTxt;
   final VoidCallback? showOrHidePassword;
@@ -30,6 +35,7 @@ class CustomTextField extends StatelessWidget
   final FormFieldValidator<String>? validator;
   final bool? isRequired;
   final int? maxLines, minLines;
+  final String? initialValue;
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +47,7 @@ class CustomTextField extends StatelessWidget
         borderRadius: BorderRadius.circular(4),
       ),
       child: TextFormField(
+        initialValue: initialValue,
         controller: controller,
         keyboardType: txtInputType,
         textAlign: TextAlign.start,
@@ -62,7 +69,9 @@ class CustomTextField extends StatelessWidget
                       icon: FaIcon(FontAwesomeIcons.eyeSlash),
                       onPressed: showOrHidePassword,
                     ))
-              : null,
+              : IconButton(
+                  onPressed: suffixIconFunction,
+                  icon: suffixIcon ?? SizedBox.shrink()),
           prefixIcon: prefixIcon,
         ),
         validator: validator != null
