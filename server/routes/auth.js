@@ -1,10 +1,13 @@
 const express = require('express');
-const userController = require('../controller/userController');
+const { createUser, verifyUser, fetchUser, updateUser } = require('../controller/userController');
+const router=express.Router();
 
 
-const authRouter = express.Router();
 
-authRouter.use('/api',userController);
+router.post("/register",createUser);
+router.post("/login",verifyUser);
+router.post("/fetch",fetchUser);
+router.post("/update",updateUser);
+    
 
-
-module.exports = authRouter;
+module.exports = router;

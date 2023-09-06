@@ -2,31 +2,49 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:job_finder/consts/texts.dart';
 import 'package:job_finder/data/user_profile_data.dart';
+import 'package:job_finder/providers/users/user_provider.dart';
 import 'package:job_finder/util/helpers/text_helper.dart';
 import 'package:job_finder/util/text.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
-class UserProfileUpdate extends StatelessWidget {
-  const UserProfileUpdate({super.key});
+import '../../modals/users/user.dart';
+
+class UserProfileUpdate extends StatefulWidget {
+  final User? user;
+
+  const UserProfileUpdate({super.key, this.user});
 
   @override
+  State<UserProfileUpdate> createState() => _UserProfileUpdateState();
+}
 
+class _UserProfileUpdateState extends State<UserProfileUpdate> {
+  
 
+  final _usernameController = TextEditingController();
+  final _descriptionController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _phoneController = TextEditingController();
+  final _cityController = TextEditingController();
+  late final password;
+  late final userId;
 
+  @override
+  void initState() {
+    super.initState();
+    password = widget.user?.password;
+    userId = widget.user?.id;
+    _usernameController.text = widget.user?.username ?? '';
+    _descriptionController.text = widget.user?.description ?? '';
+    _emailController.text = widget.user?.email ?? '';
+    _phoneController.text = widget.user?.mobile.toString() ?? 0.toString();
+    _cityController.text = widget.user?.regionOrCity ?? '';
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final TextEditingController _dobController = TextEditingController();
-    Future<void> _selectDate(BuildContext context) async {
-      final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime(1900),
-        lastDate: DateTime.now(),
-      );
-
-      if (picked != null) {
-        _dobController.text = DateFormat('dd/MM/yyyy').format(picked);
-      }
-    }
+    final userProvider = context.watch<UserProvider>();
     return Scaffold(
       appBar: AppBar(
         title: CText(
@@ -47,7 +65,20 @@ class UserProfileUpdate extends StatelessWidget {
             )),
         actions: [
           TextButton(
-              onPressed: () {},
+              onPressed: () {
+                User updateUser = User(
+                    id: userId,
+                    username: _usernameController.text,
+                    email: _emailController.text,
+                    password: password,
+                    regionOrCity: _cityController.text,
+                    mobile: int.parse(_phoneController.text),
+                    
+                    );
+                    Provider.of<UserProvider>(context,listen: false).updateUser(updateUser);
+                    // userProvider.updateUser(updateUser);
+                    Navigator.pop(context);
+              },
               child: CText(
                 text: tSaveBtn,
                 decorations: TextDecorations(fontSize: 18),
@@ -84,7 +115,8 @@ class UserProfileUpdate extends StatelessWidget {
                   child: Column(
                 children: [
                   TextFormField(
-                    initialValue: UserProfileData.mohamed.userName,
+                    // initialValue: widget.user?.username ?? '',
+                    controller: _usernameController,
                     decoration: const InputDecoration(
                         labelText: tFullname,
                         hintText: tFullname,
@@ -92,11 +124,12 @@ class UserProfileUpdate extends StatelessWidget {
                         prefixIcon: Icon(FontAwesomeIcons.user)),
                   ),
                   const SizedBox(
-                    height: 10,
+                    height: 20,
                   ),
                   TextFormField(
                     maxLines: 5,
-                    initialValue: UserProfileData.mohamed.bio,
+                    // initialValue: widget.user?.description!,
+                    controller: _descriptionController,
                     decoration: const InputDecoration(
                       labelText: tBio,
                       hintText: tBio,
@@ -105,10 +138,11 @@ class UserProfileUpdate extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(
-                    height: 10,
+                    height: 20,
                   ),
                   TextFormField(
-                    initialValue: UserProfileData.mohamed.userEmail,
+                    // initialValue: widget.user?.email,
+                    controller: _emailController,
                     decoration: const InputDecoration(
                         labelText: tEmail,
                         hintText: tEmail,
@@ -116,10 +150,11 @@ class UserProfileUpdate extends StatelessWidget {
                         prefixIcon: Icon(Icons.email_outlined)),
                   ),
                   const SizedBox(
-                    height: 10,
+                    height: 20,
                   ),
                   TextFormField(
-                    initialValue: UserProfileData.mohamed.phone,
+                    // initialValue: widget.user?.mobile.toString(),
+                    controller: _phoneController,
                     decoration: const InputDecoration(
                         labelText: tPhone,
                         hintText: tPhone,
@@ -127,58 +162,16 @@ class UserProfileUpdate extends StatelessWidget {
                         prefixIcon: Icon(FontAwesomeIcons.phone)),
                   ),
                   const SizedBox(
-                    height: 10,
+                    height: 20,
                   ),
                   TextFormField(
-                    initialValue: UserProfileData.mohamed.city,
+                    // initialValue: widget.user?.regionOrCity,
+                    controller: _cityController,
                     decoration: const InputDecoration(
                         labelText: tCity,
                         hintText: tCity,
                         border: OutlineInputBorder(),
                         prefixIcon: Icon(FontAwesomeIcons.city)),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    initialValue: UserProfileData.mohamed.professional,
-                    decoration: const InputDecoration(
-                        labelText: tProfession,
-                        hintText: tProfession,
-                        border: OutlineInputBorder(),
-                        prefixIcon: Icon(Icons.work)),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    initialValue: UserProfileData.mohamed.languages != null
-                        ? UserProfileData.mohamed.languages!.join(",")
-                        : null,
-                    decoration: const InputDecoration(
-                        labelText: tLanguages,
-                        hintText: tLanguages,
-                        border: OutlineInputBorder(),
-                        prefixIcon: Icon(FontAwesomeIcons.language)),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    controller: _dobController,
-                    // initialValue: UserProfileData.mohamed.DOB != null
-                    //     ? DateFormat('yyyy-MM-dd')
-                    //         .format(UserProfileData.mohamed.DOB!)
-                    //     : null,
-                    onTap: ()=> _selectDate(context),
-                    decoration: const InputDecoration(
-                        labelText: tDOP,
-                        hintText: tDOP,
-                        border: OutlineInputBorder(),
-                        prefixIcon: Icon(FontAwesomeIcons.cakeCandles)),
-                  ),
-                  const SizedBox(
-                    height: 10,
                   ),
                 ],
               ))

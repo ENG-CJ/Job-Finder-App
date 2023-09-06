@@ -4,10 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:job_finder/consts/texts.dart';
 import 'package:job_finder/mixins/messages.dart';
-import 'package:job_finder/util/helpers/custom_text_field.dart';
+import 'package:job_finder/modals/users/user.dart';
+import 'package:job_finder/providers/users/user_provider.dart';
+import 'package:job_finder/util/custom_text_field.dart';
 import 'package:job_finder/util/helpers/text_helper.dart';
 import 'package:job_finder/util/text.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import '../../../consts/colors.dart';
 import '../../../util/buton.dart';
 import '../login_page.dart';
@@ -26,51 +29,13 @@ class RegisterCompany extends StatelessWidget with Messages {
   TextEditingController comAddressController = TextEditingController();
   TextEditingController comIndustryController = TextEditingController();
   TextEditingController comCountryController = TextEditingController();
-
-  Future<void> registerCompany(String fullName, String email, String password,
-      String phone, String address, String city, String country) async {
-    final url = Uri.parse('http://192.168.100.7:9999/api/register');
-
-    // Create a Map to represent your request body
-    final Map<String, dynamic> requestBody = {
-      "username": fullName,
-      "email": email,
-      "password": password,
-      "type": type,
-      "phone": phone,
-      "address": address,
-      "city": city,
-      "country": country,
-    };
-
-    // Encode the request body as JSON
-    final String jsonBody = jsonEncode(requestBody);
-
-    final response = await http.post(
-      url,
-      headers: {
-        'Content-Type': 'application/json', // Set the content type to JSON
-      },
-      body: jsonBody,
-    );
-
-    print('Response Status Code: ${response.statusCode}');
-    print('Response Body: ${response.body}');
-
-    if (response.statusCode == 200) {
-      print("User with the userName: ${comName} is registered successfully.");
-    } else {
-      print("Registration failed");
-    }
-  }
+  TextEditingController descriptionController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController textEditingController = TextEditingController();
-    bool _isDropdownVisible = false;
-    List<String> _options = ['Option 1', 'Option 2', 'Option 3', 'Option 4'];
-    String _selectedOption = '';
     bool _termsAndCondChecked = false;
+    var provider = Provider.of<UserProvider>(context);
+
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
@@ -221,15 +186,6 @@ class RegisterCompany extends StatelessWidget with Messages {
                       height: 8,
                     ),
                     CustomTextField(
-                      controller: comCityController,
-                      txtInputType: TextInputType.text,
-                      hintText: comCity,
-                      prefixIcon: const Icon(Icons.location_city_rounded),
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    CustomTextField(
                         controller: comAddressController,
                         txtInputType: TextInputType.text,
                         hintText: comAddress,
@@ -247,54 +203,23 @@ class RegisterCompany extends StatelessWidget with Messages {
                       height: 16,
                     ),
                     Container(
-                      margin: const EdgeInsets.only(left: 10),
+                      margin: EdgeInsets.only(left: 10),
                       child: CText(
-                        text: comIndustry,
+                        text: descriptionDetails,
                         decorations: TextDecorations(
                             fontSize: 16, family: 'Roboto-Light'),
                       ),
                     ),
                     const SizedBox(
-                      height: 16,
+                      height: 8,
                     ),
-                    TextField(
-                      controller: comIndustryController,
-                      onTap: () {
-                        _isDropdownVisible = !_isDropdownVisible;
-                        //Note: -> Add State make visible to the dropdown item
-                      },
-                      decoration: const InputDecoration(
-                        contentPadding: EdgeInsets.fromLTRB(10, 14, 10, 10),
-                        border: InputBorder.none,
-                        focusedBorder: InputBorder.none,
-                        hintText: 'Select an option',
-                        suffixIcon: Icon(Icons.arrow_drop_down),
-                      ),
-                    ),
-                    if (_isDropdownVisible)
-                      Container(
-                        constraints: BoxConstraints(maxHeight: 150.0),
-                        child: ListView.builder(
-                          itemCount: _options.length,
-                          itemBuilder: (context, index) {
-                            return InkWell(
-                              onTap: () {
-                                _selectedOption = _options[index];
-                                textEditingController.text = _selectedOption;
-                                _isDropdownVisible = false;
-                                FocusScope.of(context).unfocus();
-                                //Note: -> Add State make visible to the dropdown item
-                              },
-                              child: Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text(_options[index]),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    const SizedBox(
-                      height: 12,
+                    CustomTextField(
+                      minLines: 1,
+                      maxLines: 13,
+                      controller: descriptionController,
+                      txtInputType: TextInputType.text,
+                      hintText: comCountry,
+                      prefixIcon: const Icon(Icons.flag),
                     ),
                     Row(
                       children: [
@@ -343,38 +268,40 @@ class RegisterCompany extends StatelessWidget with Messages {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: CButton(
-                          onClicked: () {
-                            // showDialog(context: context, builder: (context){
-                            //   return showInfo(context,"No Database Configured, Only Click Ok to Continue😊","Jon Finder",
-                            //           () {
-                            //         Navigator.pop(context);
-                            //         Navigator.push(context, MaterialPageRoute(builder: (_)=> Login()));
-                            //       }
+                          onClicked: () async {
+                            var companyData = User(
+                                type: type,
+                                description: descriptionController.text,
+                                address: comAddressController.text,
+                                username: comNameController.text,
+                                email: comEmailController.text,
+                                password: comPasswordController.text,
+                                regionOrCity: comCountryController.text,
+                                mobile: int.parse(
+                                  comPhoneController.text,
+                                ));
 
-                            //   );
-                            // });
-                            registerCompany(
-                              comNameController.text,
-                              comEmailController.text,
-                              comPasswordController.text,
-                              comPhoneController.text,
-                              comAddressController.text,
-                              comCityController.text,
-                              comCountryController.text,
-                            );
+                            provider.createUser(companyData).whenComplete(() {
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (_) => Login()));
+                            });
                           },
                           width: double.maxFinite,
                           padding: 14,
                           radius: 4,
                           backgroundColor: colors['secondary'],
                           widget: Center(
-                            child: CText(
-                              text: tRegBtn,
-                              decorations: TextDecorations(
-                                  fontSize: 20,
-                                  family: 'Roboto-Regular',
-                                  color: Colors.white),
-                            ),
+                            child: provider.isSaving
+                                ? CircularProgressIndicator(
+                                    color: Colors.white,
+                                  )
+                                : CText(
+                                    text: tRegBtn,
+                                    decorations: TextDecorations(
+                                        fontSize: 20,
+                                        family: 'Roboto-Regular',
+                                        color: Colors.white),
+                                  ),
                           )),
                     ),
                   ],
