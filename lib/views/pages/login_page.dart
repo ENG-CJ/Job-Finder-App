@@ -12,6 +12,8 @@ import 'package:job_finder/util/text.dart';
 import 'package:job_finder/views/pages/home_page.dart';
 import 'package:provider/provider.dart';
 
+import '../dashboard/screens/dashboard.dart';
+
 class Login extends StatefulWidget {
   const Login({super.key});
 
@@ -202,8 +204,13 @@ class _LoginState extends State<Login> with TextFieldBorderDecorator, Messages {
                         "email": provider.user!.email,
                         "username": provider.user!.username,
                       }).whenComplete(() {
-                        Navigator.push(
-                            context, MaterialPageRoute(builder: (_) => Home()));
+                        if (provider.user!.type == "User") {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (_) => Home()));
+                        } else {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (_) => Dashboard()));
+                        }
                       });
                     }
                   });

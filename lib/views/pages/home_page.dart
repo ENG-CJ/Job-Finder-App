@@ -192,6 +192,6 @@ class JobSearchDelegate extends SearchDelegate
       return buildJobListView(context, matchedResults);
     }
 
-    return noDataError(context, close);
+    return noDataError(context, null, null, null, close);
   }
 }

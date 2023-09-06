@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const authRoute  = require('./routes/auth')
+const jobRoute  = require('./routes/job')
 
 
 const app = express();
@@ -10,6 +11,7 @@ app.use(express.urlencoded({extended: true}));
 
 
 app.use('/users',authRoute);
+app.use('/jobs',jobRoute);
     
 
 
