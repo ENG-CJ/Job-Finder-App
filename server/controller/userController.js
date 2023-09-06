@@ -1,3 +1,4 @@
+const e = require("express");
 const db = require("../db/db");
 
 module.exports = {
@@ -69,6 +70,67 @@ module.exports = {
       return res.send({
         userData: data,
       });
+    });
+  },
+
+  updateUser: (req, res) => {
+    const {
+      id,
+      username,
+      email,
+      mobile,
+      address,
+      verified,
+      description,
+      country,
+    } = req.body;
+
+    const updateFields = [];
+    const updateValues = [];
+
+    const fieldToUpdate = {
+      username,
+      email,
+      mobile,
+      address,
+      verified,
+      description,
+      country,
+    };
+
+    for (const field in fieldToUpdate) {
+      if (fieldToUpdate[field] !== undefined) {
+        updateFields.push(`${field} = ?`);
+        updateValues.push(fieldToUpdate[field]);
+      }
+    }
+
+    if (updateFields.length === 0) {
+      return res.status[400].json({ message: "No fields to update" });
+    }
+
+    const updateUserQuery = `Update users SET ${updateFields.join(
+      ", "
+    )} where id = ?`;
+    updateValues.push(id);
+
+    db.query(updateUserQuery, updateValues, (err, result) => {
+      if (err) {
+        return res
+          .status(500)
+          .json({ message: `Update Failed`, description: err.message });
+      }
+
+      if (result.effectedRow === 0) {
+        return res
+          .status(404)
+          .json({
+            message: `User with ID ${id} not found`,
+            description: err.message,
+          });
+      }
+
+      return res.status(200).json({ message: "User Updated Successfully" });
     });
   },
 };

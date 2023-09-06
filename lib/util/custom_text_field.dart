@@ -40,7 +40,6 @@ class CustomTextField extends StatelessWidget
   @override
   Widget build(BuildContext context) {
     bool isPasswordType = txtInputType == TextInputType.visiblePassword;
-
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 10),
       decoration: BoxDecoration(

@@ -19,18 +19,26 @@ class User {
       this.verified = 'false',
       this.type = 'User'});
 
+  //   User.simple({
+  //   required this.username,
+  //   required this.email,
+  // });
+
   factory User.fromJson(Map<String, dynamic> jsonData) {
     return User(
-        id: jsonData['id'] ?? "",
-        username: jsonData['username'],
-        email: jsonData['email'],
-        password: jsonData['password'],
-        regionOrCity: jsonData['country'],
-        mobile: int.parse(jsonData['mobile']),
-        address: jsonData['address'],
-        description: jsonData['description'],
-        type: jsonData['type'],
-        verified: jsonData['verified']);
+    id: jsonData['id'] ?? "",
+    username: jsonData['username'],
+    email: jsonData['email'],
+    password: jsonData['password'],
+    regionOrCity: jsonData['country'],
+    mobile: (jsonData['mobile'] is int)
+        ? jsonData['mobile'] 
+        : int.parse(jsonData['mobile'].toString()), 
+    address: jsonData['address'],
+    description: jsonData['description'],
+    type: jsonData['type'],
+    verified: jsonData['verified'],
+  );
   }
 
   Map<String, dynamic> toJson() {

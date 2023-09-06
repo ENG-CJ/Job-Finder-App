@@ -19,8 +19,14 @@ import '../login_page.dart';
 class UserReg extends StatelessWidget with Messages {
   UserReg({super.key});
 
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  // final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final String type = "User";
+
+  final GlobalKey<FormState> fullNameFormKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> emailFormKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> passwordFormKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> phoneFormKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> cityFormKey = GlobalKey<FormState>();
 
   TextEditingController fullNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -28,6 +34,14 @@ class UserReg extends StatelessWidget with Messages {
   TextEditingController cityController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
+
+  void clearTxtField() {
+    fullNameController.clear();
+    emailController.clear();
+    passwordController.clear();
+    phoneController.clear();
+    cityController.clear();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,17 +82,24 @@ class UserReg extends StatelessWidget with Messages {
               const SizedBox(
                 height: 5,
               ),
-              CustomTextField(
-                controller: fullNameController,
-                txtInputType: TextInputType.text,
-                hintText: signUpFullNameTft,
-                prefixIcon: const Icon(Icons.person_outline_rounded),
-                // validator: (value) {
-                //   if(value == null || value.isNotEmpty) {
-                //     return 'This field is required.';
-                //   }
-                //   return null;
-                // },
+              Form(
+                key: fullNameFormKey,
+                child: CustomTextField(
+                  controller: fullNameController,
+                  txtInputType: TextInputType.text,
+                  hintText: signUpFullNameTft,
+                  prefixIcon: const Icon(Icons.person_outline_rounded),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'This field is required.';
+                    }
+                    if(!RegExp(r'^[a-zA-Z0-9_]{3,16}$').hasMatch(value))
+                    {
+                      return 'Invalid username!';
+                    }
+                    return null;
+                  },
+                ),
               ),
               const SizedBox(
                 height: 16,
@@ -86,17 +107,24 @@ class UserReg extends StatelessWidget with Messages {
               const SizedBox(
                 height: 5,
               ),
-              CustomTextField(
-                controller: emailController,
-                txtInputType: TextInputType.emailAddress,
-                hintText: tEmail,
-                prefixIcon: const Icon(Icons.email_outlined),
-                // validator: (value) {
-                //   if(value == null || value.isNotEmpty) {
-                //     return 'This field is required.';
-                //   }
-                //   return null;
-                // },
+              Form(
+                key: emailFormKey,
+                child: CustomTextField(
+                  controller: emailController,
+                  txtInputType: TextInputType.emailAddress,
+                  hintText: tEmail,
+                  prefixIcon: const Icon(Icons.email_outlined),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'This field is required.';
+                    }
+                    if(!RegExp(r'^[\W-\.]+@([\W-]+\.)+[\W]{2,4}$').hasMatch(value))
+                    {
+                      return 'Invalid username!';
+                    }
+                    return null;
+                  },
+                ),
               ),
               const SizedBox(
                 height: 16,
@@ -107,17 +135,23 @@ class UserReg extends StatelessWidget with Messages {
               const SizedBox(
                 height: 5,
               ),
-              CustomTextField(
-                controller: passwordController,
-                txtInputType: TextInputType.visiblePassword,
-                hintText: tPassTxt,
-                prefixIcon: const Icon(Icons.fingerprint),
-                // validator: (value) {
-                //   if(value == null || value.isNotEmpty) {
-                //     return 'This field is required.';
-                //   }
-                //   return null;
-                // },
+              Form(
+                key: passwordFormKey,
+                child: CustomTextField(
+                  controller: passwordController,
+                  txtInputType: TextInputType.visiblePassword,
+                  hintText: tPassTxt,
+                  prefixIcon: const Icon(Icons.fingerprint),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'This field is required.';
+                    }
+                    if(value.length != 6){
+                      return 'Password length must be 6 and above.';
+                    }
+                    return null;
+                  },
+                ),
               ),
               const SizedBox(
                 height: 16,
@@ -125,18 +159,25 @@ class UserReg extends StatelessWidget with Messages {
               const SizedBox(
                 height: 5,
               ),
-              CustomTextField(
-                controller: phoneController,
-                txtInputType: TextInputType.phone,
-                hintText: tPhone,
-                prefixIcon: const Icon(Icons.mobile_friendly),
-                // validator: (value) {
-                //   if(value == null || value.isNotEmpty) {
-                //     return 'This field is required.';
-                //   }
+              Form(
+                key: phoneFormKey,
+                child: CustomTextField(
+                  controller: phoneController,
+                  txtInputType: TextInputType.phone,
+                  hintText: tPhone,
+                  prefixIcon: const Icon(Icons.mobile_friendly),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'This field is required.';
+                    }
+                     if(!RegExp(r'^[a-zA-Z0-9_]{3,16}$').hasMatch(value))
+                    {
+                      return 'Invalid City Name!';
+                    }
 
-                //   return null;
-                // },
+                    return null;
+                  },
+                ),
               ),
               const SizedBox(
                 height: 16,
@@ -144,17 +185,20 @@ class UserReg extends StatelessWidget with Messages {
               const SizedBox(
                 height: 5,
               ),
-              CustomTextField(
-                controller: cityController,
-                txtInputType: TextInputType.text,
-                hintText: tSelectCity,
-                prefixIcon: const Icon(Icons.location_city),
-                // validator: (value) {
-                //   if(value == null || value.isNotEmpty) {
-                //     return 'This field is required.';
-                //   }
-                //   return null;
-                // },
+              Form(
+                key: cityFormKey,
+                child: CustomTextField(
+                  controller: cityController,
+                  txtInputType: TextInputType.text,
+                  hintText: tSelectCity,
+                  prefixIcon: const Icon(Icons.location_city),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'This field is required.';
+                    }
+                    return null;
+                  },
+                ),
               ),
               const SizedBox(
                 height: 12,

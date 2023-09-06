@@ -57,4 +57,29 @@ class UserProvider extends ChangeNotifier {
     _profile_loadig = false;
     notifyListeners();
   }
+Future updateUser(User user) async {
+  try{
+    _isSaving = true;
+    notifyListeners();
+    var data = await _user.updateUser(user);
+    _responseMessage = data['message'];
+
+  } on TypeError catch(err) {
+    var error = ErrorGetter(errorMessage: err.toString(),description: "Type Error occured");
+    _hasError = true;
+    _errorMessage = error.errorMessage;
+  } catch (e) {
+    var error  = ErrorGetter.fromJson(e as Map<String, dynamic>);
+    _hasError = true;
+    _errorMessage = error.description!;
+  }
+
+  _isSaving = false;
+  notifyListeners();
 }
+
+}
+
+
+
+

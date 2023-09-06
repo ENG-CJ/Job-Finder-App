@@ -2,19 +2,49 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:job_finder/consts/texts.dart';
 import 'package:job_finder/data/user_profile_data.dart';
+import 'package:job_finder/providers/users/user_provider.dart';
 import 'package:job_finder/util/helpers/text_helper.dart';
 import 'package:job_finder/util/text.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import '../../modals/users/user.dart';
 
-class UserProfileUpdate extends StatelessWidget {
+class UserProfileUpdate extends StatefulWidget {
   final User? user;
 
   const UserProfileUpdate({super.key, this.user});
 
   @override
+  State<UserProfileUpdate> createState() => _UserProfileUpdateState();
+}
+
+class _UserProfileUpdateState extends State<UserProfileUpdate> {
+  
+
+  final _usernameController = TextEditingController();
+  final _descriptionController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _phoneController = TextEditingController();
+  final _cityController = TextEditingController();
+  late final password;
+  late final userId;
+
+  @override
+  void initState() {
+    super.initState();
+    password = widget.user?.password;
+    userId = widget.user?.id;
+    _usernameController.text = widget.user?.username ?? '';
+    _descriptionController.text = widget.user?.description ?? '';
+    _emailController.text = widget.user?.email ?? '';
+    _phoneController.text = widget.user?.mobile.toString() ?? 0.toString();
+    _cityController.text = widget.user?.regionOrCity ?? '';
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final userProvider = context.watch<UserProvider>();
     return Scaffold(
       appBar: AppBar(
         title: CText(
@@ -35,7 +65,20 @@ class UserProfileUpdate extends StatelessWidget {
             )),
         actions: [
           TextButton(
-              onPressed: () {},
+              onPressed: () {
+                User updateUser = User(
+                    id: userId,
+                    username: _usernameController.text,
+                    email: _emailController.text,
+                    password: password,
+                    regionOrCity: _cityController.text,
+                    mobile: int.parse(_phoneController.text),
+                    
+                    );
+                    Provider.of<UserProvider>(context,listen: false).updateUser(updateUser);
+                    // userProvider.updateUser(updateUser);
+                    Navigator.pop(context);
+              },
               child: CText(
                 text: tSaveBtn,
                 decorations: TextDecorations(fontSize: 18),
@@ -72,7 +115,8 @@ class UserProfileUpdate extends StatelessWidget {
                   child: Column(
                 children: [
                   TextFormField(
-                    initialValue: user?.username,
+                    // initialValue: widget.user?.username ?? '',
+                    controller: _usernameController,
                     decoration: const InputDecoration(
                         labelText: tFullname,
                         hintText: tFullname,
@@ -84,7 +128,8 @@ class UserProfileUpdate extends StatelessWidget {
                   ),
                   TextFormField(
                     maxLines: 5,
-                    initialValue: user?.description!,
+                    // initialValue: widget.user?.description!,
+                    controller: _descriptionController,
                     decoration: const InputDecoration(
                       labelText: tBio,
                       hintText: tBio,
@@ -96,7 +141,8 @@ class UserProfileUpdate extends StatelessWidget {
                     height: 20,
                   ),
                   TextFormField(
-                    initialValue: user?.email,
+                    // initialValue: widget.user?.email,
+                    controller: _emailController,
                     decoration: const InputDecoration(
                         labelText: tEmail,
                         hintText: tEmail,
@@ -107,7 +153,8 @@ class UserProfileUpdate extends StatelessWidget {
                     height: 20,
                   ),
                   TextFormField(
-                    initialValue: user?.mobile.toString(),
+                    // initialValue: widget.user?.mobile.toString(),
+                    controller: _phoneController,
                     decoration: const InputDecoration(
                         labelText: tPhone,
                         hintText: tPhone,
@@ -118,7 +165,8 @@ class UserProfileUpdate extends StatelessWidget {
                     height: 20,
                   ),
                   TextFormField(
-                    initialValue: user?.regionOrCity,
+                    // initialValue: widget.user?.regionOrCity,
+                    controller: _cityController,
                     decoration: const InputDecoration(
                         labelText: tCity,
                         hintText: tCity,

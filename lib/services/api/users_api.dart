@@ -52,4 +52,18 @@ class UserAPIServices {
 
     return user;
   }
+
+  Future<dynamic> updateUser(User user) async {
+    dynamic response;
+    try {
+      response =
+          await _dio.post("$API_BASE_URL/users/update", data: user.toJson());
+    } on DioException catch (err) {
+      return Future.error({
+        "error": "Something went wrong",
+        "description": "Error Occurred During ${err.message}"
+      });
+    }
+    return response.data;
+  }
 }

@@ -142,7 +142,6 @@ class RegisterCompany extends StatelessWidget with Messages {
                       txtInputType: TextInputType.text,
                       hintText: comName,
                       prefixIcon: const Icon(FontAwesomeIcons.mountainCity),
-                      isRequired: true,
                     ),
                     const SizedBox(
                       height: 16,
@@ -152,7 +151,6 @@ class RegisterCompany extends StatelessWidget with Messages {
                       txtInputType: TextInputType.number,
                       hintText: comPhone,
                       prefixIcon: const Icon(Icons.phone_outlined),
-                      isRequired: true,
                     ),
                     const SizedBox(
                       height: 16,
@@ -161,7 +159,6 @@ class RegisterCompany extends StatelessWidget with Messages {
                         controller: comEmailController,
                         txtInputType: TextInputType.emailAddress,
                         hintText: comEmail,
-                        isRequired: true,
                         prefixIcon: const Icon(Icons.alternate_email)),
                     const SizedBox(
                       height: 16,
@@ -170,7 +167,6 @@ class RegisterCompany extends StatelessWidget with Messages {
                         controller: comPasswordController,
                         txtInputType: TextInputType.visiblePassword,
                         hintText: tPassTxt,
-                        isRequired: true,
                         prefixIcon: const Icon(Icons.fingerprint)),
                     const SizedBox(
                       height: 16,
