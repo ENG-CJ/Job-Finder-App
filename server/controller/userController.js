@@ -1,5 +1,6 @@
 const e = require("express");
 const db = require("../db/db");
+const fs = require("fs");
 
 module.exports = {
   createUser: (req, res) => {
@@ -8,33 +9,34 @@ module.exports = {
       email,
       password,
       type,
-      phone,
+      mobile,
       address,
       verified,
       description,
       country,
     } = req.body;
     db.query(
-      "INSERT into users (username,email,password,type,mobile,address,verified,description,country) VALUES (?,?,?,?,?,?,?,?,?)",
+      "INSERT into users (username,email,password,type,mobile,address,verified,description,country,profile_pic) VALUES (?,?,?,?,?,?,?,?,?,?)",
       [
         username,
         email,
         password,
         type,
-        phone,
+        mobile,
         address,
         verified,
         description,
         country,
+        req.file ? req.file.filename : "null",
       ],
       (err, data) => {
         if (err) {
-          return res.send({
+          return res.status(500).send({
             message: `Registration Failed`,
             description: err.message,
           });
         }
-        res.send({ message: "User registered successfully" });
+        res.send({ message: "User registered successfully " });
       }
     );
   },
@@ -57,9 +59,9 @@ module.exports = {
   },
 
   fetchUser: (req, res) => {
-    var sql = "SELECT *from users where email=?";
-    var { email } = req.body;
-    db.query(sql, [email], (err, data) => {
+    var sql = "SELECT *from users where id=?";
+    var { id } = req.body;
+    db.query(sql, [id], (err, data) => {
       if (err)
         return res.send({
           message: "there is an error occurred during login",
@@ -80,57 +82,59 @@ module.exports = {
       email,
       mobile,
       address,
-      verified,
       description,
       country,
+      oldImage,
     } = req.body;
+    var query =
+      "UPDATE users set username=?, email=?, mobile=?,description=?,country=?, profile_pic=? where id=? ";
+    db.query(
+      query,
+      [
+        username,
+        email,
+        mobile,
+        description,
+        country,
+         req.file ? req.file.filename : oldImage,
+        id,
+      ],
+      (err, result) => {
+        if (err) {
+          return res
+            .status(500)
+            .json({ message: `Update Failed`, description: err.message });
+        }
 
-    const updateFields = [];
-    const updateValues = [];
+        return res.send({
+          file: req.file ? req.file : "false",
 
-    const fieldToUpdate = {
-      username,
-      email,
-      mobile,
-      address,
-      verified,
-      description,
-      country,
-    };
-
-    for (const field in fieldToUpdate) {
-      if (fieldToUpdate[field] !== undefined) {
-        updateFields.push(`${field} = ?`);
-        updateValues.push(fieldToUpdate[field]);
+          old: oldImage,
+          message: "Your Profile Has been updated successfully",
+        });
       }
-    }
-
-    if (updateFields.length === 0) {
-      return res.status[400].json({ message: "No fields to update" });
-    }
-
-    const updateUserQuery = `Update users SET ${updateFields.join(
-      ", "
-    )} where id = ?`;
-    updateValues.push(id);
-
-    db.query(updateUserQuery, updateValues, (err, result) => {
-      if (err) {
-        return res
-          .status(500)
-          .json({ message: `Update Failed`, description: err.message });
-      }
-
-      if (result.effectedRow === 0) {
-        return res
-          .status(404)
-          .json({
-            message: `User with ID ${id} not found`,
-            description: err.message,
-          });
-      }
-
-      return res.status(200).json({ message: "User Updated Successfully" });
-    });
+    );
   },
+
+  deleteImage: (req, res, next) => {
+    if (req.file) {
+        if (fs.existsSync(`./public/uploads/${req.body.oldImage}`)) {
+          fs.unlink(`./public/uploads/${req.body.oldImage}`, (err) => {
+            if (err)
+              return res.status(500).send({
+                message: "Updated Process failed please try again",
+                description: err.message,
+              });
+
+            next();
+          });
+        } else {
+        
+          next();
+        }
+    
+      }else next();
+     
+  },
+  
 };

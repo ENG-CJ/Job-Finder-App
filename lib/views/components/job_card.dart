@@ -4,6 +4,7 @@ import 'package:job_finder/modals/jobs/job_modal.dart';
 
 import '../../consts/colors.dart';
 import '../../consts/texts.dart';
+import '../../modals/jobs/job_modal_latest.dart';
 import '../../util/helpers/text_helper.dart';
 import '../../util/icon_text.dart';
 import '../../util/text.dart';
@@ -12,17 +13,20 @@ import 'job_header.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class JobCard extends StatelessWidget {
-  final Job job;
+  final JobOnUserScreen job;
 
   const JobCard({super.key, required this.job});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) =>  JobDetails(job: job,)),
+          MaterialPageRoute(
+              builder: (context) => JobDetails(
+                    job: job,
+                  )),
         );
       },
       child: Container(
@@ -44,36 +48,35 @@ class JobCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             JobHeader(
-              company: job.corporation,
+              company: job.company,
               jobTitle: job.jobTitle,
-              logo: job.companyLogoPath,
+              logo: job.profile,
             ),
             Padding(
                 padding: const EdgeInsets.only(top: 10, left: 8, right: 8),
                 child: CText(
                     decorations:
                         TextDecorations(height: 1.3, family: "Poppins Light"),
-                    text: job.jobDescription)),
+                    text: job.descripton)),
             Padding(
               padding: EdgeInsets.only(top: 10, left: 8, right: 8),
               child: Row(
                 children: [
                   IconText(
                     icon: FontAwesomeIcons.clock,
-                    iconLabel: job.timePosted,
+                    iconLabel: timeago.format(job.updated),
                   ),
                   SizedBox(
                     width: 25,
                   ),
                   IconText(
                     icon: FontAwesomeIcons.users,
-                    iconLabel: '${job.numberOfApplicants} Applicants',
+                    iconLabel: '${job.applicants} Applicants',
                   ),
                 ],
               ),
             ),
             // SizedBox(height: 10,),
-
           ],
         ),
       ),
