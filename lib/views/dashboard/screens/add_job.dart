@@ -69,7 +69,7 @@ class _AddJobState extends State<AddJob> with Messages {
     LocalStorageSharedPref().getLocalData().then((value) {
       if (value != null) {
         var provider = Provider.of<UserProvider>(context, listen: false);
-        provider.fetchUser(value['email']).whenComplete(() {
+        provider.fetchUser(value['user_id']).whenComplete(() {
           if (provider.user != null) {
             setState(() {
               id = provider.user!.id;

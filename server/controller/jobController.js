@@ -74,4 +74,19 @@ module.exports = {
       });
     });
   },
+
+  displayJobs: (req, res) => {
+    var sql = "CALL displayJobsOnUserScreen()";
+    db.query(sql, (err, data) => {
+      if (err)
+      return res.status(500).send({
+        message: "there is an error occurred during login",
+        errorCode: err.code,
+        description: err.message,
+      });
+      return res.send({
+        jobs: data[0],
+      });
+    });
+  }
 };

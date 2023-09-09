@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:job_finder/consts/api_url.dart';
+import 'package:job_finder/modals/jobs/job_modal.dart';
+import 'package:job_finder/modals/jobs/job_modal_latest.dart';
 import 'package:job_finder/modals/jobs/job_table.dart';
 
 class JobAPIServices {
@@ -42,6 +44,32 @@ class JobAPIServices {
       jobs = (response.data['jobs'][0] as List).map((job) {
         return JobTable.fromJson(job);
       }).toList();
+
+      return jobs;
+    } on DioException catch (e) {
+      return Future.error({
+        "error": e.message,
+        "description": "error occurred while saving data"
+      });
+    }
+  }
+
+  Future<List<JobOnUserScreen>> displayJobsOnUserScreen() async {
+    List<JobOnUserScreen> jobs = [];
+    try {
+      var response = await _dio.get("$API_BASE_URL/jobs/");
+
+      if (response.statusCode != 200) {
+        return Future.error({
+          "error":
+              "Something went wrong the request returned ${response.statusCode}",
+          "description": "there is an error for this request please try again"
+        });
+      }
+
+      jobs = (response.data['jobs'] as List)
+          .map((json) => JobOnUserScreen.fromJson(json))
+          .toList();
 
       return jobs;
     } on DioException catch (e) {

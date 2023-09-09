@@ -200,6 +200,7 @@ class _LoginState extends State<Login> with TextFieldBorderDecorator, Messages {
                               ));
                     } else {
                       LocalStorageSharedPref().storeUserDetails({
+                        "user_id": provider.user!.id,
                         "type": provider.user!.type,
                         "email": provider.user!.email,
                         "username": provider.user!.username,
