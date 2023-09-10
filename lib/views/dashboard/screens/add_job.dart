@@ -30,6 +30,7 @@ class _AddJobState extends State<AddJob> with Messages {
       text: DateFormat("yyyy/MM/dd").format(DateTime.now()));
   final qualify = TextEditingController();
   final description = TextEditingController();
+  final category = TextEditingController();
 
   String? value;
   int? id;
@@ -121,6 +122,14 @@ class _AddJobState extends State<AddJob> with Messages {
                 SizedBox(
                   height: 10,
                 ),
+                CustomTextField(
+                    txtInputType: TextInputType.text,
+                    hintText: "Category",
+                    prefixIcon: Icon(FontAwesomeIcons.suitcase),
+                    controller: category),
+                SizedBox(
+                  height: 10,
+                ),
                 CustomDropdownMenu(
                     value: value,
                     onChange: (newValue) {
@@ -174,6 +183,7 @@ class _AddJobState extends State<AddJob> with Messages {
                         var provider =
                             Provider.of<JobProvider>(context, listen: false);
                         var job = JobTable(
+                            category: category.text,
                             jobTitle: jobtitle.text,
                             jobType: value ?? "FullTime",
                             deadLine: dateTextField.text,

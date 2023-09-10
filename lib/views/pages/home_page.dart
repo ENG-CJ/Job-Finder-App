@@ -59,6 +59,7 @@ class _HomeState extends State<Home> with BottomNavigationBarMixin {
         provider.fetchUser(value['user_id']);
 
         Provider.of<JobProvider>(context, listen: false).getAllJobs();
+        Provider.of<JobProvider>(context, listen: false).fetchCategories();
 
         setState(() {
           email = value['email'];

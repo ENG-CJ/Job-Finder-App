@@ -91,20 +91,22 @@ class HomePage extends StatelessWidget
               child: Row(
                 children: [
                   SizedBox(
-                    height: 50,
-                    child: ListView.separated(
-                      scrollDirection: Axis.horizontal,
-                      shrinkWrap: true,
-                      primary: false,
-                      itemBuilder: (_, index) {
-                        return Categories(categoryName: categories[index]);
-                      },
-                      separatorBuilder: (_, index) => SizedBox(
-                        width: 5,
-                      ),
-                      itemCount: categories.length,
-                    ),
-                  )
+                      height: 50,
+                      child: Consumer<JobProvider>(builder: (_, data, child) {
+                        return ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          shrinkWrap: true,
+                          primary: false,
+                          itemBuilder: (_, index) {
+                            return Categories(
+                                categoryName: data.categories[index].category);
+                          },
+                          separatorBuilder: (_, index) => SizedBox(
+                            width: 5,
+                          ),
+                          itemCount: data.categories.length,
+                        );
+                      }))
                 ],
               ),
             ),

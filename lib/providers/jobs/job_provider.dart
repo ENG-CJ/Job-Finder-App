@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:job_finder/modals/Errors/error_modal.dart';
+import 'package:job_finder/modals/jobs/categories.dart';
 import 'package:job_finder/modals/jobs/job_modal_latest.dart';
 import 'package:job_finder/modals/jobs/job_table.dart';
 import 'package:job_finder/services/api/job_api.dart';
@@ -21,6 +22,7 @@ class JobProvider extends ChangeNotifier {
   bool get isSaving => _isSaving;
   List<JobTable> jobs = [];
   List<JobOnUserScreen> allJobs = [];
+  List<Category> categories = [];
 
   var _service = JobAPIServices();
 
@@ -39,6 +41,8 @@ class JobProvider extends ChangeNotifier {
       _errorMessage = formatter.errorMessage;
     } catch (e) {
       var _formater = ErrorGetter.fromJson(e as Map<String, dynamic>);
+      _hasError = true;
+      _errorMessage = _formater.errorMessage;
     }
 
     _isSaving = false;
@@ -70,6 +74,27 @@ class JobProvider extends ChangeNotifier {
       _isLoading = true;
       notifyListeners();
       jobs = await _service.fetchJob(id);
+    } on TypeError catch (e) {
+      var formatter = ErrorGetter(
+          errorMessage: e.toString(),
+          description: "This error was type error please check your data");
+      _hasError = true;
+      _errorMessage = formatter.errorMessage;
+    } catch (e) {
+      _hasError = true;
+      var _formater = ErrorGetter.fromJson(e as Map<String, dynamic>);
+      _errorMessage = _formater.errorMessage;
+    }
+
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> fetchCategories() async {
+    try {
+      _isLoading = true;
+      notifyListeners();
+      categories = await _service.fetchCategories();
     } on TypeError catch (e) {
       var formatter = ErrorGetter(
           errorMessage: e.toString(),
