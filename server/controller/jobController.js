@@ -2,6 +2,17 @@ const db = require("../db/db");
 const cr = require("crypto");
 
 module.exports = {
+  fetchCategories: (req, res) =>{
+    var sql = "SELECT DISTINCT category from jobs";
+    db.query(sql, (err, data) => {
+      if (err)
+      return res.status(500).send({
+        message: `Fetching Failed ${err.sqlMessage}`,
+        description: err.message,
+      });
+      res.send({"categories": data});
+    });
+  },
   createJob: (req, res) => {
     const {
       jobTitle,
@@ -11,27 +22,28 @@ module.exports = {
       active,
       applicants,
       owner,
-
+      category,
       qualifyAsList,
     } = req.body;
-    var sql = "CALL createJob(?,?,?,?,?,?,?,?,?)";
+    var sql = "CALL createJob(?,?,?,?,?,?,?,?,?,?)";
     db.query(
       sql,
       [
         cr.randomUUID(),
         jobTitle,
+        category,
         jobType,
         description,
-        deadLine,
+        qualifyAsList,
         active,
         applicants,
         owner,
-        qualifyAsList,
+        deadLine,
       ],
       (err, data) => {
         if (err) {
-          return res.send({
-            message: `Registration Failed`,
+          return res.status(500).send({
+            message: `Registration Failed ${err.sqlMessage}`,
             description: err.message,
           });
         }
@@ -70,7 +82,7 @@ module.exports = {
         });
 
       return res.send({
-        message: "the record has been successfully deleted"
+        message: "the record has been successfully deleted",
       });
     });
   },
@@ -79,14 +91,14 @@ module.exports = {
     var sql = "CALL displayJobsOnUserScreen()";
     db.query(sql, (err, data) => {
       if (err)
-      return res.status(500).send({
-        message: "there is an error occurred during login",
-        errorCode: err.code,
-        description: err.message,
-      });
+        return res.status(500).send({
+          message: "there is an error occurred during login",
+          errorCode: err.code,
+          description: err.message,
+        });
       return res.send({
         jobs: data[0],
       });
     });
-  }
+  },
 };
