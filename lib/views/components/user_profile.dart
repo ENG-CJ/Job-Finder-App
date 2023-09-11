@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:job_finder/consts/texts.dart';
@@ -21,6 +23,9 @@ class UserProfile extends StatefulWidget {
 
 class _UserProfileState extends State<UserProfile> {
   User? user;
+  // String userImage = "assets/icon_user.png";
+    // late final profileImage ;
+  
   @override
   void initState() {
     super.initState();
@@ -34,9 +39,12 @@ class _UserProfileState extends State<UserProfile> {
         provider.fetchUser(value['email']);
       }
     });
+    // List<int> userImageBytes = utf8.encode(userImage);
+    // profileImage = base64Decode(user?.profile_pic_base64  ?? base64Encode(userImageBytes));
   }
 
   @override
+  
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -97,8 +105,8 @@ class _UserProfileState extends State<UserProfile> {
                             ),
                         child: ClipRRect(
                             borderRadius: BorderRadius.circular(60),
-                            child: const Image(
-                                image: AssetImage("assets/mo_ali.jpeg"))),
+                            child:  Image.network('http://192.168.100.7:9999/images/${user?.profile_pic}')
+                            ),
                       ),
                       const SizedBox(
                         width: 12.0,

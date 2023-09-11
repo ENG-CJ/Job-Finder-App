@@ -64,7 +64,7 @@ class _AddJobState extends State<AddJob> with Messages {
 
   @override
   void initState() {
-    // TODO: implement initState
+
     super.initState();
     LocalStorageSharedPref().getLocalData().then((value) {
       if (value != null) {
@@ -180,7 +180,7 @@ class _AddJobState extends State<AddJob> with Messages {
                             jobDescription: description.text,
                             qualifyAsList: qualify.text,
                             jobOwner: id);
-
+            
                         provider.saveJobData(job).whenComplete(() {
                           if (provider.hasError) {
                             EasyLoading.showError(provider.error);

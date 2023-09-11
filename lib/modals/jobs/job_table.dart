@@ -46,9 +46,10 @@ class JobTable {
 
   Map<String, dynamic> toJson() {
     return {
+      "id": id,
       "jobTitle": jobTitle,
       "jobType": jobType,
-      "description": jobDescription,
+      "jobDescription": jobDescription,
       "deadLine": deadLine,
       "applicants": numberOfApplicants,
       "active": active,

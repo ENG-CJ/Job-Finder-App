@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:job_finder/consts/api_url.dart';
 import 'package:job_finder/modals/jobs/job_table.dart';
+import 'package:job_finder/util/text.dart';
 
 class JobAPIServices {
   final _dio = Dio();
@@ -70,5 +71,22 @@ class JobAPIServices {
         "description": "error occurred while saving data"
       });
     }
+  }
+
+  Future<dynamic> updateJob(JobTable job) async {
+    dynamic response;
+    try {
+      // print("Jod Id is : ${job.id}");
+      print("Jod Id is : ${job.toJson()}");
+      
+      response = await _dio.post("$API_BASE_URL/jobs/update", data: job.toJson());
+    } on DioException catch (err) {
+      return Future.error({
+        "error": err.response!.data['description'],
+        "description": err.message
+      });
+    }
+
+    return response.data;
   }
 }

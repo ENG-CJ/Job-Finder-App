@@ -5,6 +5,8 @@ import 'package:job_finder/mixins/no_data_found_error.dart';
 import 'package:job_finder/util/helpers/text_helper.dart';
 import 'package:job_finder/util/icon_text.dart';
 import 'package:job_finder/util/text.dart';
+import 'package:job_finder/views/dashboard/screens/job_details_page.dart';
+import 'package:job_finder/views/dashboard/screens/job_edit_page.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
@@ -26,6 +28,7 @@ class JobView extends StatefulWidget {
 }
 
 class _JobViewState extends State<JobView> with NoDataErrorMixin, Messages {
+  JobTable? job;
   int? id;
 
   @override
@@ -159,7 +162,12 @@ class _JobViewState extends State<JobView> with NoDataErrorMixin, Messages {
                       children: [
                         CButton(
                             width: 90,
-                            onClicked: () => print("Hello"),
+                            onClicked: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => JobEditPage(
+                                       job: job,
+                                        ))),
                             backgroundColor:
                                 colors['primary']!.withOpacity(0.5) as Color,
                             widget: Center(
@@ -210,7 +218,18 @@ class _JobViewState extends State<JobView> with NoDataErrorMixin, Messages {
                         ),
                         CButton(
                             width: 90,
-                            onClicked: () => print("Hello"),
+                            onClicked: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => JobDetailsPage(
+                                            jobTitle: job.jobTitle,
+                                            jobType: job.jobType,
+                                            jobDate: job.deadLine,
+                                            qualification: job.qualifications,
+                                            jobDescription: job.jobDescription,
+                                          )));
+                            },
                             backgroundColor:
                                 colors['primary']!.withOpacity(0.5) as Color,
                             widget: Center(

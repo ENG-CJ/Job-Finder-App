@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:job_finder/consts/api_url.dart';
 import 'package:job_finder/consts/texts.dart';
 import 'package:job_finder/data/user_profile_data.dart';
 import 'package:job_finder/providers/users/user_provider.dart';
@@ -29,7 +30,7 @@ class _UserProfileUpdateState extends State<UserProfileUpdate> {
   final _cityController = TextEditingController();
   late final password;
   late final userId;
-
+  late String? userImage;
   @override
   void initState() {
     super.initState();
@@ -40,6 +41,7 @@ class _UserProfileUpdateState extends State<UserProfileUpdate> {
     _emailController.text = widget.user?.email ?? '';
     _phoneController.text = widget.user?.mobile.toString() ?? 0.toString();
     _cityController.text = widget.user?.regionOrCity ?? '';
+    userImage = widget.user!.profile_pic;
   }
 
   @override
@@ -103,12 +105,13 @@ class _UserProfileUpdateState extends State<UserProfileUpdate> {
                   child: ClipRRect(
                       borderRadius: BorderRadius.circular(60),
                       child:
-                          const Image(image: AssetImage("assets/mo_ali.jpeg"))),
+                          Image.network('${API_BASE_URL}/images/$userImage'),
                 ),
-              ),
+              ),),
               const SizedBox(
                 height: 20,
               ),
+              
 
               /*  Fields  */
               Form(

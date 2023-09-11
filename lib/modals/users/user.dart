@@ -1,11 +1,14 @@
+import 'dart:ui';
+
 class User {
   String username, email, password;
   int mobile;
   String regionOrCity;
   String type;
   String verified;
-  String? description, address;
+  String? description, address, profile_pic_base64,profile_pic ;
   int? id;
+  
 
   User(
       {required this.username,
@@ -17,12 +20,11 @@ class User {
       this.description,
       this.id,
       this.verified = 'false',
-      this.type = 'User'});
+      this.type = 'User',
+      this.profile_pic
+      });
 
-  //   User.simple({
-  //   required this.username,
-  //   required this.email,
-  // });
+  
 
   factory User.fromJson(Map<String, dynamic> jsonData) {
     return User(
@@ -38,6 +40,9 @@ class User {
     description: jsonData['description'],
     type: jsonData['type'],
     verified: jsonData['verified'],
+    profile_pic: jsonData['profile_pic'] is String 
+      ? jsonData['profile_pic'] 
+      : null,
   );
   }
 

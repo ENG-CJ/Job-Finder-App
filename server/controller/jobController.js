@@ -11,7 +11,6 @@ module.exports = {
       active,
       applicants,
       owner,
-
       qualifyAsList,
     } = req.body;
     var sql = "CALL createJob(?,?,?,?,?,?,?,?,?)";
@@ -70,8 +69,47 @@ module.exports = {
         });
 
       return res.send({
-        message: "the record has been successfully deleted"
+        message: "the record has been successfully deleted",
       });
     });
   },
+
+  updateJob: (req, res) => {
+    const {
+      id,
+      jobTitle,
+      jobType,
+      jobDescription,
+      qualifyAsList,
+      active,
+      deadLine,
+   
+    } = req.body;
+    
+    var query =
+      "UPDATE jobs SET jobTitle=?, jobType=?, descripton=?, qualifications=?, active=?, deadLine=? WHERE id = ?";
+    db.query(
+      query,
+      [
+        jobTitle,
+        jobType,
+        jobDescription,
+        qualifyAsList,
+        active,
+        deadLine,
+        id, 
+      ],
+      (err, result) => {
+        if (err) {
+          return res.status(500).send({
+            message: `Registration Failed ${err.sqlMessage} `,
+            description: `${err.message} with description ${jobDescription}`,
+          });
+        }
+  
+        return res.send({ message: "Job has been updated!" });
+      }
+    );
+  },
+  
 };
