@@ -5,6 +5,7 @@ import 'package:job_finder/mixins/bottom_navigation_mixin.dart';
 import 'package:job_finder/mixins/no_data_found_error.dart';
 import 'package:job_finder/modals/jobs/applied_jobs.dart';
 import 'package:job_finder/modals/jobs/job_modal.dart';
+import 'package:job_finder/providers/users/user_provider.dart';
 import 'package:job_finder/util/buton.dart';
 import 'package:job_finder/util/filter_dailog.dart';
 import 'package:job_finder/util/helpers/text_helper.dart';
@@ -18,6 +19,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
 
+import '../../consts/api_url.dart';
 import '../../consts/colors.dart';
 import '../../modals/jobs/requests.dart';
 import '../../providers/jobs/job_provider.dart';
@@ -39,6 +41,8 @@ class _AppliedPageState extends State<AppliedPage>
     super.initState();
     LocalStorageSharedPref().getLocalData().then((value) {
       if (value != null) {
+        Provider.of<UserProvider>(context, listen: false)
+            .fetchUser(value['user_id']);
         Provider.of<JobProvider>(context, listen: false)
             .fetchRequests(value['user_id']);
       }
@@ -64,10 +68,22 @@ class _AppliedPageState extends State<AppliedPage>
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      ProfileImage(
-                          radius: 30,
-                          asBackgroundImage: true,
-                          imagePath: "assets/me.jpeg"),
+                      Consumer<UserProvider>(builder: (_, data, child) {
+                        return data.user!.imagePath == null ||
+                                data.user!.imagePath == "null" ||
+                                data.user!.imagePath == "" ||
+                                data.user!.imagePath == "no_profile"
+                            ? ProfileImage(
+                                radius: 30,
+                                asBackgroundImage: true,
+                                imagePath: "assets/default.png")
+                            : ProfileImage(
+                                fromNetwork: true,
+                                radius: 30,
+                                asBackgroundImage: true,
+                                imagePath:
+                                    "$API_BASE_URL/uploads/${data.user!.imagePath!}");
+                      }),
                       CText(
                         text: "Applied Jobs",
                         decorations: TextDecorations(
@@ -94,8 +110,6 @@ class _AppliedPageState extends State<AppliedPage>
                                     scrollable: true,
                                   );
                                 });
-
-                            print(data);
                           },
                           width: 45,
                           radius: 50,
@@ -132,14 +146,28 @@ class _AppliedPageState extends State<AppliedPage>
     );
   }
 
-  _buildRequestsListView(BuildContext context, List<Request> requests) {
-    return ListView.separated(
-        separatorBuilder: (_, i) => SizedBox(
-              height: 20,
-            ),
-        itemCount: requests.length,
-        shrinkWrap: true,
-        primary: false,
-        itemBuilder: (_, index) => AppliedJobCard(request: requests[index]));
+  Widget _buildRequestsListView(BuildContext context, List<Request> requests) {
+    return requests.isEmpty
+        ? Padding(
+            padding: const EdgeInsets.only(top: 80),
+            child: noDataError(context, "Refresh", "No Requests Yet",
+                "Apply Jobs to view the requests", (context, result) {
+              LocalStorageSharedPref().getLocalData().then((value) {
+                if (value != null) {
+                  Provider.of<JobProvider>(context, listen: false)
+                      .fetchRequests(value['user_id']);
+                }
+              });
+            }),
+          )
+        : ListView.separated(
+            separatorBuilder: (_, i) => SizedBox(
+                  height: 20,
+                ),
+            itemCount: requests.length,
+            shrinkWrap: true,
+            primary: false,
+            itemBuilder: (_, index) =>
+                AppliedJobCard(request: requests[index]));
   }
 }

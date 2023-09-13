@@ -31,6 +31,7 @@ import '../components/job_card.dart';
 import '../components/job_header.dart';
 
 import '../components/login_mode_profile.dart';
+import 'book_marks_page.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -40,10 +41,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> with BottomNavigationBarMixin {
-  final pages = [
-    HomePage(),
-    AppliedPage(),
-  ];
+  final pages = [HomePage(), AppliedPage(), BookMarksPage()];
   int currentIndex = 0;
   var email = '';
   var username = '';
@@ -98,7 +96,7 @@ class _HomeState extends State<Home> with BottomNavigationBarMixin {
       ),
       bottomNavigationBar:
           curvedNavigationBar(currentIndex, onClickIndex: (index) {
-        if (index > 1) return;
+        if (index > 2) return;
         setState(() {
           currentIndex = index;
         });
