@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:job_finder/services/local/local_storage.dart';
 
+import '../../consts/api_url.dart';
 import '../../consts/colors.dart';
 import '../../util/buton.dart';
 import '../../util/helpers/text_helper.dart';
@@ -11,7 +12,9 @@ import '../../util/text.dart';
 
 class LoginModeProfile extends StatelessWidget {
   final username;
-  const LoginModeProfile({super.key, required this.username});
+  final imagePath;
+  const LoginModeProfile(
+      {super.key, required this.username, this.imagePath = ''});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +22,16 @@ class LoginModeProfile extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.only(top: 10),
-          child: ProfileImage(imagePath: "assets/google.png"),
+          child: imagePath == '' ||
+                  imagePath == "no_profile" ||
+                  imagePath == "null" ||
+                  imagePath == null
+              ? ProfileImage(imagePath: "assets/default.png")
+              : ProfileImage(
+                  fromNetwork: true,
+                  imagePath: "$API_BASE_URL/uploads/$imagePath",
+                  asBackgroundImage: true,
+                ),
         ),
         SizedBox(
           height: 4,

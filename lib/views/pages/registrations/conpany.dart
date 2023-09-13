@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -12,24 +13,41 @@ import 'package:job_finder/util/text.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import '../../../consts/colors.dart';
+import '../../../mixins/image_picker_resource.dart';
 import '../../../util/buton.dart';
 import '../login_page.dart';
 
-class RegisterCompany extends StatelessWidget with Messages {
+class RegisterCompany extends StatefulWidget {
   RegisterCompany({super.key});
 
+  @override
+  State<RegisterCompany> createState() => _RegisterCompanyState();
+}
+
+class _RegisterCompanyState extends State<RegisterCompany>
+    with Messages, ImagePickerResource {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   final String type = "Company";
 
   TextEditingController comNameController = TextEditingController();
+
   TextEditingController comPhoneController = TextEditingController();
+
   TextEditingController comEmailController = TextEditingController();
+
   TextEditingController comPasswordController = TextEditingController();
+
   TextEditingController comCityController = TextEditingController();
+
   TextEditingController comAddressController = TextEditingController();
+
   TextEditingController comIndustryController = TextEditingController();
+
   TextEditingController comCountryController = TextEditingController();
+
   TextEditingController descriptionController = TextEditingController();
+  File? imagePath;
 
   @override
   Widget build(BuildContext context) {
@@ -90,8 +108,8 @@ class RegisterCompany extends StatelessWidget with Messages {
                             children: [
                               Center(
                                 child: Container(
-                                  height: 80,
-                                  width: 80,
+                                  height: 90,
+                                  width: 100,
                                   margin:
                                       const EdgeInsets.only(left: 16, top: 20),
                                   decoration: BoxDecoration(
@@ -99,11 +117,15 @@ class RegisterCompany extends StatelessWidget with Messages {
                                       ),
                                   child: Stack(
                                     children: [
-                                      ClipRRect(
-                                        borderRadius: BorderRadius.circular(60),
-                                        child: Image.asset(
-                                            "assets/img_holder.png"),
-                                      ),
+                                      imagePath != null
+                                          ? CircleAvatar(
+                                              radius: 40,
+                                              backgroundImage:
+                                                  FileImage(imagePath!))
+                                          : CircleAvatar(
+                                              radius: 40,
+                                              backgroundImage: AssetImage(
+                                                  "assets/img_holder.png")),
                                       Positioned(
                                         top: 40,
                                         right: 0,
@@ -114,8 +136,14 @@ class RegisterCompany extends StatelessWidget with Messages {
                                             shape: BoxShape.circle,
                                           ),
                                           child: IconButton(
-                                            onPressed: () {
-                                              // Handle camera icon press
+                                            onPressed: () async {
+                                              var image =
+                                                  await getImagePicked();
+                                              if (image != null) {
+                                                setState(() {
+                                                  imagePath = image;
+                                                });
+                                              }
                                             },
                                             color: Colors.red,
                                             icon: Icon(
@@ -270,6 +298,7 @@ class RegisterCompany extends StatelessWidget with Messages {
                       child: CButton(
                           onClicked: () async {
                             var companyData = User(
+                                imageFile: imagePath,
                                 type: type,
                                 description: descriptionController.text,
                                 address: comAddressController.text,

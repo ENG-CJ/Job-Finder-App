@@ -8,13 +8,30 @@ class UserAPIServices {
   Future<dynamic> registerUser(User user) async {
     dynamic response;
     try {
-      response =
-          await _dio.post('$API_BASE_URL/users/register', data: user.toJson());
+      print(user.imageFile ?? "no data");
+      if (user.imageFile != null) {
+        var formData = FormData.fromMap({
+          "username": user.username,
+          "email": user.email,
+          "password": user.password,
+          "mobile": user.mobile,
+          "country": user.regionOrCity,
+          "type": user.type,
+          "verified": user.verified,
+          "description": user.description,
+          "address": user.address,
+          "profile_pic": await MultipartFile.fromFile(user.imageFile!.path)
+        });
+        response =
+            await _dio.post('$API_BASE_URL/users/register', data: formData);
+      } else {
+        response = await _dio.post('$API_BASE_URL/users/register',
+            data: user.toJson());
+      }
     } on DioException catch (e) {
-      return Future.error({
-        "error": "Something went wrong",
-        "description": "Error Occurred During ${e.message}"
-      });
+      print(e.response!.data);
+      return Future.error(
+          {"error": e.message, "description": e.response!.data['description']});
     }
 
     return response.data;
@@ -36,11 +53,11 @@ class UserAPIServices {
     return user;
   }
 
-  Future<User?> fetchUserDetails(String email) async {
+  Future<User?> fetchUserDetails(int id) async {
     User? user;
     try {
       var response =
-          await _dio.post("$API_BASE_URL/users/fetch", data: {"email": email});
+          await _dio.post("$API_BASE_URL/users/fetch", data: {"id": id});
       if (response.data['userData'].length > 0) {
         user = User.fromJson((response.data['userData'] as List).first);
       } else {
@@ -56,12 +73,35 @@ class UserAPIServices {
   Future<dynamic> updateUser(User user) async {
     dynamic response;
     try {
-      response =
-          await _dio.post("$API_BASE_URL/users/update", data: user.toJson());
+      if (user.imageFile != null) {
+        print("api part image path is ${user.imagePath}");
+        var formData = FormData.fromMap({
+          "id": user.id,
+          "username": user.username,
+          "email": user.email,
+          "oldImage": user.imagePath,
+          "password": user.password,
+          "mobile": user.mobile,
+          "country": user.regionOrCity,
+          "type": user.type,
+          "verified": user.verified,
+          "description": user.description,
+          "address": user.address,
+          "profile_pic": await MultipartFile.fromFile(user.imageFile!.path)
+        });
+
+        response =
+            await _dio.post("$API_BASE_URL/users/update", data: formData);
+        print("with file compoleted");
+      } else {
+        response =
+            await _dio.post("$API_BASE_URL/users/update", data: user.toJson());
+        print("no file completed ");
+      }
     } on DioException catch (err) {
       return Future.error({
-        "error": "Something went wrong",
-        "description": "Error Occurred During ${err.message}"
+        "error": err.response!.data['message'],
+        "description": err.response!.data['description']
       });
     }
     return response.data;

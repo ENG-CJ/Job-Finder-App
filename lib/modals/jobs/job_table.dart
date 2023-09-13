@@ -6,12 +6,14 @@ class JobTable {
   int? jobOwner;
   String active;
   int numberOfApplicants;
+  String? category;
 
   JobTable(
       {required this.jobTitle,
       required this.jobType,
       required this.deadLine,
       this.qualifications,
+      this.category,
       this.id,
       this.updated,
       this.jobDescription = '',
@@ -48,6 +50,7 @@ class JobTable {
     return {
       "id": id,
       "jobTitle": jobTitle,
+      "category": category,
       "jobType": jobType,
       "jobDescription": jobDescription,
       "deadLine": deadLine,

@@ -1,10 +1,15 @@
+import 'dart:async';
+
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:job_finder/consts/api_url.dart';
 import 'package:job_finder/consts/colors.dart';
 import 'package:job_finder/mixins/bottom_navigation_mixin.dart';
 import 'package:job_finder/mixins/no_data_found_error.dart';
+import 'package:job_finder/providers/jobs/job_provider.dart';
+import 'package:job_finder/providers/users/user_provider.dart';
 import 'package:job_finder/services/local/local_storage.dart';
 import 'package:job_finder/util/helpers/text_helper.dart';
 import 'package:job_finder/util/icon_image.dart';
@@ -13,10 +18,12 @@ import 'package:job_finder/util/text.dart';
 import 'package:job_finder/views/components/banner_top.dart';
 import 'package:job_finder/views/pages/applied_page.dart';
 import 'package:job_finder/views/pages/home_view.dart';
+import 'package:provider/provider.dart';
 
 import '../../consts/menus_list.dart';
 import '../../mixins/listview_builder_job_card.dart';
 import '../../modals/jobs/job_modal.dart';
+import '../../modals/jobs/job_modal_latest.dart';
 import '../../util/buton.dart';
 import '../../util/categories.dart';
 import '../../util/profile.dart';
@@ -43,12 +50,17 @@ class _HomeState extends State<Home> with BottomNavigationBarMixin {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     LocalStorageSharedPref().getLocalData().then((value) {
       if (value == null) {
         Navigator.pop(context);
       } else {
+        var provider = Provider.of<UserProvider>(context, listen: false);
+        provider.fetchUser(value['user_id']);
+
+        Provider.of<JobProvider>(context, listen: false).getAllJobs();
+        Provider.of<JobProvider>(context, listen: false).fetchCategories();
+
         setState(() {
           email = value['email'];
           username = value['username'];
@@ -75,9 +87,10 @@ class _HomeState extends State<Home> with BottomNavigationBarMixin {
         actions: [
           IconButton(
               onPressed: () {
-                showSearch(
-                    context: context,
-                    delegate: JobSearchDelegate(jobList: HomePage.jobs));
+                // showSearch(
+                //     context: context,
+                //     delegate: JobSearchDelegate(
+                //         jobList: Provider.of<JobProvider>(context).allJobs));
               },
               icon: Icon(Icons.search)),
           IconButton(onPressed: () {}, icon: Icon(Icons.refresh)),
@@ -106,7 +119,10 @@ class _HomeState extends State<Home> with BottomNavigationBarMixin {
                         BorderRadius.only(bottomRight: Radius.circular(80))),
                 padding: EdgeInsets.all(0),
                 margin: EdgeInsets.all(0),
-                child: LoginModeProfile(username: username),
+                child: LoginModeProfile(
+                    username: username,
+                    imagePath:
+                        "${Provider.of<UserProvider>(context).user!.imagePath}"),
               ),
             ),
             Column(
@@ -144,7 +160,7 @@ class _HomeState extends State<Home> with BottomNavigationBarMixin {
 
 class JobSearchDelegate extends SearchDelegate
     with BuildListViewJobCard, NoDataErrorMixin {
-  final List<Job> jobList;
+  final List<JobOnUserScreen> jobList;
   JobSearchDelegate({required this.jobList})
       : super(keyboardType: TextInputType.text);
 
@@ -182,7 +198,7 @@ class JobSearchDelegate extends SearchDelegate
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    List<Job> matchedResults = [];
+    List<JobOnUserScreen> matchedResults = [];
     for (var item in jobList) {
       if (item.jobTitle.toLowerCase().contains(query.toLowerCase())) {
         matchedResults.add(item);
