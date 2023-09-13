@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:job_finder/util/helpers/text_helper.dart';
 import 'package:job_finder/util/text.dart';
-import 'package:intl/intl.dart';
 import '../../../consts/colors.dart';
 
 class JobDetailsPage extends StatelessWidget {
@@ -79,23 +78,25 @@ class JobDetailsPage extends StatelessWidget {
                           color: Colors.black.withOpacity(0.5)),
                     ),
                   ),
-                  const SizedBox(height: 12,),
-                  qualification != null && qualification!.isNotEmpty
-                ? Wrap(
-                    spacing: 4,
-                    runSpacing: 0,
-                    children: List.generate(
-                        qualification!.length,
-                        (index) => Chip(
-                              backgroundColor: Colors.grey[200],
-                              shadowColor: Colors.red,
-                              surfaceTintColor: Colors.grey[200],
-                              label: Text(qualification![index]),
-                            )))
-                : const Padding(
-                    padding: const EdgeInsets.only(left: 8, top: 20),
-                    child: Text(""),
+                  const SizedBox(
+                    height: 12,
                   ),
+                  qualification != null && qualification!.isNotEmpty
+                      ? Wrap(
+                          spacing: 4,
+                          runSpacing: 0,
+                          children: List.generate(
+                              qualification!.length,
+                              (index) => Chip(
+                                    backgroundColor: Colors.grey[200],
+                                    shadowColor: Colors.red,
+                                    surfaceTintColor: Colors.grey[200],
+                                    label: Text(qualification![index]),
+                                  )))
+                      : const Padding(
+                          padding: const EdgeInsets.only(left: 8, top: 20),
+                          child: Text(""),
+                        ),
                   const SizedBox(
                     height: 30,
                   ),
@@ -104,22 +105,27 @@ class JobDetailsPage extends StatelessWidget {
                     child: CText(
                       text: 'About the Role',
                       decorations: TextDecorations(
-                          fontSize: 18,
-                          family: 'Roboto-Bold',
-                          weight: FontWeight.bold,
-                          ),
+                        fontSize: 18,
+                        family: 'Roboto-Bold',
+                        weight: FontWeight.bold,
+                      ),
                     ),
                   ),
                   const SizedBox(
                     height: 12,
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 7,right: 12),
+                    padding: const EdgeInsets.only(left: 7, right: 12),
                     child: Container(
-                      // height: mediaQuery.height * 0.5,
-                      padding: EdgeInsets.only(right: 12),
-                      child: Text(jobDescription!,style: TextStyle(fontSize: 16,fontFamily: 'Roboto-Light',fontWeight: FontWeight.normal),)
-                    ),
+                        // height: mediaQuery.height * 0.5,
+                        padding: EdgeInsets.only(right: 12),
+                        child: Text(
+                          jobDescription!,
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontFamily: 'Roboto-Light',
+                              fontWeight: FontWeight.normal),
+                        )),
                   ),
                 ],
               ),

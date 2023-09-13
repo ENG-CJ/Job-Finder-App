@@ -29,7 +29,7 @@ class JobHeader extends StatelessWidget {
       children: [
         Row(
           children: [
-            logo == null || logo == "" || logo == ""
+            logo == null || logo == "" || logo == "no_profile"
                 ? const IconImage(iconImagePath: "assets/default.png")
                 : IconImage(
                     iconImagePath: "$API_BASE_URL/uploads/${logo!}",
