@@ -6,9 +6,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../consts/colors.dart';
 
 mixin BottomNavigationBarMixin {
-
-
-   Widget curvedNavigationBar(int currentIndex,{void Function(int)? onClickIndex}) {
+  Widget curvedNavigationBar(int currentIndex,
+      {void Function(int)? onClickIndex}) {
     return CurvedNavigationBar(
       index: currentIndex,
       onTap: onClickIndex,
@@ -26,10 +25,6 @@ mixin BottomNavigationBarMixin {
         ),
         FaIcon(
           FontAwesomeIcons.bookmark,
-          color: Colors.white,
-        ),
-        FaIcon(
-          FontAwesomeIcons.user,
           color: Colors.white,
         ),
       ],
