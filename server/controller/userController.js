@@ -2,6 +2,7 @@ const e = require("express");
 const db = require("../db/db");
 const fs = require("fs");
 
+
 module.exports = {
   createUser: (req, res) => {
     const {
@@ -15,6 +16,9 @@ module.exports = {
       description,
       country,
     } = req.body;
+
+    const profile_pic = req.file;
+
     db.query(
       "INSERT into users (username,email,password,type,mobile,address,verified,description,country,profile_pic) VALUES (?,?,?,?,?,?,?,?,?,?)",
       [
@@ -68,6 +72,8 @@ module.exports = {
           errorCode: err.code,
           description: err.message,
         });
+
+        
 
       return res.send({
         userData: data,

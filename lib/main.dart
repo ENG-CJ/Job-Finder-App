@@ -8,6 +8,7 @@ import 'package:job_finder/views/dashboard/screens/dashboard.dart';
 import 'package:job_finder/views/dashboard/screens/job_view.dart';
 import 'package:job_finder/views/pages/login_page.dart';
 import 'package:job_finder/views/pages/registrations/conpany.dart';
+import 'package:job_finder/views/pages/registrations/user_reg.dart';
 import 'package:job_finder/views/pages/user_type_page.dart';
 import 'package:provider/provider.dart';
 
@@ -33,7 +34,7 @@ class JobFinder extends StatelessWidget {
         theme: ThemeData()
             .copyWith(scaffoldBackgroundColor: const Color(0xfff4f4f4)),
         debugShowCheckedModeBanner: false,
-        home: Login(),
+        home: const Login(),
         builder: EasyLoading.init(),
       ),
     );

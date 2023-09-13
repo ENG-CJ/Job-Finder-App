@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:job_finder/consts/api_url.dart';
@@ -23,6 +25,9 @@ class UserProfile extends StatefulWidget {
 
 class _UserProfileState extends State<UserProfile> {
   User? user;
+  // String userImage = "assets/icon_user.png";
+    // late final profileImage ;
+  
   @override
   void initState() {
     super.initState();
@@ -36,9 +41,12 @@ class _UserProfileState extends State<UserProfile> {
         provider.fetchUser(value['user_id']);
       }
     });
+    // List<int> userImageBytes = utf8.encode(userImage);
+    // profileImage = base64Decode(user?.profile_pic_base64  ?? base64Encode(userImageBytes));
   }
 
   @override
+  
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -97,6 +105,7 @@ class _UserProfileState extends State<UserProfile> {
                         decoration: BoxDecoration(
                             // color: Colors.red
                             ),
+
                         child: user!.imagePath == null ||
                                 user!.imagePath == "null" ||
                                 user!.imagePath == "no_profile"
@@ -108,6 +117,7 @@ class _UserProfileState extends State<UserProfile> {
                                 asBackgroundImage: true,
                                 imagePath:
                                     "$API_BASE_URL/uploads/${user!.imagePath}"),
+
                       ),
                       const SizedBox(
                         width: 12.0,

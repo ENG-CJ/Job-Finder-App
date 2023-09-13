@@ -1,4 +1,6 @@
+
 import 'dart:io';
+
 
 class User {
   String username, email, password;
@@ -10,6 +12,7 @@ class User {
   int? id;
   String? imagePath;
   File? imageFile;
+
 
   User(
       {required this.username,
@@ -23,12 +26,11 @@ class User {
       this.description,
       this.id,
       this.verified = 'false',
-      this.type = 'User'});
+      this.type = 'User',
+   
+      });
 
-  //   User.simple({
-  //   required this.username,
-  //   required this.email,
-  // });
+  
 
   factory User.fromJson(Map<String, dynamic> jsonData) {
     return User(
@@ -44,6 +46,7 @@ class User {
       type: jsonData['type'],
       verified: jsonData['verified'],
     );
+
   }
 
   Map<String, dynamic> toJson() {

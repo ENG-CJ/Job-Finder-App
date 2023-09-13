@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:job_finder/modals/Errors/error_modal.dart';
@@ -90,6 +92,28 @@ class JobProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+
+  Future updateJob(JobTable job) async {
+    // try{
+      _isSaving = true;
+      notifyListeners();
+      var data = await _service.updateJob(job);
+      _responseMessage = data['message'];
+      log("Response says $data");
+    // } on TypeError catch(err) {
+    //   var error = ErrorGetter(errorMessage: err.toString(),description: "Type Error occured");
+    //   _hasError = true;
+    //   _errorMessage = error.errorMessage;
+    // } catch (e) {
+    //   var error = ErrorGetter.fromJson(e as Map<String, dynamic>);
+    //   _hasError = false;
+    //   _errorMessage = error.description!;
+    // }
+
+    _isSaving = false;
+    notifyListeners();
+  }
+
   Future<void> fetchCategories() async {
     try {
       _isLoading = true;
@@ -132,4 +156,5 @@ class JobProvider extends ChangeNotifier {
     _isLoading = false;
     notifyListeners();
   }
+
 }

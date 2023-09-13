@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:job_finder/consts/api_url.dart';
 import 'package:job_finder/consts/texts.dart';
 import 'package:job_finder/data/user_profile_data.dart';
 import 'package:job_finder/providers/users/user_provider.dart';
@@ -35,7 +36,9 @@ class _UserProfileUpdateState extends State<UserProfileUpdate>
   final _emailController = TextEditingController();
   final _phoneController = TextEditingController();
   final _cityController = TextEditingController();
+
   File? imagePath;
+
 
   @override
   void initState() {
@@ -45,6 +48,7 @@ class _UserProfileUpdateState extends State<UserProfileUpdate>
     _emailController.text = widget.user?.email ?? '';
     _phoneController.text = widget.user?.mobile.toString() ?? 0.toString();
     _cityController.text = widget.user?.regionOrCity ?? '';
+ 
   }
 
   @override
@@ -108,6 +112,7 @@ class _UserProfileUpdateState extends State<UserProfileUpdate>
               ))
         ],
       ),
+
       body: ModalProgressHUD(
         blur: 1,
         color: Colors.white,
@@ -192,6 +197,7 @@ class _UserProfileUpdateState extends State<UserProfileUpdate>
                 const SizedBox(
                   height: 20,
                 ),
+
 
                 /*  Fields  */
                 Form(
