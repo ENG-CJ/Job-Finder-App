@@ -3,7 +3,7 @@ class JobOnUserScreen {
   String jobTitle;
   String jobType;
   String descripton;
-  String qualifications;
+  List<String> qualifications;
   int applicants;
   DateTime deadLine;
   DateTime updated;
@@ -31,7 +31,7 @@ class JobOnUserScreen {
         jobTitle: json["jobTitle"],
         jobType: json["jobType"],
         descripton: json["descripton"],
-        qualifications: json["qualifications"],
+        qualifications: _getQualifications(json["qualifications"]),
         applicants: json["applicants"],
         deadLine: DateTime.parse(json["deadLine"]),
         updated: DateTime.parse(json["updated"]),
@@ -39,6 +39,17 @@ class JobOnUserScreen {
         company: json["company"],
         profile: json["profile"],
       );
+
+  static List<String> _getQualifications(String data) {
+    var listData = <String>[];
+    if (data != "" || data.isNotEmpty) {
+      listData = data.split(",");
+      return listData;
+    }
+
+    print("list string $listData");
+    return listData;
+  }
 
   Map<String, dynamic> toJson() => {
         "id": id,
