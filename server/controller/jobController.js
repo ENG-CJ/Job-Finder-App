@@ -2,33 +2,32 @@ const db = require("../db/db");
 const cr = require("crypto");
 
 module.exports = {
-
-  deleteRequest: (req, res,next) => {
+  deleteRequest: (req, res, next) => {
     var sql = "DELETE FROM requests WHERE req_id=?";
     db.query(sql, [req.params.req_id], (err, data) => {
       if (err)
-      return res.status(500).send({
-        message: `Deleting Failed ${err.sqlMessage}`,
-        description: err.message,
-      });
-     next();
-    })
+        return res.status(500).send({
+          message: `Deleting Failed ${err.sqlMessage}`,
+          description: err.message,
+        });
+      next();
+    });
   },
-  fetchRequestBasedOnUser: (req, res)=>{
-    var sql ="SELECT * FROM requests where applicant_id=? and job_id=?";
+  fetchRequestBasedOnUser: (req, res) => {
+    var sql = "SELECT * FROM requests where applicant_id=? and job_id=?";
     db.query(sql, [req.params.id, req.params.jobID], (err, data) => {
       if (err)
-      return res.status(500).send({
-        message: `Fetching Failed ${err.sqlMessage}`,
-        description: err.message,
-      });
-      res.send({'jobs': data});
-    })
+        return res.status(500).send({
+          message: `Fetching Failed ${err.sqlMessage}`,
+          description: err.message,
+        });
+      res.send({ jobs: data });
+    });
   },
   fetchRequest: (req, res) => {
     var sql =
       "SELECT req_id,applicant_id,job_id,request_date,status,jobs.jobTitle,users.username,users.profile_pic FROM requests INNER JOIN jobs on requests.job_id=jobs.id INNER JOIN users on jobs.owner=users.id where applicant_id=?";
-    db.query(sql,[req.params.applicant_id], (err, data) => {
+    db.query(sql, [req.params.applicant_id], (err, data) => {
       if (err)
         return res.status(500).send({
           message: `Fetching Failed ${err.sqlMessage}`,
@@ -37,36 +36,35 @@ module.exports = {
       res.send({ requests: data });
     });
   },
-  incrementJobApplicants: (req,res)=>{
+  incrementJobApplicants: (req, res) => {
     var sql = "UPDATE jobs SET applicants=applicants+1 WHERE id=?";
     db.query(sql, [req.body.job_id], (err, data) => {
       if (err)
-      return res.status(500).send({
-        message: `updating Failed ${err.sqlMessage}`,
-        description: err.message,
+        return res.status(500).send({
+          message: `updating Failed ${err.sqlMessage}`,
+          description: err.message,
+        });
+      res.send({
+        message:
+          "Your Request Has been sent, Wait Until The Owner Verified or accept your request",
       });
-     res.send({
-       message:
-         "Your Request Has been sent, Wait Until The Owner Verified or accept your request",
-     });
-
-    })
+    });
   },
-  decrementJobApplicants: (req, res)=> {
+  decrementJobApplicants: (req, res) => {
     var sql = "UPDATE jobs SET applicants=applicants-1 WHERE id=?";
     db.query(sql, [req.params.job_id], (err, data) => {
       if (err)
-      return res.status(500).send({
-        message: `updating Failed ${err.sqlMessage}`,
-        description: err.message,
-      });
+        return res.status(500).send({
+          message: `updating Failed ${err.sqlMessage}`,
+          description: err.message,
+        });
       res.send({
         message:
           "Your Request Has been removed, Wait Until The Owner Verified or accept your request",
       });
-    })
+    });
   },
-  applyJob: (req, res,next) => {
+  applyJob: (req, res, next) => {
     var query =
       "INSERT INTO `requests`(`applicant_id`, `job_id`, `request_date`) VALUES (?,?,?)";
     db.query(
@@ -79,7 +77,7 @@ module.exports = {
             description: err.message,
           });
         }
-       next();
+        next();
       }
     );
   },
@@ -105,8 +103,9 @@ module.exports = {
       owner,
       category,
       qualifyAsList,
+      posted,
     } = req.body;
-    var sql = "CALL createJob(?,?,?,?,?,?,?,?,?,?)";
+    var sql = "CALL createJob(?,?,?,?,?,?,?,?,?,?,?)";
     db.query(
       sql,
       [
@@ -120,6 +119,7 @@ module.exports = {
         applicants,
         owner,
         deadLine,
+        posted
       ],
       (err, data) => {
         if (err) {
@@ -171,6 +171,21 @@ module.exports = {
   displayJobs: (req, res) => {
     var sql = "CALL displayJobsOnUserScreen()";
     db.query(sql, (err, data) => {
+      if (err)
+        return res.status(500).send({
+          message: "there is an error occurred during login",
+          errorCode: err.code,
+          description: err.message,
+        });
+      return res.send({
+        jobs: data[0],
+      });
+    });
+  },
+
+  fetchJobsBasedOnCategories: (req, res) => {
+    var sql = "CALL fetchJobsBasedOnCategory(?)";
+    db.query(sql, [req.params.category],(err, data) => {
       if (err)
         return res.status(500).send({
           message: "there is an error occurred during login",

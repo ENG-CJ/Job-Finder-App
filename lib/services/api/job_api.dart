@@ -26,7 +26,7 @@ class JobAPIServices {
       return response.data;
     } on DioException catch (e) {
       return Future.error({
-        "error": "${e.message} ${e.response!.data['message']}",
+        "error": "${e.response} ",
         "description": "error occurred while saving data"
       });
     }
@@ -160,6 +160,34 @@ class JobAPIServices {
     List<JobOnUserScreen> jobs = [];
     try {
       var response = await _dio.get("$API_BASE_URL/jobs/");
+
+      if (response.statusCode != 200) {
+        return Future.error({
+          "error":
+              "Something went wrong the request returned ${response.statusCode}",
+          "description": "there is an error for this request please try again"
+        });
+      }
+
+      jobs = (response.data['jobs'] as List)
+          .map((json) => JobOnUserScreen.fromJson(json))
+          .toList();
+
+      return jobs;
+    } on DioException catch (e) {
+      return Future.error({
+        "error": e.message,
+        "description": "error occurred while saving data"
+      });
+    }
+  }
+
+  Future<List<JobOnUserScreen>> displayJobsBasedOnCategory(
+      String category) async {
+    List<JobOnUserScreen> jobs = [];
+    try {
+      var response =
+          await _dio.get("$API_BASE_URL/jobs/fetchJobsCategory/$category");
 
       if (response.statusCode != 200) {
         return Future.error({

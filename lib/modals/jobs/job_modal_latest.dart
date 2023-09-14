@@ -10,20 +10,21 @@ class JobOnUserScreen {
   int owner;
   String company;
   String? profile;
+  DateTime posted;
 
-  JobOnUserScreen({
-    required this.id,
-    required this.jobTitle,
-    required this.jobType,
-    required this.descripton,
-    required this.qualifications,
-    required this.applicants,
-    required this.deadLine,
-    required this.updated,
-    required this.owner,
-    required this.company,
-    required this.profile,
-  });
+  JobOnUserScreen(
+      {required this.id,
+      required this.jobTitle,
+      required this.jobType,
+      required this.descripton,
+      required this.qualifications,
+      required this.applicants,
+      required this.deadLine,
+      required this.updated,
+      required this.owner,
+      required this.company,
+      required this.profile,
+      required this.posted});
 
   factory JobOnUserScreen.fromJson(Map<String, dynamic> json) =>
       JobOnUserScreen(
@@ -35,6 +36,7 @@ class JobOnUserScreen {
         applicants: json["applicants"],
         deadLine: DateTime.parse(json["deadLine"]),
         updated: DateTime.parse(json["updated"]),
+        posted: DateTime.parse(json["posted"]),
         owner: json["owner"],
         company: json["company"],
         profile: json["profile"],
@@ -63,5 +65,6 @@ class JobOnUserScreen {
         "owner": owner,
         "company": company,
         "profile": profile,
+        "posted": posted.toIso8601String()
       };
 }

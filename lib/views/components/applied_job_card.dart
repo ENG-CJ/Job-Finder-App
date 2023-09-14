@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:job_finder/services/local/local_storage.dart';
 import 'package:job_finder/util/buton.dart';
 import 'package:job_finder/util/text.dart';
@@ -25,6 +26,12 @@ class AppliedJobCard extends StatefulWidget {
 }
 
 class _AppliedJobCardState extends State<AppliedJobCard> with Messages {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(

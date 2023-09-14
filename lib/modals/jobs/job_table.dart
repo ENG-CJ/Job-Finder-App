@@ -7,20 +7,23 @@ class JobTable {
   String active;
   int numberOfApplicants;
   String? category;
+  String posted;
 
-  JobTable(
-      {required this.jobTitle,
-      required this.jobType,
-      required this.deadLine,
-      this.qualifications,
-      this.category,
-      this.id,
-      this.updated,
-      this.jobDescription = '',
-      this.jobOwner,
-      this.qualifyAsList = '',
-      this.active = 'true',
-      this.numberOfApplicants = 0});
+  JobTable({
+    required this.jobTitle,
+    required this.jobType,
+    required this.deadLine,
+    required this.posted,
+    this.qualifications,
+    this.category,
+    this.id,
+    this.updated,
+    this.jobDescription = '',
+    this.jobOwner,
+    this.qualifyAsList = '',
+    this.active = 'true',
+    this.numberOfApplicants = 0,
+  });
 
   factory JobTable.fromJson(Map<String, dynamic> json) {
     return JobTable(
@@ -33,7 +36,8 @@ class JobTable {
         active: json['active'],
         jobOwner: json['owner'],
         jobDescription: json['descripton'],
-        updated: json['updated']);
+        updated: json['updated'],
+        posted: json['posted']);
   }
 
   static List<String> _getQualifications(String data) {
@@ -59,6 +63,7 @@ class JobTable {
       "owner": jobOwner,
       "qualifications": qualifications,
       "qualifyAsList": qualifyAsList,
+      "posted": posted
     };
   }
 }
