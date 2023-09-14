@@ -91,7 +91,6 @@ class _HomeState extends State<Home> with BottomNavigationBarMixin {
                 //         jobList: Provider.of<JobProvider>(context).allJobs));
               },
               icon: Icon(Icons.search)),
-          IconButton(onPressed: () {}, icon: Icon(Icons.refresh)),
         ],
       ),
       bottomNavigationBar:

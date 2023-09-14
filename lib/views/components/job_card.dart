@@ -91,7 +91,7 @@ class JobCard extends StatelessWidget with Messages {
                 children: [
                   IconText(
                     icon: FontAwesomeIcons.clock,
-                    iconLabel: timeago.format(job.updated),
+                    iconLabel: timeago.format(job.posted),
                   ),
                   SizedBox(
                     width: 25,

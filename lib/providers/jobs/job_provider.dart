@@ -29,6 +29,7 @@ class JobProvider extends ChangeNotifier {
   List<JobTable> jobs = [];
   List<Request> requests = [];
   List<JobOnUserScreen> allJobs = [];
+  List<JobOnUserScreen> jobsBasedOnCategory = [];
   List<Category> categories = [];
 
   var _service = JobAPIServices();
@@ -226,6 +227,25 @@ class JobProvider extends ChangeNotifier {
       _isLoading = true;
       notifyListeners();
       allJobs = await _service.displayJobsOnUserScreen();
+    } on TypeError catch (e) {
+      var formatter = ErrorGetter(
+          errorMessage: e.toString(),
+          description: "This error was type error please check your data");
+      _hasError = true;
+      _errorMessage = formatter.errorMessage;
+    } catch (e) {
+      _hasError = true;
+      var _formater = ErrorGetter.fromJson(e as Map<String, dynamic>);
+      _errorMessage = _formater.errorMessage;
+    }
+
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> getJobsBasedOnCategories(String category) async {
+    try {
+      jobsBasedOnCategory = await _service.displayJobsBasedOnCategory(category);
     } on TypeError catch (e) {
       var formatter = ErrorGetter(
           errorMessage: e.toString(),

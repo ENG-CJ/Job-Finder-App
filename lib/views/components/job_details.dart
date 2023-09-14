@@ -14,6 +14,8 @@ import '../../consts/texts.dart';
 import '../../util/icon_image.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
+import '../../util/text.dart';
+
 class JobDetails extends StatefulWidget {
   final JobOnUserScreen job;
 
@@ -80,10 +82,16 @@ class _JobDetailsState extends State<JobDetails> with Messages {
                 const SizedBox(
                   width: 16,
                 ),
-                Text(
-                  widget.job.company,
-                  style:
-                      TextStyle(fontSize: 16, fontFamily: 'Poppins-SemiBold'),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.job.company,
+                      style: TextStyle(
+                          fontSize: 16, fontFamily: 'Poppins-SemiBold'),
+                    ),
+                    CText(text: "Corpoartion"),
+                  ],
                 ),
               ],
             ),
@@ -96,7 +104,7 @@ class _JobDetailsState extends State<JobDetails> with Messages {
                 Padding(
                     padding: const EdgeInsets.only(left: 10),
                     child: Text(
-                      timeago.format(widget.job.updated),
+                      "Posted: ${timeago.format(widget.job.posted)}",
                       style: const TextStyle(
                           fontSize: 16,
                           fontFamily: 'Poppins-Regular',
@@ -230,8 +238,7 @@ class _JobDetailsState extends State<JobDetails> with Messages {
                                 var requestData = Request(
                                     applicantId: value['user_id'],
                                     jobId: widget.job.id,
-                                    requestDate: DateFormat("yyyy/MM/dd")
-                                        .format(DateTime.now()));
+                                    requestDate: DateTime.now().toString());
                                 provider
                                     .applyJobsData(requestData)
                                     .whenComplete(() {

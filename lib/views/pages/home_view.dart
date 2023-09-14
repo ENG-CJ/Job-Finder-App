@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:job_finder/mixins/no_data_found_error.dart';
 import 'package:job_finder/providers/jobs/job_provider.dart';
+import 'package:job_finder/views/pages/job_based_category.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
@@ -99,6 +100,21 @@ class HomePage extends StatelessWidget
                           primary: false,
                           itemBuilder: (_, index) {
                             return Categories(
+                                onTap: () {
+                                  Provider.of<JobProvider>(context,
+                                          listen: false)
+                                      .getJobsBasedOnCategories(
+                                          data.categories[index].category)
+                                      .whenComplete(() {
+                                    Navigator.of(context)
+                                        .push(MaterialPageRoute(
+                                            builder: (_) => JobBasedCategory(
+                                                  category: data
+                                                      .categories[index]
+                                                      .category,
+                                                )));
+                                  });
+                                },
                                 categoryName: data.categories[index].category);
                           },
                           separatorBuilder: (_, index) => SizedBox(
