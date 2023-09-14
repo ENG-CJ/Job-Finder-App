@@ -157,6 +157,7 @@ class _JobEditPageState extends State<JobEditPage> {
                         print("Job Date is  : ${dateTextField.text}");
                     provider.updateJob(updateJob).whenComplete(() {
                       provider.fetchJobs(owner!);
+                      
                       print("Done");
                     });
                   },

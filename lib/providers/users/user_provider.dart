@@ -6,7 +6,7 @@ import '../../modals/users/user.dart';
 
 class UserProvider extends ChangeNotifier {
   bool _isSaving = false;
-  bool _profile_loadig = false;
+  bool _profile_loading = false;
   bool _hasError = false;
   String _errorMessage = '';
   String _responseMessage = '';
@@ -16,9 +16,14 @@ class UserProvider extends ChangeNotifier {
   String get error => _errorMessage;
   bool get hasError => _hasError;
   bool get isSaving => _isSaving;
-  bool get profileLoading => _profile_loadig;
+  bool get profileLoading => _profile_loading;
   User? get user => _userData;
   final _user = UserAPIServices();
+
+  set isSaving(bool saving) {
+    _isSaving = saving;
+    notifyListeners();
+  }
 
   Future createUser(User user) async {
     try {
@@ -31,10 +36,12 @@ class UserProvider extends ChangeNotifier {
           errorMessage: e.toString(), description: "Type Error Occurred");
       _hasError = true;
       _errorMessage = error.errorMessage;
+      print("error says ${error.errorMessage}");
     } catch (e) {
       var error = ErrorGetter.fromJson(e as Map<String, dynamic>);
       _hasError = true;
       _errorMessage = error.description!;
+      print("error says ${error.errorMessage}");
     }
 
     _isSaving = false;
@@ -50,36 +57,33 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future fetchUser(String email) async {
-    _profile_loadig = true;
+  Future fetchUser(int id) async {
+    _profile_loading = true;
     notifyListeners();
-    _userData = await _user.fetchUserDetails(email);
-    _profile_loadig = false;
+    _userData = await _user.fetchUserDetails(id);
+    _profile_loading = false;
     notifyListeners();
   }
-Future updateUser(User user) async {
-  try{
-    _isSaving = true;
+
+  Future updateUser(User user) async {
+    try {
+      _isSaving = true;
+      notifyListeners();
+      var data = await _user.updateUser(user);
+      _responseMessage = data['message'];
+      print("response says $data");
+    } on TypeError catch (err) {
+      var error = ErrorGetter(
+          errorMessage: err.toString(), description: "Type Error occured");
+      _hasError = true;
+      _errorMessage = error.errorMessage;
+    } catch (e) {
+      var error = ErrorGetter.fromJson(e as Map<String, dynamic>);
+      _hasError = true;
+      _errorMessage = error.description!;
+    }
+
+    _isSaving = false;
     notifyListeners();
-    var data = await _user.updateUser(user);
-    _responseMessage = data['message'];
-
-  } on TypeError catch(err) {
-    var error = ErrorGetter(errorMessage: err.toString(),description: "Type Error occured");
-    _hasError = true;
-    _errorMessage = error.errorMessage;
-  } catch (e) {
-    var error  = ErrorGetter.fromJson(e as Map<String, dynamic>);
-    _hasError = true;
-    _errorMessage = error.description!;
   }
-
-  _isSaving = false;
-  notifyListeners();
 }
-
-}
-
-
-
-

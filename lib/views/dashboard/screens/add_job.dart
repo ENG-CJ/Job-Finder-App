@@ -30,6 +30,7 @@ class _AddJobState extends State<AddJob> with Messages {
       text: DateFormat("yyyy/MM/dd").format(DateTime.now()));
   final qualify = TextEditingController();
   final description = TextEditingController();
+  final category = TextEditingController();
 
   String? value;
   int? id;
@@ -69,7 +70,7 @@ class _AddJobState extends State<AddJob> with Messages {
     LocalStorageSharedPref().getLocalData().then((value) {
       if (value != null) {
         var provider = Provider.of<UserProvider>(context, listen: false);
-        provider.fetchUser(value['email']).whenComplete(() {
+        provider.fetchUser(value['user_id']).whenComplete(() {
           if (provider.user != null) {
             setState(() {
               id = provider.user!.id;
@@ -118,6 +119,14 @@ class _AddJobState extends State<AddJob> with Messages {
                     hintText: "Job Title",
                     prefixIcon: Icon(FontAwesomeIcons.suitcase),
                     controller: jobtitle),
+                SizedBox(
+                  height: 10,
+                ),
+                CustomTextField(
+                    txtInputType: TextInputType.text,
+                    hintText: "Category",
+                    prefixIcon: Icon(FontAwesomeIcons.suitcase),
+                    controller: category),
                 SizedBox(
                   height: 10,
                 ),
@@ -174,6 +183,7 @@ class _AddJobState extends State<AddJob> with Messages {
                         var provider =
                             Provider.of<JobProvider>(context, listen: false);
                         var job = JobTable(
+                            category: category.text,
                             jobTitle: jobtitle.text,
                             jobType: value ?? "FullTime",
                             deadLine: dateTextField.text,

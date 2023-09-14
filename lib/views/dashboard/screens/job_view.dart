@@ -43,7 +43,7 @@ class _JobViewState extends State<JobView> with NoDataErrorMixin, Messages {
       if (value != null) {
         var provider = Provider.of<UserProvider>(context, listen: false);
         var jobProvider = Provider.of<JobProvider>(context, listen: false);
-        provider.fetchUser(value['email']).whenComplete(() {
+        provider.fetchUser(value['user_id']).whenComplete(() {
           if (provider.user != null) {
             jobProvider.fetchJobs(provider.user!.id!);
           }
@@ -195,10 +195,10 @@ class _JobViewState extends State<JobView> with NoDataErrorMixin, Messages {
                                         provider
                                             .deleteJobData(job.id)
                                             .whenComplete(() {
-                                          if (provider.hasError)
+                                          if (provider.hasError) {
                                             EasyLoading.showError(
                                                 provider.error);
-                                          else {
+                                          } else {
                                             loadJobs();
                                           }
                                         });

@@ -54,12 +54,15 @@ mixin NoDataErrorMixin {
                     SizedBox(
                       height: 6,
                     ),
-                    CText(
-                      text:
-                          description ?? "Try Again, And Search Predfined Job",
-                      decorations: TextDecorations(
-                          color: colors['secondary'] as Color,
-                          family: "Poppins Medium"),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 40, right: 10),
+                      child: CText(
+                        text: description ??
+                            "Try Again, And Search Predfined Job",
+                        decorations: TextDecorations(
+                            color: colors['secondary'] as Color,
+                            family: "Poppins Medium"),
+                      ),
                     ),
                     SizedBox(
                       height: 20,

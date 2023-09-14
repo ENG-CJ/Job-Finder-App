@@ -1,23 +1,14 @@
 const express = require('express');
-const { createUser, verifyUser, fetchUser, updateUser } = require('../controller/userController');
-const multer = require('multer');
-const path = require('path');
+const { createUser, verifyUser, fetchUser, updateUser, deleteImage } = require('../controller/userController');
+const { uploadImage } = require('../multer/uploadConfig');
 const router=express.Router();
 
 
-const storage = multer.diskStorage({
-  destination: './images/',
-  filename: (req,file, callback) => {
-    return callback(null, `${file.fieldname}_${Date.now()}${path.extname(file.originalname)}`)
-  }
-})
 
-const upload = multer({ storage: storage });
-
-router.post("/register", upload.single('profile_pic') ,createUser);
+router.post("/register",uploadImage().single("profile_pic"), createUser);
 router.post("/login",verifyUser);
 router.post("/fetch",fetchUser);
-router.post("/update",updateUser);
+router.post("/update",uploadImage().single("profile_pic"),deleteImage,updateUser);
     
 
 module.exports = router;

@@ -2,10 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:job_finder/consts/api_url.dart';
 import 'package:job_finder/consts/texts.dart';
 import 'package:job_finder/providers/users/user_provider.dart';
 import 'package:job_finder/services/local/local_storage.dart';
 import 'package:job_finder/util/helpers/text_helper.dart';
+import 'package:job_finder/util/profile.dart';
 import 'package:job_finder/util/text.dart';
 import 'package:job_finder/views/components/user_profile_update.dart';
 
@@ -36,7 +38,7 @@ class _UserProfileState extends State<UserProfile> {
         Navigator.pop(context);
       } else {
         var provider = Provider.of<UserProvider>(context, listen: false);
-        provider.fetchUser(value['email']);
+        provider.fetchUser(value['user_id']);
       }
     });
     // List<int> userImageBytes = utf8.encode(userImage);
@@ -88,7 +90,7 @@ class _UserProfileState extends State<UserProfile> {
           child: Consumer<UserProvider>(builder: (_, data, child) {
         user = data.user;
         return data.profileLoading
-            ? Center(
+            ? const Center(
                 child: CircularProgressIndicator(),
               )
             : Column(
@@ -103,10 +105,17 @@ class _UserProfileState extends State<UserProfile> {
                         decoration: BoxDecoration(
                             // color: Colors.red
                             ),
-                        child: ClipRRect(
-                            borderRadius: BorderRadius.circular(60),
-                            child:  Image.network('http://192.168.100.7:9999/images/${user?.profile_pic}')
-                            ),
+                        child: user!.imagePath == null ||
+                                user!.imagePath == "null" ||
+                                user!.imagePath == "no_profile"
+                            ? ProfileImage(
+                                asBackgroundImage: true,
+                                imagePath: "assets/default.png")
+                            : ProfileImage(
+                                fromNetwork: true,
+                                asBackgroundImage: true,
+                                imagePath:
+                                    "$API_BASE_URL/uploads/${user!.imagePath}"),
                       ),
                       const SizedBox(
                         width: 12.0,
@@ -189,6 +198,8 @@ class _UserProfileState extends State<UserProfile> {
                         margin: EdgeInsets.only(
                             left: 16, top: 5, right: 10, bottom: 10),
                         child: CText(
+                          createMaxLines: false,
+                          wrapText: false,
                           text: data.user!.description!,
                           decorations: TextDecorations(
                               fontSize: 15,

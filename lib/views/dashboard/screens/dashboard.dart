@@ -1,6 +1,7 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:job_finder/consts/api_url.dart';
 import 'package:job_finder/consts/colors.dart';
 import 'package:job_finder/util/dashboard_card.dart';
 import 'package:job_finder/util/helpers/text_helper.dart';
@@ -12,6 +13,7 @@ import 'package:provider/provider.dart';
 
 import '../../../providers/users/user_provider.dart';
 import '../../../services/local/local_storage.dart';
+import '../../components/user_profile.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -22,19 +24,13 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   int indexPage = 0;
-  List<Widget> screens = [
-    DashboardView(),
-    JobView(),
-  ];
+  List<Widget> screens = [DashboardView(), JobView(), UserProfile()];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         bottomNavigationBar: CurvedNavigationBar(
-            onTap: (newIndex) {
-              if (newIndex > 1) {
-                return;
-              }
+            onTap: (  newIndex) {
               setState(() {
                 indexPage = newIndex;
               });
@@ -51,10 +47,10 @@ class _DashboardState extends State<Dashboard> {
                 FontAwesomeIcons.suitcase,
                 color: Colors.white,
               ),
-              FaIcon(
-                FontAwesomeIcons.codePullRequest,
-                color: Colors.white,
-              ),
+              // FaIcon(
+              //   FontAwesomeIcons.codePullRequest,
+              //   color: Colors.white,
+              // ),
               FaIcon(
                 FontAwesomeIcons.user,
                 color: Colors.white,
@@ -73,6 +69,7 @@ class DashboardView extends StatefulWidget {
 
 class _DashboardViewState extends State<DashboardView> {
   String? username;
+  String? imagePath;
 
   @override
   void initState() {
@@ -81,10 +78,11 @@ class _DashboardViewState extends State<DashboardView> {
     LocalStorageSharedPref().getLocalData().then((value) {
       if (value != null) {
         var provider = Provider.of<UserProvider>(context, listen: false);
-        provider.fetchUser(value['email']).whenComplete(() {
+        provider.fetchUser(value['user_id']).whenComplete(() {
           if (provider.user != null) {
             setState(() {
               username = provider.user!.username;
+              imagePath = provider.user!.imagePath;
             });
           }
         });
@@ -103,7 +101,11 @@ class _DashboardViewState extends State<DashboardView> {
             children: [
               Row(
                 children: [
-                  IconImage(iconImagePath: "assets/afro.png"),
+                  imagePath == null || imagePath == "no_profile"
+                      ? IconImage(iconImagePath: "assets/default_com.png")
+                      : IconImage(
+                          fromNetwork: true,
+                          iconImagePath: "$API_BASE_URL/uploads/$imagePath"),
                   Padding(
                     padding: EdgeInsets.only(left: 10),
                     child: Column(

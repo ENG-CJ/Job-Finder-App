@@ -63,7 +63,7 @@ class TopBanner extends StatelessWidget {
 
                       ),),
                     SizedBox(height: 3,),
-                    CText(text: "Ordered By most relevant",
+                    CText(text: "Ordered By most  ",
                       decorations: TextDecorations(
                         color: Colors.white70,
                         fontSize: 16,

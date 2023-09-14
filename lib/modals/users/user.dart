@@ -1,4 +1,4 @@
-import 'dart:ui';
+import 'dart:io';
 
 class User {
   String username, email, password;
@@ -8,7 +8,8 @@ class User {
   String verified;
   String? description, address, profile_pic_base64,profile_pic ;
   int? id;
-  
+  String? imagePath;
+  File? imageFile;
 
   User(
       {required this.username,
@@ -16,6 +17,8 @@ class User {
       required this.password,
       required this.regionOrCity,
       required this.mobile,
+      this.imageFile,
+      this.imagePath,
       this.address,
       this.description,
       this.id,
@@ -28,32 +31,30 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> jsonData) {
     return User(
-    id: jsonData['id'] ?? "",
-    username: jsonData['username'],
-    email: jsonData['email'],
-    password: jsonData['password'],
-    regionOrCity: jsonData['country'],
-    mobile: (jsonData['mobile'] is int)
-        ? jsonData['mobile'] 
-        : int.parse(jsonData['mobile'].toString()), 
-    address: jsonData['address'],
-    description: jsonData['description'],
-    type: jsonData['type'],
-    verified: jsonData['verified'],
-    profile_pic: jsonData['profile_pic'] is String 
-      ? jsonData['profile_pic'] 
-      : null,
-  );
+      imagePath: jsonData['profile_pic'],
+      id: jsonData['id'] ?? "",
+      username: jsonData['username'],
+      email: jsonData['email'],
+      password: jsonData['password'],
+      regionOrCity: jsonData['country'],
+      mobile: jsonData['mobile'],
+      address: jsonData['address'],
+      description: jsonData['description'],
+      type: jsonData['type'],
+      verified: jsonData['verified'],
+    );
   }
 
   Map<String, dynamic> toJson() {
     return {
+      "id": id,
       "username": username,
       "email": email,
       "password": password,
-      "phone": mobile,
+      "mobile": mobile,
       "country": regionOrCity,
       "type": type,
+      "oldImage": imagePath,
       "verified": verified,
       "description": description,
       "address": address
