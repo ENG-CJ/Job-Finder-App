@@ -16,16 +16,23 @@ class JobProvider extends ChangeNotifier {
   bool _hasError = false;
   bool _isLoading = false;
   bool _isValidData = false;
+  bool _dashboardLoading = false;
   String _errorMessage = '';
   String _responseMessage = '';
 
   String get response => _responseMessage;
   String get error => _errorMessage;
   bool get isValidData => _isValidData;
+  bool get dashboardLoading => _dashboardLoading;
   bool get hasError => _hasError;
   bool get isLoading => _isLoading;
   bool get isDeleting => _isDeleting;
   bool get isSaving => _isSaving;
+  int jobsRow = 0;
+  int requestsRow = 0;
+  int rejectedRow = 0;
+  int acceptedRow = 0;
+  int pendingRow = 0;
   List<JobTable> jobs = [];
   List<Request> requests = [];
   List<JobOnUserScreen> allJobs = [];
@@ -155,6 +162,50 @@ class JobProvider extends ChangeNotifier {
     }
 
     _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> getRowCount(Map<String, dynamic> data) async {
+    try {
+      _dashboardLoading = true;
+      notifyListeners();
+      switch (data['table']) {
+        case 'jobs':
+          _dashboardLoading = true;
+          jobsRow = await _service.getRowsAnalyst(data['table'], data['owner']);
+          break;
+
+        case 'requests':
+          requestsRow =
+              await _service.getRowsAnalyst(data['table'], data['owner']);
+          break;
+        case 'rejectedRequests':
+          rejectedRow = await _service.getRowsAnalyst(
+              data['table'], data['owner'], data['status']);
+          break;
+        case 'acceptedRequests':
+          acceptedRow = await _service.getRowsAnalyst(
+              data['table'], data['owner'], data['status']);
+          break;
+        case 'pendingRequests':
+          pendingRow = await _service.getRowsAnalyst(
+              data['table'], data['owner'], data['status']);
+          break;
+        default:
+      }
+    } on TypeError catch (e) {
+      var formatter = ErrorGetter(
+          errorMessage: e.toString(),
+          description: "This error was type error please check your data");
+      _hasError = true;
+      _errorMessage = formatter.errorMessage;
+    } catch (e) {
+      _hasError = true;
+      var _formater = ErrorGetter.fromJson(e as Map<String, dynamic>);
+      _errorMessage = _formater.errorMessage;
+    }
+
+    _dashboardLoading = false;
     notifyListeners();
   }
 

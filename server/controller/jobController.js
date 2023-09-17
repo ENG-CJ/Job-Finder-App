@@ -2,6 +2,95 @@ const db = require("../db/db");
 const cr = require("crypto");
 
 module.exports = {
+  countRows:(req,res,next)=>{
+    var {table,owner_id,status}=req.query;
+    switch (table) {
+      case "jobs":
+        var sql = `SELECT COUNT(*) as rowCount FROM jobs WHERE owner=?`;
+        db.query(sql, [owner_id], (err, data) => {
+          if (err)
+            return res.status(500).send({
+              message: `Fetching Failed ${err.sqlMessage}`,
+              description: err.message,
+            });
+          res.send({ numberOfRows: data[0].rowCount });
+        });
+        break;
+      case "requests":
+        var sql = `
+          SELECT COUNT(*) as rowCount FROM requests 
+          INNER JOIN jobs
+          ON requests.job_id=jobs.id
+          INNER JOIN users
+          ON jobs.owner=users.id
+          WHERE jobs.owner=?`;
+        db.query(sql, [owner_id], (err, data) => {
+          if (err)
+            return res.status(500).send({
+              message: `Fetching Failed ${err.sqlMessage}`,
+              description: err.message,
+            });
+          res.send({ numberOfRows: data[0].rowCount });
+        });
+        break;
+
+      case "rejectedRequests":
+        var sql = `
+          SELECT COUNT(*) as rowCount FROM requests 
+          INNER JOIN jobs
+          ON requests.job_id=jobs.id
+          INNER JOIN users
+          ON jobs.owner=users.id
+          WHERE jobs.owner=? AND requests.status=?`;
+        db.query(sql, [owner_id, status], (err, data) => {
+          if (err)
+            return res.status(500).send({
+              message: `Fetching Failed ${err.sqlMessage}`,
+              description: err.message,
+            });
+          res.send({ numberOfRows: data[0].rowCount });
+        });
+        break;
+      case "acceptedRequests":
+        var sql = `
+          SELECT COUNT(*) as rowCount FROM requests 
+          INNER JOIN jobs
+          ON requests.job_id=jobs.id
+          INNER JOIN users
+          ON jobs.owner=users.id
+          WHERE jobs.owner=? AND requests.status=?`;
+        db.query(sql, [owner_id, status], (err, data) => {
+          if (err)
+            return res.status(500).send({
+              message: `Fetching Failed ${err.sqlMessage}`,
+              description: err.message,
+            });
+          res.send({ numberOfRows: data[0].rowCount });
+        });
+        break;
+      case "pendingRequests":
+        var sql = `
+          SELECT COUNT(*) as rowCount FROM requests 
+          INNER JOIN jobs
+          ON requests.job_id=jobs.id
+          INNER JOIN users
+          ON jobs.owner=users.id
+          WHERE jobs.owner=? AND requests.status=?`;
+        db.query(sql, [owner_id, status], (err, data) => {
+          if (err)
+            return res.status(500).send({
+              message: `Fetching Failed ${err.sqlMessage}`,
+              description: err.message,
+            });
+          res.send({ numberOfRows: data[0].rowCount });
+        });
+        break;
+
+      default:
+        break;
+    }
+  
+  },
   deleteRequest: (req, res, next) => {
     var sql = "DELETE FROM requests WHERE req_id=?";
     db.query(sql, [req.params.req_id], (err, data) => {
