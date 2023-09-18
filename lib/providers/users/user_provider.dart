@@ -9,11 +9,13 @@ class UserProvider extends ChangeNotifier {
   bool _profile_loading = false;
   bool _hasError = false;
   String _errorMessage = '';
+  String _description = '';
   String _responseMessage = '';
   User? _userData;
 
   String get response => _responseMessage;
   String get error => _errorMessage;
+  String get description => _description;
   bool get hasError => _hasError;
   bool get isSaving => _isSaving;
   bool get profileLoading => _profile_loading;
@@ -51,7 +53,15 @@ class UserProvider extends ChangeNotifier {
   Future login(Map<String, dynamic> data) async {
     _isSaving = true;
     notifyListeners();
-    _userData = await _user.getUserWithCredentials(data);
+    var authLoginStatus = await _user.getUserWithCredentials(data);
+    authLoginStatus.fold((error) {
+      _errorMessage = error.errorMessage;
+      _description = error.description!;
+      _hasError = true;
+    }, (success) {
+      _hasError = false;
+      _userData = success;
+    });
 
     _isSaving = false;
     notifyListeners();
