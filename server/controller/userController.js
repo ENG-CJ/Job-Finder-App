@@ -50,7 +50,7 @@ module.exports = {
     var { email, password } = req.body;
     db.query(sql, [email, password], (err, data) => {
       if (err)
-        return res.send({
+        return res.status(500).send({
           message: "there is an error occurred during login",
           errorCode: err.code,
           description: err.message,

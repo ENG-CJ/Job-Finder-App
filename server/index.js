@@ -16,6 +16,7 @@ app.use(express.static('public'));
 
 app.use('/users',authRoute);
 app.use('/jobs',jobRoute);
+
     
 
 

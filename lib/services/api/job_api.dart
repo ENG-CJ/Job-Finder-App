@@ -134,6 +134,29 @@ Future<List<JobRequests>> jobRequests(int ownerId) async {
     }
   }
 
+  Future<int> getRowsAnalyst(String tableName, int owner_id,
+      [String status = '']) async {
+    try {
+      var response = await _dio.get(
+          "$API_BASE_URL/jobs/count?table=$tableName&owner_id=$owner_id&status=$status");
+
+      if (response.statusCode != 200) {
+        return Future.error({
+          "error":
+              "Something went wrong the request returned ${response.statusCode}",
+          "description": "there is an error for this request please try again"
+        });
+      }
+
+      return response.data['numberOfRows'];
+    } on DioException catch (e) {
+      return Future.error({
+        "error": e.message,
+        "description": "error occurred while saving data"
+      });
+    }
+  }
+
   Future<bool> hasAlreadyApplied(int userID, String jobID) async {
     bool hasData = false;
     try {

@@ -9,30 +9,42 @@ import 'package:job_finder/providers/users/user_provider.dart';
 import 'package:job_finder/util/buton.dart';
 import 'package:job_finder/util/custom_text_field.dart';
 import 'package:job_finder/util/helpers/text_helper.dart';
-import 'package:job_finder/util/icon_image.dart';
 import 'package:job_finder/util/text.dart';
-import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import '../../../consts/colors.dart';
 import '../login_page.dart';
 
-class UserReg extends StatelessWidget with Messages {
+class UserReg extends StatefulWidget with Messages {
   UserReg({super.key});
 
+  @override
+  State<UserReg> createState() => _UserRegState();
+}
+
+class _UserRegState extends State<UserReg> {
   // final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final String type = "User";
 
   final GlobalKey<FormState> fullNameFormKey = GlobalKey<FormState>();
+
   final GlobalKey<FormState> emailFormKey = GlobalKey<FormState>();
+
   final GlobalKey<FormState> passwordFormKey = GlobalKey<FormState>();
+
   final GlobalKey<FormState> phoneFormKey = GlobalKey<FormState>();
+
   final GlobalKey<FormState> cityFormKey = GlobalKey<FormState>();
 
   TextEditingController fullNameController = TextEditingController();
+
   TextEditingController emailController = TextEditingController();
+
   TextEditingController passwordController = TextEditingController();
+
   TextEditingController cityController = TextEditingController();
+
   TextEditingController phoneController = TextEditingController();
+
   TextEditingController descriptionController = TextEditingController();
 
   void clearTxtField() {
@@ -46,7 +58,6 @@ class UserReg extends StatelessWidget with Messages {
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<UserProvider>(context);
-    bool _termsAndCondChecked = false;
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -93,8 +104,7 @@ class UserReg extends StatelessWidget with Messages {
                     if (value == null || value.isEmpty) {
                       return 'This field is required.';
                     }
-                    if(!RegExp(r'^[a-zA-Z0-9_]{3,16}$').hasMatch(value))
-                    {
+                    if (!RegExp(r'^[a-zA-Z0-9_]{3,16}$').hasMatch(value)) {
                       return 'Invalid username!';
                     }
                     return null;
@@ -118,8 +128,8 @@ class UserReg extends StatelessWidget with Messages {
                     if (value == null || value.isEmpty) {
                       return 'This field is required.';
                     }
-                    if(!RegExp(r'^[\W-\.]+@([\W-]+\.)+[\W]{2,4}$').hasMatch(value))
-                    {
+                    if (!RegExp(r'^[\W-\.]+@([\W-]+\.)+[\W]{2,4}$')
+                        .hasMatch(value)) {
                       return 'Invalid username!';
                     }
                     return null;
@@ -146,7 +156,7 @@ class UserReg extends StatelessWidget with Messages {
                     if (value == null || value.isEmpty) {
                       return 'This field is required.';
                     }
-                    if(value.length != 6){
+                    if (value.length != 6) {
                       return 'Password length must be 6 and above.';
                     }
                     return null;
@@ -170,8 +180,7 @@ class UserReg extends StatelessWidget with Messages {
                     if (value == null || value.isEmpty) {
                       return 'This field is required.';
                     }
-                     if(!RegExp(r'^[a-zA-Z0-9_]{3,16}$').hasMatch(value))
-                    {
+                    if (!RegExp(r'^[a-zA-Z0-9_]{3,16}$').hasMatch(value)) {
                       return 'Invalid City Name!';
                     }
 
@@ -214,47 +223,6 @@ class UserReg extends StatelessWidget with Messages {
               const SizedBox(
                 height: 12,
               ),
-              Row(
-                children: [
-                  Checkbox(
-                    value: _termsAndCondChecked,
-                    onChanged: (bool? newValue) {
-                      //? -> Add here the state to check the checkbox
-                    },
-                  ),
-                  RichText(
-                    text: TextSpan(
-                      children: [
-                        const TextSpan(
-                            text: signUpConditionTxt,
-                            style: TextStyle(
-                                fontSize: 16,
-                                fontFamily: 'Poppins-Light',
-                                color: Colors.black)),
-                        const WidgetSpan(
-                            child: SizedBox(
-                          width: 5,
-                        )),
-                        WidgetSpan(
-                          child: InkWell(
-                            onTap: () {
-                              // Handle the onTap action for the terms and conditions
-                            },
-                            child: CText(
-                              text: tTermsAndConditions,
-                              // Apply the desired style for the TextButton-like text
-                              decorations: TextDecorations(
-                                fontSize: 16,
-                                color: Colors.blue,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: CButton(
@@ -295,58 +263,36 @@ class UserReg extends StatelessWidget with Messages {
               ),
               Container(
                 margin: EdgeInsets.only(left: 12, right: 12),
-                child: Column(
-                  children: [
-                    Center(
-                        child: CText(
-                      text: "OR",
-                      decorations: TextDecorations(fontSize: 20),
-                    )),
-                    const SizedBox(
-                      height: 12,
-                    ),
-                    SizedBox(
-                      height: 45,
-                      width: double.infinity,
-                      child: OutlinedButton.icon(
-                          onPressed: () {},
-                          icon: IconImage(
-                            iconImagePath: "assets/google.png",
-                            width: 40,
-                            backgroundColor: Colors.transparent,
-                          ),
-                          label: CText(
-                            text: signUpWithGoogle,
-                            decorations: TextDecorations(
-                              fontSize: 18,
-                            ),
-                          )),
-                    ),
-                    const SizedBox(
-                      height: 12,
-                    ),
-                    Text.rich(
-                      TextSpan(
-                          text: signUpHaveAnAccountTxt.toUpperCase(),
-                          style: TextStyle(
-                              fontSize: 14, fontFamily: "Roboto-Bold"),
-                          children: [
-                            TextSpan(
-                                text: signUpLoginTxt.toUpperCase(),
-                                style: TextStyle(
-                                    color: colors['primary'],
-                                    fontSize: 14,
-                                    fontFamily: "Roboto-Bold"),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => Login()));
-                                  })
-                          ]),
-                    )
-                  ],
+                child: Center(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const SizedBox(
+                        height: 12,
+                      ),
+                      Text.rich(
+                        TextSpan(
+                            text: signUpHaveAnAccountTxt.toUpperCase(),
+                            style: TextStyle(
+                                fontSize: 14, fontFamily: "Roboto-Bold"),
+                            children: [
+                              TextSpan(
+                                  text: signUpLoginTxt.toUpperCase(),
+                                  style: TextStyle(
+                                      color: colors['primary'],
+                                      fontSize: 14,
+                                      fontFamily: "Roboto-Bold"),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => Login()));
+                                    })
+                            ]),
+                      )
+                    ],
+                  ),
                 ),
               )
             ],

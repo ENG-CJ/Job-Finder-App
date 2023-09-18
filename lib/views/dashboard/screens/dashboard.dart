@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:job_finder/consts/api_url.dart';
 import 'package:job_finder/consts/colors.dart';
+import 'package:job_finder/providers/jobs/job_provider.dart';
 import 'package:job_finder/util/dashboard_card.dart';
 import 'package:job_finder/util/helpers/text_helper.dart';
 import 'package:job_finder/util/icon_image.dart';
@@ -79,6 +80,7 @@ class _DashboardViewState extends State<DashboardView> {
     LocalStorageSharedPref().getLocalData().then((value) {
       if (value != null) {
         var provider = Provider.of<UserProvider>(context, listen: false);
+        var jobProvider = Provider.of<JobProvider>(context, listen: false);
         provider.fetchUser(value['user_id']).whenComplete(() {
           if (provider.user != null) {
             setState(() {
@@ -86,6 +88,24 @@ class _DashboardViewState extends State<DashboardView> {
               imagePath = provider.user!.imagePath;
             });
           }
+        });
+        jobProvider.getRowCount({"table": "jobs", "owner": value['user_id']});
+        jobProvider
+            .getRowCount({"table": "requests", "owner": value['user_id']});
+        jobProvider.getRowCount({
+          "table": "rejectedRequests",
+          "owner": value['user_id'],
+          "status": "Rejected"
+        });
+        jobProvider.getRowCount({
+          "table": "acceptedRequests",
+          "owner": value['user_id'],
+          "status": "accepted"
+        });
+        jobProvider.getRowCount({
+          "table": "pendingRequests",
+          "owner": value['user_id'],
+          "status": "Pending"
         });
       }
     });
@@ -143,19 +163,25 @@ class _DashboardViewState extends State<DashboardView> {
         ),
         Divider(),
         DashboardCard(
-          counterTitle: "56",
+          counterTitle: Provider.of<JobProvider>(context).dashboardLoading
+              ? "....."
+              : Provider.of<JobProvider>(context).jobsRow.toString(),
           subtitle: "Posted Jobs",
           rightIcon: FontAwesomeIcons.suitcase,
         ),
         DashboardCard(
           backgroundColor: Color(0xff27005D),
-          counterTitle: "190",
+          counterTitle: Provider.of<JobProvider>(context).dashboardLoading
+              ? "....."
+              : Provider.of<JobProvider>(context).requestsRow.toString(),
           subtitle: "Request From Applicants",
           rightIcon: FontAwesomeIcons.codePullRequest,
         ),
         DashboardCard(
           backgroundColor: Color(0xffFF6969),
-          counterTitle: "4k",
+          counterTitle: Provider.of<JobProvider>(context).dashboardLoading
+              ? "....."
+              : Provider.of<JobProvider>(context).rejectedRow.toString(),
           subtitle: "You Rejected",
           rightIcon: FontAwesomeIcons.readme,
         ),
@@ -187,18 +213,23 @@ class _DashboardViewState extends State<DashboardView> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           CText(
-                            text: "Incoming Requests",
+                            text: "Accepted",
                             decorations: TextDecorations(
                                 fontSize: 20, family: "Poppins Medium"),
                           ),
                           CText(
-                              text: "This is all requests you get",
+                              text: "This is all requests you accepted",
                               decorations: TextDecorations(
                                   fontSize: 15, family: "Poppins Light"))
                         ],
                       ),
                       CText(
-                          text: "+ 800",
+                          text:
+                              Provider.of<JobProvider>(context).dashboardLoading
+                                  ? "....."
+                                  : Provider.of<JobProvider>(context)
+                                      .acceptedRow
+                                      .toString(),
                           decorations: TextDecorations(
                               fontSize: 27,
                               family: "Poppins Bold",
@@ -215,18 +246,23 @@ class _DashboardViewState extends State<DashboardView> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           CText(
-                            text: "Pednidng Requests",
+                            text: "Pending Requests",
                             decorations: TextDecorations(
                                 fontSize: 20, family: "Poppins Medium"),
                           ),
                           CText(
-                              text: "This is all requests you get",
+                              text: "This is all Pending requests",
                               decorations: TextDecorations(
                                   fontSize: 15, family: "Poppins Light"))
                         ],
                       ),
                       CText(
-                          text: "+ 200",
+                          text:
+                              Provider.of<JobProvider>(context).dashboardLoading
+                                  ? "....."
+                                  : Provider.of<JobProvider>(context)
+                                      .pendingRow
+                                      .toString(),
                           decorations: TextDecorations(
                               fontSize: 27,
                               family: "Poppins Bold",
