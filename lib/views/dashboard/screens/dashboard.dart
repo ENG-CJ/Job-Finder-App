@@ -9,6 +9,7 @@ import 'package:job_finder/util/icon_image.dart';
 import 'package:job_finder/util/profile.dart';
 import 'package:job_finder/util/text.dart';
 import 'package:job_finder/views/dashboard/screens/job_view.dart';
+import 'package:job_finder/views/dashboard/screens/recieved_jobs.dart';
 import 'package:provider/provider.dart';
 
 import '../../../providers/users/user_provider.dart';
@@ -24,7 +25,7 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   int indexPage = 0;
-  List<Widget> screens = [DashboardView(), JobView(), UserProfile()];
+  List<Widget> screens = const [DashboardView(), JobView(), RecievedJobRequests(), UserProfile()];
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +39,7 @@ class _DashboardState extends State<Dashboard> {
             buttonBackgroundColor: colors['primary'] as Color,
             backgroundColor: Colors.white,
             color: colors['primary'] as Color,
-            items: [
+            items: const [
               FaIcon(
                 FontAwesomeIcons.chartLine,
                 color: Colors.white,
@@ -47,10 +48,10 @@ class _DashboardState extends State<Dashboard> {
                 FontAwesomeIcons.suitcase,
                 color: Colors.white,
               ),
-              // FaIcon(
-              //   FontAwesomeIcons.codePullRequest,
-              //   color: Colors.white,
-              // ),
+              FaIcon(
+                FontAwesomeIcons.receipt,
+                color: Colors.white,
+              ),
               FaIcon(
                 FontAwesomeIcons.user,
                 color: Colors.white,

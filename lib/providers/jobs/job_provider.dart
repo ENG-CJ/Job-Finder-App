@@ -6,34 +6,66 @@ import 'package:job_finder/modals/Errors/error_modal.dart';
 import 'package:job_finder/modals/jobs/categories.dart';
 import 'package:job_finder/modals/jobs/job_modal_latest.dart';
 import 'package:job_finder/modals/jobs/job_table.dart';
+import 'package:job_finder/modals/jobs/requestJobs.dart';
 import 'package:job_finder/services/api/job_api.dart';
+
+import '../../modals/jobs/requests.dart';
 
 class JobProvider extends ChangeNotifier {
   bool _isSaving = false;
   bool _isDeleting = false;
   bool _hasError = false;
   bool _isLoading = false;
+  bool _isValidData = false;
   String _errorMessage = '';
   String _responseMessage = '';
 
   String get response => _responseMessage;
   String get error => _errorMessage;
+  bool get isValidData => _isValidData;
   bool get hasError => _hasError;
   bool get isLoading => _isLoading;
   bool get isDeleting => _isDeleting;
   bool get isSaving => _isSaving;
   List<JobTable> jobs = [];
+  List<Request> requests = [];
   List<JobOnUserScreen> allJobs = [];
+  List<JobOnUserScreen> jobsBasedOnCategory = [];
   List<Category> categories = [];
+  List<JobRequests> requestedJobs = [];
 
   var _service = JobAPIServices();
 
+  
   Future saveJobData(JobTable job) async {
     try {
       _isSaving = true;
       notifyListeners();
 
       var response = await _service.createJob(job);
+      _responseMessage = response['message'];
+    } on TypeError catch (e) {
+      var formatter = ErrorGetter(
+          errorMessage: e.stackTrace.toString(),
+          description: "This error was type error please check your data");
+      _hasError = true;
+      _errorMessage = formatter.errorMessage;
+    } catch (e) {
+      var _formater = ErrorGetter.fromJson(e as Map<String, dynamic>);
+      _hasError = true;
+      _errorMessage = _formater.errorMessage;
+    }
+
+    _isSaving = false;
+    notifyListeners();
+  }
+
+  Future applyJobsData(Request data) async {
+    try {
+      _isSaving = true;
+      notifyListeners();
+
+      var response = await _service.applyJobs(data);
       _responseMessage = response['message'];
     } on TypeError catch (e) {
       var formatter = ErrorGetter(
@@ -71,6 +103,43 @@ class JobProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future deleteRequest(int id, String job_id) async {
+    try {
+      _isDeleting = true;
+      notifyListeners();
+
+      var response = await _service.deleteRequest(id, job_id);
+      _responseMessage = response['message'];
+    } on TypeError catch (e) {
+      var formatter = ErrorGetter(
+          errorMessage: e.stackTrace.toString(),
+          description: "This error was type error please check your data");
+      _hasError = true;
+      _errorMessage = formatter.errorMessage;
+    } catch (e) {
+      var _formater = ErrorGetter.fromJson(e as Map<String, dynamic>);
+    }
+
+    _isDeleting = false;
+    notifyListeners();
+  }
+
+  Future hasData(int user, String job_id) async {
+    try {
+      var response = await _service.hasAlreadyApplied(user, job_id);
+      _isValidData = response;
+    } on TypeError catch (e) {
+      var formatter = ErrorGetter(
+          errorMessage: e.stackTrace.toString(),
+          description: "This error was type error please check your data");
+      _hasError = true;
+      _errorMessage = formatter.errorMessage;
+    } catch (e) {
+      var _formater = ErrorGetter.fromJson(e as Map<String, dynamic>);
+    }
+    notifyListeners();
+  }
+
   Future<void> fetchJobs(int id) async {
     try {
       _isLoading = true;
@@ -92,22 +161,87 @@ class JobProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future updateJob(JobTable job) async {
-    // try{
-      _isSaving = true;
+  Future<void> jobRequest(int ownerId) async{
+    try{
+      _isLoading = true;
       notifyListeners();
-      var data = await _service.updateJob(job);
-      _responseMessage = data['message'];
-      log("Response says $data");
-    // } on TypeError catch(err) {
-    //   var error = ErrorGetter(errorMessage: err.toString(),description: "Type Error occured");
-    //   _hasError = true;
-    //   _errorMessage = error.errorMessage;
-    // } catch (e) {
-    //   var error = ErrorGetter.fromJson(e as Map<String, dynamic>);
-    //   _hasError = false;
-    //   _errorMessage = error.description!;
-    // }
+      requestedJobs = await _service.jobRequests(ownerId);
+    } on TypeError catch (e) {
+      var formatter = ErrorGetter(
+          errorMessage: e.toString(),
+          description: "This error was type error please check your data");
+      _hasError = true;
+      _errorMessage = formatter.errorMessage;
+    }
+     catch (e) {
+      _hasError = true;
+      var _formater = ErrorGetter.fromJson(e as Map<String, dynamic>);
+      _errorMessage = _formater.errorMessage;
+    }
+    _isLoading = false;
+    notifyListeners();
+  }
+
+
+  Future<void> fetchRequests(int id) async {
+    try {
+      _isLoading = true;
+      notifyListeners();
+      requests = await _service.fetchRequests(id);
+    } on TypeError catch (e) {
+      var formatter = ErrorGetter(
+          errorMessage: e.toString(),
+          description: "This error was type error please check your data");
+      _hasError = true;
+      _errorMessage = formatter.errorMessage;
+    } catch (e) {
+      _hasError = true;
+      var _formater = ErrorGetter.fromJson(e as Map<String, dynamic>);
+      _errorMessage = _formater.errorMessage;
+    }
+
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future updateStatus (int reqId,String status) async {
+    try{
+      _isSaving = true;
+      _isLoading = true;
+      notifyListeners();
+      var response = await _service.updateStatus(reqId, status);
+      
+    } on TypeError catch (err) {
+       var error = ErrorGetter(errorMessage: err.toString(),description: "Type Error occured");
+      _hasError = true;
+      _errorMessage = error.errorMessage;
+    } catch (e) {
+       var error = ErrorGetter.fromJson(e as Map<String, dynamic>);
+      _hasError = false;
+      _errorMessage = error.description!;
+    }
+    _isSaving = false;
+    _isLoading = false;
+    notifyListeners();
+  }
+
+
+  Future updateJob(JobTable job) async {
+    try{
+    _isSaving = true;
+    notifyListeners();
+    var data = await _service.updateJob(job);
+    _responseMessage = data['message'];
+    log("Response says $data");
+    } on TypeError catch(err) {
+      var error = ErrorGetter(errorMessage: err.toString(),description: "Type Error occured");
+      _hasError = true;
+      _errorMessage = error.errorMessage;
+    } catch (e) {
+      var error = ErrorGetter.fromJson(e as Map<String, dynamic>);
+      _hasError = false;
+      _errorMessage = error.description!;
+    }
 
     _isSaving = false;
     notifyListeners();
@@ -140,6 +274,25 @@ class JobProvider extends ChangeNotifier {
       _isLoading = true;
       notifyListeners();
       allJobs = await _service.displayJobsOnUserScreen();
+    } on TypeError catch (e) {
+      var formatter = ErrorGetter(
+          errorMessage: e.toString(),
+          description: "This error was type error please check your data");
+      _hasError = true;
+      _errorMessage = formatter.errorMessage;
+    } catch (e) {
+      _hasError = true;
+      var _formater = ErrorGetter.fromJson(e as Map<String, dynamic>);
+      _errorMessage = _formater.errorMessage;
+    }
+
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> getJobsBasedOnCategories(String category) async {
+    try {
+      jobsBasedOnCategory = await _service.displayJobsBasedOnCategory(category);
     } on TypeError catch (e) {
       var formatter = ErrorGetter(
           errorMessage: e.toString(),

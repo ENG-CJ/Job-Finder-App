@@ -6,10 +6,11 @@ class User {
   String regionOrCity;
   String type;
   String verified;
-  String? description, address, profile_pic_base64,profile_pic ;
+  String? description, address;
   int? id;
   String? imagePath;
   File? imageFile;
+
 
   User(
       {required this.username,
@@ -24,7 +25,7 @@ class User {
       this.id,
       this.verified = 'false',
       this.type = 'User',
-      this.profile_pic
+   
       });
 
   

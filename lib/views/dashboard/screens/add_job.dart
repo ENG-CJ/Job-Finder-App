@@ -54,6 +54,7 @@ class _AddJobState extends State<AddJob> with Messages {
   void _saveData() async {
     var provider = Provider.of<JobProvider>(context, listen: false);
     var job = JobTable(
+        posted: DateTime.now().toString(),
         jobTitle: jobtitle.text,
         jobType: value ?? "FullTime",
         deadLine: dateTextField.text,
@@ -65,7 +66,6 @@ class _AddJobState extends State<AddJob> with Messages {
 
   @override
   void initState() {
-
     super.initState();
     LocalStorageSharedPref().getLocalData().then((value) {
       if (value != null) {
@@ -183,6 +183,7 @@ class _AddJobState extends State<AddJob> with Messages {
                         var provider =
                             Provider.of<JobProvider>(context, listen: false);
                         var job = JobTable(
+                            posted: DateTime.now().toString(),
                             category: category.text,
                             jobTitle: jobtitle.text,
                             jobType: value ?? "FullTime",
@@ -190,7 +191,7 @@ class _AddJobState extends State<AddJob> with Messages {
                             jobDescription: description.text,
                             qualifyAsList: qualify.text,
                             jobOwner: id);
-            
+
                         provider.saveJobData(job).whenComplete(() {
                           if (provider.hasError) {
                             EasyLoading.showError(provider.error);

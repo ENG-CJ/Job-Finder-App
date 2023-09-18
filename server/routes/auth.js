@@ -5,6 +5,8 @@ const router=express.Router();
 
 
 
+
+
 router.post("/register",uploadImage().single("profile_pic"), createUser);
 router.post("/login",verifyUser);
 router.post("/fetch",fetchUser);

@@ -1,22 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:job_finder/providers/jobs/job_provider.dart';
 import 'package:job_finder/providers/users/user_provider.dart';
-import 'package:job_finder/views/dashboard/screens/add_job.dart';
-import 'package:job_finder/views/dashboard/screens/dashboard.dart';
-import 'package:job_finder/views/dashboard/screens/job_view.dart';
 import 'package:job_finder/views/pages/login_page.dart';
-import 'package:job_finder/views/pages/registrations/conpany.dart';
-import 'package:job_finder/views/pages/registrations/user_reg.dart';
-import 'package:job_finder/views/pages/user_type_page.dart';
 import 'package:provider/provider.dart';
-
 import 'consts/colors.dart';
 
-void main() {
+void main() async {
   SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(statusBarColor: colors['primary']));
+
+  await Hive.initFlutter();
+  await Hive.openBox('bookmark');
   runApp(const JobFinder());
 }
 

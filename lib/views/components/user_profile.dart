@@ -38,7 +38,7 @@ class _UserProfileState extends State<UserProfile> {
         Navigator.pop(context);
       } else {
         var provider = Provider.of<UserProvider>(context, listen: false);
-        provider.fetchUser(value['user_id']);
+        
       }
     });
     // List<int> userImageBytes = utf8.encode(userImage);

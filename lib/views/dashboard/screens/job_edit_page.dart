@@ -18,9 +18,7 @@ class JobEditPage extends StatefulWidget {
   final JobTable? job;
   const JobEditPage({
     super.key,
-   
     this.job,
- 
   });
 
   @override
@@ -59,9 +57,9 @@ class _JobEditPageState extends State<JobEditPage> {
     jobId = widget.job?.id;
     owner = widget.job?.jobOwner;
     value = widget.job?.jobType;
-    jobtitle.text = widget.job!.jobTitle; 
-    
-    String iso8601DateString  = widget.job!.deadLine;
+    jobtitle.text = widget.job!.jobTitle;
+
+    String iso8601DateString = widget.job!.deadLine;
     DateTime dealine = DateTime.parse(iso8601DateString);
     dateTextField.text = DateFormat("yyyy/MM/dd").format(dealine);
     print(dateTextField.text);
@@ -147,17 +145,18 @@ class _JobEditPageState extends State<JobEditPage> {
               child: CButton(
                   onClicked: () {
                     JobTable updateJob = JobTable(
-                        id: jobId,
-                        jobTitle: jobtitle.text,
-                        jobType: value ?? '',
-                        deadLine: dateTextField.text,
-                        jobDescription: description.text,
-                        qualifyAsList: qualify.text,
-                        );
-                        print("Job Date is  : ${dateTextField.text}");
+                      id: jobId,
+                      posted: widget.job!.posted,
+                      jobTitle: jobtitle.text,
+                      jobType: value ?? '',
+                      deadLine: dateTextField.text,
+                      jobDescription: description.text,
+                      qualifyAsList: qualify.text,
+                    );
+                    print("Job Date is  : ${dateTextField.text}");
                     provider.updateJob(updateJob).whenComplete(() {
                       provider.fetchJobs(owner!);
-                      
+
                       print("Done");
                     });
                   },

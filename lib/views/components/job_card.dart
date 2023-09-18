@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:job_finder/modals/jobs/job_modal.dart';
+import 'package:job_finder/services/local/book_marks.dart';
 
 import '../../consts/colors.dart';
-import '../../consts/texts.dart';
+import '../../mixins/messages.dart';
 import '../../modals/jobs/job_modal_latest.dart';
 import '../../util/helpers/text_helper.dart';
 import '../../util/icon_text.dart';
@@ -11,8 +11,9 @@ import '../../util/text.dart';
 import 'job_details.dart';
 import 'job_header.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:animated_snack_bar/animated_snack_bar.dart';
 
-class JobCard extends StatelessWidget {
+class JobCard extends StatelessWidget with Messages {
   final JobOnUserScreen job;
 
   const JobCard({super.key, required this.job});
@@ -48,6 +49,32 @@ class JobCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             JobHeader(
+              onClickIcon: () async {
+                var bookmark = Bookmarks(
+                    key: job.id,
+                    jobTitle: job.jobTitle,
+                    company: job.company,
+                    jobDescription: job.descripton);
+                bookmark.hasData(job.id).then((value) {
+                  if (value) {
+                    showDialog(
+                        context: context,
+                        builder: (_) => showError(
+                            context,
+                            "Already Bookmarked!!, Click Bookmark view to remove if you want",
+                            "BookMarks"));
+                  } else {
+                    bookmark.addBookmarks(bookmark).whenComplete(() {
+                      AnimatedSnackBar.material("Added Bookmark",
+                              mobileSnackBarPosition:
+                                  MobileSnackBarPosition.top,
+                              duration: Duration(seconds: 8),
+                              type: AnimatedSnackBarType.success)
+                          .show(context);
+                    });
+                  }
+                });
+              },
               company: job.company,
               jobTitle: job.jobTitle,
               logo: job.profile,
@@ -64,7 +91,7 @@ class JobCard extends StatelessWidget {
                 children: [
                   IconText(
                     icon: FontAwesomeIcons.clock,
-                    iconLabel: timeago.format(job.updated),
+                    iconLabel: timeago.format(job.posted),
                   ),
                   SizedBox(
                     width: 25,

@@ -36,7 +36,9 @@ class _UserProfileUpdateState extends State<UserProfileUpdate>
   final _emailController = TextEditingController();
   final _phoneController = TextEditingController();
   final _cityController = TextEditingController();
+
   File? imagePath;
+
 
   @override
   void initState() {
@@ -46,7 +48,7 @@ class _UserProfileUpdateState extends State<UserProfileUpdate>
     _emailController.text = widget.user?.email ?? '';
     _phoneController.text = widget.user?.mobile.toString() ?? 0.toString();
     _cityController.text = widget.user?.regionOrCity ?? '';
-    // userImage = widget.user!.profile_pic;
+ 
   }
 
   @override
@@ -194,6 +196,7 @@ class _UserProfileUpdateState extends State<UserProfileUpdate>
                 const SizedBox(
                   height: 20,
                 ),
+
 
                 /*  Fields  */
                 Form(
