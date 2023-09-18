@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:job_finder/consts/texts.dart';
@@ -249,47 +250,6 @@ class _RegisterCompanyState extends State<RegisterCompany>
                       hintText: comCountry,
                       prefixIcon: const Icon(Icons.flag),
                     ),
-                    Row(
-                      children: [
-                        Checkbox(
-                          value: _termsAndCondChecked,
-                          onChanged: (bool? newValue) {
-                            //? -> Add here the state to check the checkbox
-                          },
-                        ),
-                        RichText(
-                          text: TextSpan(
-                            children: [
-                              TextSpan(
-                                  text: signUpConditionTxt,
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontFamily: 'Poppins-Light',
-                                      color: Colors.black)),
-                              WidgetSpan(
-                                  child: SizedBox(
-                                width: 5,
-                              )),
-                              WidgetSpan(
-                                child: InkWell(
-                                  onTap: () {
-                                    // Handle the onTap action for the terms and conditions
-                                  },
-                                  child: CText(
-                                    text: tTermsAndConditions,
-                                    // Apply the desired style for the TextButton-like text
-                                    decorations: TextDecorations(
-                                      fontSize: 16,
-                                      color: Colors.blue,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
                     const SizedBox(
                       height: 8,
                     ),
@@ -333,6 +293,41 @@ class _RegisterCompanyState extends State<RegisterCompany>
                                   ),
                           )),
                     ),
+                    Container(
+                      margin: EdgeInsets.only(left: 12, right: 12),
+                      child: Center(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const SizedBox(
+                              height: 12,
+                            ),
+                            Text.rich(
+                              TextSpan(
+                                  text: signUpHaveAnAccountTxt.toUpperCase(),
+                                  style: TextStyle(
+                                      fontSize: 14, fontFamily: "Roboto-Bold"),
+                                  children: [
+                                    TextSpan(
+                                        text: signUpLoginTxt.toUpperCase(),
+                                        style: TextStyle(
+                                            color: colors['primary'],
+                                            fontSize: 14,
+                                            fontFamily: "Roboto-Bold"),
+                                        recognizer: TapGestureRecognizer()
+                                          ..onTap = () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        Login()));
+                                          })
+                                  ]),
+                            )
+                          ],
+                        ),
+                      ),
+                    )
                   ],
                 ),
               )
