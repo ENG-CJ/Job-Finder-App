@@ -1,5 +1,7 @@
+const { error } = require("console");
 const db = require("../db/db");
 const cr = require("crypto");
+const e = require("express");
 
 module.exports = {
   countRows:(req,res,next)=>{
@@ -222,6 +224,41 @@ module.exports = {
     );
   },
 
+  jobRequests: (req,res) => {
+    var sql = "CALL UserRequests(?)"
+    var {id} = req.params;
+    db.query(sql, [id], (err,data) => {
+      if(err){
+        return res.send({
+          message: "There is an error occurred",
+          description: err.message,
+          errorCode: err.code
+        })
+      }
+      
+      return res.send({
+        requests: data
+      })
+    })
+  },
+
+  updateJobStatus: (req,res) => {
+    var sql = "Call updateStatus(?,?)";
+    var {id,status} = req.params;
+    db.query(sql, [id,status],(err,data) => {
+      if(err){
+        return res.send({
+          message: `There is an error $err`,
+          description: err.message,
+          errorCode: err.code
+        });  
+      }
+      return res.send({
+          state: data
+        });
+    })  
+  },
+   
   fetchJob: (req, res) => {
     var sql = "CALL fetchJob(?)";
     var { id } = req.params;

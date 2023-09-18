@@ -4,6 +4,7 @@ import 'package:job_finder/modals/jobs/categories.dart';
 import 'package:job_finder/modals/jobs/job_modal.dart';
 import 'package:job_finder/modals/jobs/job_modal_latest.dart';
 import 'package:job_finder/modals/jobs/job_table.dart';
+import 'package:job_finder/modals/jobs/requestJobs.dart';
 import 'package:job_finder/util/categories.dart';
 
 import '../../modals/jobs/requests.dart';
@@ -52,6 +53,34 @@ class JobAPIServices {
       });
     }
   }
+
+Future<List<JobRequests>> jobRequests(int ownerId) async {
+  List<JobRequests> jobs = [];
+  try {
+    var response = await _dio.get("$API_BASE_URL/jobs/fetchRequest/$ownerId");
+
+    if (response.statusCode != 200) {
+      return Future.error({
+        "error": "Something gone wrong ${response.statusCode}",
+        "description": "There is an error occurred!"
+      });
+    }
+
+    jobs = (response.data['requests'][0] as List).map((job) {
+        return JobRequests.fromJson(job);
+      }).toList();
+   
+
+    return jobs;
+  } on DioException catch (e) {
+    return Future.error({
+      "error": e.message,
+      "description": "Error occurred while saving data"
+    });
+  }
+}
+
+
 
   Future<List<JobTable>> fetchJob(int userID) async {
     List<JobTable> jobs = [];
@@ -291,4 +320,18 @@ class JobAPIServices {
 
     return response.data;
   }
+
+  Future<dynamic> updateStatus(int reqId, String status) async{
+    dynamic response;
+    try{
+      response = await _dio.put("$API_BASE_URL/jobs/updateStatus/$reqId/$status");
+    } on DioException catch (error) {
+      return Future.error({
+        "error": error.response!.data['description'],
+        "description": error.message
+      });
+    }
+    return response.data;
+  }
+
 }

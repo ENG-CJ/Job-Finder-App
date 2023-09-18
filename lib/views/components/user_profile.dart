@@ -38,7 +38,7 @@ class _UserProfileState extends State<UserProfile> {
         Navigator.pop(context);
       } else {
         var provider = Provider.of<UserProvider>(context, listen: false);
-        provider.fetchUser(value['user_id']);
+        
       }
     });
     // List<int> userImageBytes = utf8.encode(userImage);
@@ -105,7 +105,6 @@ class _UserProfileState extends State<UserProfile> {
                         decoration: BoxDecoration(
                             // color: Colors.red
                             ),
-
                         child: user!.imagePath == null ||
                                 user!.imagePath == "null" ||
                                 user!.imagePath == "no_profile"
@@ -117,7 +116,6 @@ class _UserProfileState extends State<UserProfile> {
                                 asBackgroundImage: true,
                                 imagePath:
                                     "$API_BASE_URL/uploads/${user!.imagePath}"),
-
                       ),
                       const SizedBox(
                         width: 12.0,

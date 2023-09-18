@@ -1,5 +1,4 @@
 const express = require('express');
-
 const { createUser, verifyUser, fetchUser, updateUser, deleteImage } = require('../controller/userController');
 const { uploadImage } = require('../multer/uploadConfig');
 const router=express.Router();

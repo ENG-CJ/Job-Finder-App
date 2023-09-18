@@ -195,10 +195,10 @@ class _JobViewState extends State<JobView> with NoDataErrorMixin, Messages {
                                         provider
                                             .deleteJobData(job.id)
                                             .whenComplete(() {
-                                          if (provider.hasError)
+                                          if (provider.hasError) {
                                             EasyLoading.showError(
                                                 provider.error);
-                                          else {
+                                          } else {
                                             loadJobs();
                                           }
                                         });

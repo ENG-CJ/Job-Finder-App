@@ -31,7 +31,7 @@ module.exports = {
         verified,
         description,
         country,
-        req.file ? req.file.filename : "null",
+        req.file ? req.file.filename : "no_profile",
       ],
       (err, data) => {
         if (err) {

@@ -1,10 +1,14 @@
 const express = require("express");
 
-const { createJob, fetchJob, deleteJob, displayJobs, fetchCategories,updateJob, applyJob, fetchRequest, incrementJobApplicants, fetchRequestBasedOnUser, deleteRequest, decrementJobApplicants, fetchJobsBasedOnCategories, countRows } = require("../controller/jobController");
+
+const { createJob, fetchJob, deleteJob, displayJobs, fetchCategories,updateJob, applyJob, fetchRequest, incrementJobApplicants, fetchRequestBasedOnUser, deleteRequest, decrementJobApplicants, fetchJobsBasedOnCategories, countRows ,jobRequests} = require("../controller/jobController");
+
 const router = express.Router();
 
 router.post("/create", createJob);
 router.get("/fetch/:id", fetchJob);
+router.get("/fetchRequest/:id", jobRequests);
+router.put("/updateStatus/:id/:status", updateJobStatus);
 router.delete("/delete", deleteJob);
 router.post("/applyJob", applyJob,incrementJobApplicants);
 router.post("/update", updateJob);

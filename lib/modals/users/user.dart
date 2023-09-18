@@ -1,6 +1,4 @@
-
 import 'dart:io';
-
 
 class User {
   String username, email, password;
@@ -46,7 +44,6 @@ class User {
       type: jsonData['type'],
       verified: jsonData['verified'],
     );
-
   }
 
   Map<String, dynamic> toJson() {

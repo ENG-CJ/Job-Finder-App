@@ -112,7 +112,6 @@ class _UserProfileUpdateState extends State<UserProfileUpdate>
               ))
         ],
       ),
-
       body: ModalProgressHUD(
         blur: 1,
         color: Colors.white,
