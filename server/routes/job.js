@@ -1,7 +1,24 @@
 const express = require("express");
 
 
-const { createJob, fetchJob, deleteJob, displayJobs, fetchCategories,updateJob, applyJob, fetchRequest, incrementJobApplicants, fetchRequestBasedOnUser, deleteRequest, decrementJobApplicants, fetchJobsBasedOnCategories, countRows ,jobRequests} = require("../controller/jobController");
+const {
+  createJob,
+  fetchJob,
+  deleteJob,
+  displayJobs,
+  fetchCategories,
+  updateJob,
+  updateJobStatus,
+  applyJob,
+  fetchRequest,
+  incrementJobApplicants,
+  fetchRequestBasedOnUser,
+  deleteRequest,
+  decrementJobApplicants,
+  fetchJobsBasedOnCategories,
+  countRows,
+  jobRequests,
+} = require("../controller/jobController");
 
 const router = express.Router();
 

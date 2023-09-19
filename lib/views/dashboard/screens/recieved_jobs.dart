@@ -1,4 +1,4 @@
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+// import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
@@ -10,7 +10,6 @@ import 'package:job_finder/modals/jobs/job_table.dart';
 import 'package:job_finder/modals/jobs/requestJobs.dart';
 import 'package:job_finder/modals/users/user.dart';
 import 'package:job_finder/providers/jobs/job_provider.dart';
-import 'package:job_finder/providers/users/user_provider.dart';
 import 'package:job_finder/services/local/local_storage.dart';
 import 'package:job_finder/util/buton.dart';
 import 'package:job_finder/util/helpers/text_helper.dart';

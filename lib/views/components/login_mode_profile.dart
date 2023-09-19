@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:job_finder/services/local/local_storage.dart';
+import 'package:job_finder/views/pages/login_page.dart';
 
 import '../../consts/api_url.dart';
 import '../../consts/colors.dart';
@@ -9,6 +11,7 @@ import '../../util/helpers/text_helper.dart';
 import '../../util/icon_text.dart';
 import '../../util/profile.dart';
 import '../../util/text.dart';
+import '../pages/home_page.dart';
 
 class LoginModeProfile extends StatelessWidget {
   final username;
@@ -51,8 +54,8 @@ class LoginModeProfile extends StatelessWidget {
             LocalStorageSharedPref()
                 .removeLocalData("userData")
                 .whenComplete(() {
-              Navigator.pop(context);
-              Navigator.pop(context);
+              Navigator.pushAndRemoveUntil(context,
+                  MaterialPageRoute(builder: (_) => Login()), (route) => false);
             });
           },
           widget: IconText(

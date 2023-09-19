@@ -15,6 +15,7 @@ import 'package:provider/provider.dart';
 import '../../consts/colors.dart';
 import '../../modals/users/user.dart';
 import '../Widgets/Profile_Tile.dart';
+import '../pages/login_page.dart';
 
 class UserProfile extends StatefulWidget {
   const UserProfile({super.key});
@@ -26,8 +27,8 @@ class UserProfile extends StatefulWidget {
 class _UserProfileState extends State<UserProfile> {
   User? user;
   // String userImage = "assets/icon_user.png";
-    // late final profileImage ;
-  
+  // late final profileImage ;
+
   @override
   void initState() {
     super.initState();
@@ -38,7 +39,6 @@ class _UserProfileState extends State<UserProfile> {
         Navigator.pop(context);
       } else {
         var provider = Provider.of<UserProvider>(context, listen: false);
-        
       }
     });
     // List<int> userImageBytes = utf8.encode(userImage);
@@ -46,7 +46,6 @@ class _UserProfileState extends State<UserProfile> {
   }
 
   @override
-  
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -236,7 +235,16 @@ class _UserProfileState extends State<UserProfile> {
                       ProfileTile(
                         title: tLogOut,
                         icon: FontAwesomeIcons.arrowRightFromBracket,
-                        onPress: () {},
+                        onPress: () {
+                          LocalStorageSharedPref()
+                              .removeLocalData("userData")
+                              .whenComplete(() {
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(builder: (_) => Login()),
+                                (route) => false);
+                          });
+                        },
                         endIcon: false,
                         color: Colors.red,
                         leadingIconColor: Colors.red,

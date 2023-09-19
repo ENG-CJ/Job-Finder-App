@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:job_finder/consts/api_url.dart';
 import 'package:job_finder/util/helpers/text_helper.dart';
+import 'package:job_finder/util/profile.dart';
 import 'package:job_finder/util/text.dart';
 import '../../../consts/colors.dart';
 
@@ -12,14 +14,14 @@ class JobDetailsPage extends StatelessWidget {
     required this.qualification,
     required this.jobDescription,
     this.comLogo,
+    this.username
   });
 
   final String jobTitle;
   final String jobType;
   final String jobDate;
   final List<String>? qualification;
-  final String? jobDescription;
-  final String? comLogo;
+  final String? jobDescription,comLogo,username;
 
   @override
   Widget build(BuildContext context) {
@@ -34,10 +36,29 @@ class JobDetailsPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(
-                    Icons.logo_dev_outlined,
-                    size: 70,
-                  ),
+                Row(
+                 children: [
+                   (comLogo==null || comLogo=="null"
+                       || comLogo=="" || comLogo=="no_profile") ? ProfileImage(imagePath: "assets/default.png")
+                       : ProfileImage(
+                       asBackgroundImage: true,
+                       fromNetwork: true,
+                       imagePath: "$API_BASE_URL/uploads/$comLogo"),
+                   SizedBox(width: 7,),
+                   Column(
+                     crossAxisAlignment: CrossAxisAlignment.start,
+                     children: [
+                       CText(text: username??"No Account",decorations: TextDecorations(
+                         fontSize: 17,
+                         family: "Poppins Medium"
+                       ),),
+
+                       CText(text: "Corporation"),
+                     ],
+                   )
+                 ], 
+                ),
+
                   const SizedBox(
                     height: 10,
                   ),
