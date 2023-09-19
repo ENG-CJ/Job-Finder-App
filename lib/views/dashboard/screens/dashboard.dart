@@ -16,6 +16,7 @@ import 'package:provider/provider.dart';
 import '../../../providers/users/user_provider.dart';
 import '../../../services/local/local_storage.dart';
 import '../../components/user_profile.dart';
+import '../../pages/login_page.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -26,13 +27,18 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   int indexPage = 0;
-  List<Widget> screens = const [DashboardView(), JobView(), RecievedJobRequests(), UserProfile()];
+  List<Widget> screens = const [
+    DashboardView(),
+    JobView(),
+    RecievedJobRequests(),
+    UserProfile()
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         bottomNavigationBar: CurvedNavigationBar(
-            onTap: (  newIndex) {
+            onTap: (newIndex) {
               setState(() {
                 indexPage = newIndex;
               });
@@ -152,7 +158,14 @@ class _DashboardViewState extends State<DashboardView> {
                   FontAwesomeIcons.arrowRightFromBracket,
                 ),
                 onTap: () {
-                  Navigator.pop(context);
+                  LocalStorageSharedPref()
+                      .removeLocalData("userData")
+                      .whenComplete(() {
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (_) => Login()),
+                        (route) => false);
+                  });
                 },
               )
             ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:job_finder/mixins/no_data_found_error.dart';
 import 'package:job_finder/util/helpers/text_helper.dart';
 import 'package:job_finder/util/icon_text.dart';
@@ -30,6 +31,7 @@ class JobView extends StatefulWidget {
 class _JobViewState extends State<JobView> with NoDataErrorMixin, Messages {
   JobTable? job;
   int? id;
+  String? profile, username;
 
   @override
   void initState() {
@@ -45,6 +47,11 @@ class _JobViewState extends State<JobView> with NoDataErrorMixin, Messages {
         var jobProvider = Provider.of<JobProvider>(context, listen: false);
         provider.fetchUser(value['user_id']).whenComplete(() {
           if (provider.user != null) {
+            setState(() {
+              profile = provider.user!.imagePath;
+              username = provider.user!.username;
+            });
+
             jobProvider.fetchJobs(provider.user!.id!);
           }
         });
@@ -80,20 +87,10 @@ class _JobViewState extends State<JobView> with NoDataErrorMixin, Messages {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Row(
-                                children: [
-                                  IconButton(
-                                      onPressed: () {},
-                                      icon: FaIcon(FontAwesomeIcons.angleLeft)),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  CText(
-                                    text: "View And Manage Job List",
-                                    decorations: TextDecorations(
-                                        fontSize: 17, family: "Poppins Medium"),
-                                  )
-                                ],
+                              CText(
+                                text: "View And Manage Job List",
+                                decorations: TextDecorations(
+                                    fontSize: 17, family: "Poppins Medium"),
                               ),
                               IconButton(
                                   onPressed: () {
@@ -166,7 +163,7 @@ class _JobViewState extends State<JobView> with NoDataErrorMixin, Messages {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => JobEditPage(
-                                       job: job,
+                                          job: job,
                                         ))),
                             backgroundColor:
                                 colors['primary']!.withOpacity(0.5) as Color,
@@ -225,9 +222,13 @@ class _JobViewState extends State<JobView> with NoDataErrorMixin, Messages {
                                       builder: (context) => JobDetailsPage(
                                             jobTitle: job.jobTitle,
                                             jobType: job.jobType,
-                                            jobDate: job.deadLine,
+                                            jobDate: DateFormat("yyy/MM/dd")
+                                                .format(DateTime.parse(
+                                                    job.deadLine)),
                                             qualification: job.qualifications,
                                             jobDescription: job.jobDescription,
+                                            comLogo: profile,
+                                            username: username,
                                           )));
                             },
                             backgroundColor:

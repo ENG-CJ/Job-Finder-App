@@ -75,9 +75,12 @@ class _JobEditPageState extends State<JobEditPage> {
     var provider = Provider.of<JobProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        leading: Icon(
-          FontAwesomeIcons.arrowLeft,
-          color: Colors.grey,
+        leading: InkWell(
+          onTap: () => Navigator.pop(context),
+          child: Icon(
+            FontAwesomeIcons.arrowLeft,
+            color: Colors.grey,
+          ),
         ),
         elevation: 0,
         backgroundColor: Colors.transparent,
@@ -153,11 +156,11 @@ class _JobEditPageState extends State<JobEditPage> {
                       jobDescription: description.text,
                       qualifyAsList: qualify.text,
                     );
-                    print("Job Date is  : ${dateTextField.text}");
+
                     provider.updateJob(updateJob).whenComplete(() {
                       provider.fetchJobs(owner!);
-
-                      print("Done");
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: CText(text: provider.response,)));
+                    Navigator.pop(context);
                     });
                   },
                   backgroundColor: colors['primary'] as Color,
