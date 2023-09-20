@@ -10,7 +10,7 @@ We are excited to release Job Finder to the public, and we hope that it will hel
 We will fix some bugs and we'll add other features such as social login
 
 Download Latest Version<br>
-[Click Here to download](https://drive.google.com/file/d/1Lcl67EHthTKMu1D_h1Hsv4hNoWI3A4Wi/view?usp=sharing)
+[Click Here to download](https://drive.google.com/file/d/1sa1hxFmCK9rhbNBcBKjU7E3wGo1FUkWz/view?usp=sharing)
 
 ## V1.0.0 ✨ | CHANGE LOG ✅
 Initial feature <strong>(Job finder App) </strong><br>
