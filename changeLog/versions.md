@@ -9,12 +9,8 @@ This is the 2nd major release of our new product, Job Finder. It includes all of
 We are excited to release Job Finder to the public, and we hope that it will help you find your dream job.
 We will fix some bugs and we'll add other features such as social login
 
-Download Latest Version
+Download Latest Version<br>
 [Click Here to download](https://drive.google.com/file/d/1Lcl67EHthTKMu1D_h1Hsv4hNoWI3A4Wi/view?usp=sharing)
-
-DEVELOPERS
-@ENG-CJ  @kavi-kv 
-
 
 ## V1.0.0 ✨ | CHANGE LOG ✅
 Initial feature <strong>(Job finder App) </strong><br>
