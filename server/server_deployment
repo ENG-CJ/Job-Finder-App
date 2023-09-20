@@ -1,0 +1,15 @@
+server deployment script
+
+HOST=LOCAL_HOST;
+USERNAME= ENG-CJ
+PASSWORD= @CJ2024;
+DATABASE=job_finder;
+============
+
+
+.env variables
+=
+user=.en_var_2024;
+password=.env_2023;
+database=.env_password;
+
