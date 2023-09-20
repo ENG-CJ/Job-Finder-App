@@ -101,7 +101,7 @@ class _DashboardViewState extends State<DashboardView> {
         jobProvider.getRowCount({
           "table": "rejectedRequests",
           "owner": value['user_id'],
-          "status": "Rejected"
+          "status": "Declined"
         });
         jobProvider.getRowCount({
           "table": "acceptedRequests",

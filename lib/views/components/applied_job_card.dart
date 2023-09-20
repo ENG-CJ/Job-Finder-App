@@ -118,7 +118,7 @@ class _AppliedJobCardState extends State<AppliedJobCard> with Messages {
         return CButton(
             backgroundColor: colors['orange-color']!.withOpacity(0.3),
             widget: Center(child: CText(text: widget.request.status!)));
-      case "Rejected":
+      case "Declined":
         return CButton(
             backgroundColor: colors['error-color']!.withOpacity(0.7),
             widget: Center(child: CText(text: widget.request.status!)));
