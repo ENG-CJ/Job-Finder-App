@@ -231,7 +231,7 @@ module.exports = {
     db.query(sql, [id], (err,data) => {
       if(err){
         return res.send({
-          message: "There is an error occurred",
+          message: "There is an error occurred during fetching user request",
           description: err.message,
           errorCode: err.code
         })
@@ -284,7 +284,7 @@ module.exports = {
     db.query(sql, [id], (err, data) => {
       if (err)
         return res.send({
-          message: "there is an error occurred during login",
+          message: "there is an error occurred during deletion process",
           errorCode: err.code,
           description: err.message,
         });
@@ -300,7 +300,7 @@ module.exports = {
     db.query(sql, (err, data) => {
       if (err)
         return res.status(500).send({
-          message: "there is an error occurred during login",
+          message: "there is an error occurred fetching jobs",
           errorCode: err.code,
           description: err.message,
         });
@@ -315,7 +315,7 @@ module.exports = {
     db.query(sql, [req.params.category],(err, data) => {
       if (err)
         return res.status(500).send({
-          message: "there is an error occurred during login",
+          message: "there is an error occurred during fetching categories",
           errorCode: err.code,
           description: err.message,
         });
