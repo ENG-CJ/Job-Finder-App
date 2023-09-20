@@ -146,15 +146,32 @@ AND MUCH MORE....
 # Folder Structure
 ```
 lib: 
-├───consts
-├───modals
+├───config                       
+├───consts                       
+├───data                         
+├───mixins                       
+├───modals                       
+│   ├───Errors                   
+│   ├───jobs                     
+│   ├───Profile
+│   └───users
 ├───providers
+│   ├───jobs
+│   ├───Network
+│   └───users
 ├───services
+│   ├───api
+│   └───local
 ├───util
 │   └───helpers
 └───views
     ├───components
-    └───pages
+    ├───dashboard
+    │   └───screens
+    ├───pages
+    │   └───registrations
+    └───Widgets
+
 
 ```
 
