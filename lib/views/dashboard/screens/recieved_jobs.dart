@@ -37,15 +37,11 @@ class _RecievedJobRequestsState extends State<RecievedJobRequests> {
   void initState() {
     super.initState();
     LocalStorageSharedPref().getLocalData().then((value) {
-      print("Value before is $value");
       if (value == null) {
         Navigator.pop(context);
-        print("Value after is $value");
       } else {
         var jobProvider = Provider.of<JobProvider>(context, listen: false);
         jobProvider.jobRequest(value["user_id"]);
-        print("Value inside else is $value");
-        // print("Job owner is $jobOwner");
       }
     });
   }
@@ -104,7 +100,7 @@ class _RecievedJobRequestsState extends State<RecievedJobRequests> {
                           ],
                         ),
                       ),
-                      _buildJobListView(context, provider.requestedJobs),
+                      _buildJobListView(context),
                     ],
                   ),
       ),
@@ -112,15 +108,15 @@ class _RecievedJobRequestsState extends State<RecievedJobRequests> {
   }
 }
 
-Widget _buildJobListView(BuildContext context, List<JobRequests> requests) {
+Widget _buildJobListView(BuildContext context) {
+  var provider = Provider.of<JobProvider>(context);
   return ListView.builder(
-    itemCount: requests.length,
+    itemCount: provider.requestedJobs.length,
     shrinkWrap: true,
     itemBuilder: (_, index) {
-      var job = requests[index];
+      var job = provider.requestedJobs[index];
       var requestedDate = DateTime.parse(job.reqDate);
       int reqId = job.reqId;
-      var provider = Provider.of<JobProvider>(context, listen: false);
       return Padding(
         padding: const EdgeInsets.only(top: 19, left: 7, right: 7, bottom: 5),
         child: Stack(
@@ -156,37 +152,64 @@ Widget _buildJobListView(BuildContext context, List<JobRequests> requests) {
                       const SizedBox(
                         width: 16,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          CText(
-                            text: job.userName,
-                            decorations: TextDecorations(
-                                fontSize: 16, family: "Poppins SemiBold"),
-                          ),
-                          const SizedBox(
-                            width: 80,
-                          ),
-                          CText(
-                            text:
-                                DateFormat("yyyy/MM/dd").format(requestedDate),
-                            decorations: TextDecorations(
-                              family: 'Poppins Light',
-                              fontSize: 16,
-                              color: Colors.grey.withOpacity(0.7),
-                            ),
-                          )
-                        ],
-                      )
+                      CText(
+                        text: job.userName,
+                        decorations: TextDecorations(
+                            fontSize: 16, family: "Poppins SemiBold"),
+                      ),
                     ],
                   ),
                   SizedBox(
                     height: 2,
                   ),
-                  CText(
-                      decorations: TextDecorations(
-                          fontSize: 15, family: "Poppins Light"),
-                      text: job.jobTitle),
+                  RichText(
+                      text: TextSpan(
+                          style: TextStyle(color: Colors.black),
+                          children: [
+                        TextSpan(
+                            text: "The Applicant",
+                            style: TextStyle(
+                                fontSize: 15, fontFamily: "Poppins Light")),
+                        WidgetSpan(child: SizedBox(width: 4)),
+                        TextSpan(
+                            text: job.userName,
+                            style: TextStyle(
+                                fontSize: 15,
+                                fontFamily: "Poppins Light",
+                                decoration: TextDecoration.underline,
+                                decorationStyle: TextDecorationStyle.solid)),
+                        WidgetSpan(child: SizedBox(width: 4)),
+                        TextSpan(
+                            text: "Requested",
+                            style: TextStyle(
+                                fontSize: 15, fontFamily: "Poppins Light")),
+                        WidgetSpan(child: SizedBox(width: 4)),
+                        TextSpan(
+                            text: job.jobTitle,
+                            style: TextStyle(
+                                fontSize: 15,
+                                fontFamily: "Poppins Light",
+                                decoration: TextDecoration.underline,
+                                decorationStyle: TextDecorationStyle.solid)),
+                        WidgetSpan(child: SizedBox(width: 4)),
+                        TextSpan(
+                            text: "On",
+                            style: TextStyle(
+                                fontSize: 15, fontFamily: "Poppins Light")),
+                        WidgetSpan(child: SizedBox(width: 4)),
+                        TextSpan(
+                            text:
+                                DateFormat("yyyy/MM/dd").format(requestedDate),
+                            style: TextStyle(
+                                fontSize: 15,
+                                fontFamily: "Poppins Light",
+                                decoration: TextDecoration.underline,
+                                decorationStyle: TextDecorationStyle.solid)),
+                      ])),
+                  // CText(
+                  //     decorations: TextDecorations(
+                  //         fontSize: 15, family: "Poppins Light"),
+                  //     text: "The Applicant ${job.userName} Requested ${job.jobTitle} On ${  DateFormat("yyyy/MM/dd").format(requestedDate)}"),
                   SizedBox(
                     height: 10,
                   ),
@@ -209,15 +232,28 @@ Widget _buildJobListView(BuildContext context, List<JobRequests> requests) {
                                               alertContent:
                                                   "You Want to Decline the Incoming clicked request",
                                               callBackFunction: () {
-                                                provider.updateStatus(
-                                                    reqId, status);
+                                                provider
+                                                    .updateStatus(reqId, status)
+                                                    .whenComplete(() {
+                                                  // const CustomSnackBar(
+                                                  //   toastMessage:
+                                                  //   "Successfully Rejected a new job requets",
+                                                  //   type: "Failure",
+                                                  // ).showCustomSnackbar(context);
+
+                                                  LocalStorageSharedPref()
+                                                      .getLocalData()
+                                                      .then((value) {
+                                                    if (value == null) {
+                                                      Navigator.pop(context);
+                                                    } else {
+                                                      provider.jobRequest(
+                                                          value["user_id"]);
+                                                    }
+                                                  });
+                                                });
                                               });
                                         });
-                            const CustomSnackBar(
-                              toastMessage:
-                                  "Successfully Rejected a new job requets",
-                              type: "Failure",
-                            ).showCustomSnackbar(context);
                           },
                           backgroundColor:
                               colors['error-color']!.withOpacity(0.8) as Color,
@@ -248,15 +284,31 @@ Widget _buildJobListView(BuildContext context, List<JobRequests> requests) {
                                               alertContent:
                                                   "You Want to Accept the Incoming clicked request",
                                               callBackFunction: () {
-                                                provider.updateStatus(
-                                                    reqId, status);
+                                                provider
+                                                    .updateStatus(reqId, status)
+                                                    .whenComplete(() {
+                                                  LocalStorageSharedPref()
+                                                      .getLocalData()
+                                                      .then((value) {
+                                                    if (value == null) {
+                                                      Navigator.pop(context);
+                                                    } else {
+                                                      provider.jobRequest(
+                                                          value["user_id"]);
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                              SnackBar(
+                                                                  content:
+                                                                      CText(
+                                                        text:
+                                                            "You Accepted ${job.userName} His/Her Request",
+                                                      )));
+                                                    }
+                                                  });
+                                                });
                                               });
                                         });
-                            const CustomSnackBar(
-                              toastMessage:
-                                  "Successfully Accepted a new job requets",
-                              type: "Info",
-                            ).showCustomSnackbar(context);
                           },
                           backgroundColor:
                               colors['primary']!.withOpacity(0.5) as Color,
@@ -275,13 +327,19 @@ Widget _buildJobListView(BuildContext context, List<JobRequests> requests) {
                 top: 10,
                 right: 20,
                 child: job.status == "Accepted"
-                    ? Icon(
-                        Icons.pending_actions_outlined,
-                        color: colors["primary"],
+                    ? Tooltip(
+                        message: "Accepted Request",
+                        child: Icon(
+                          Icons.check,
+                          color: colors["primary"],
+                        ),
                       )
-                    : Icon(
-                        Icons.check,
-                        color: colors["primary"],
+                    : Tooltip(
+                        message: "Rejected Or Pending Request",
+                        child: Icon(
+                          FontAwesomeIcons.xmark,
+                          color: colors["error-color"],
+                        ),
                       ))
           ],
         ),

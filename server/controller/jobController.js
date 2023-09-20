@@ -46,6 +46,7 @@ module.exports = {
           WHERE jobs.owner=? AND requests.status=?`;
         db.query(sql, [owner_id, status], (err, data) => {
           if (err)
+
             return res.status(500).send({
               message: `Fetching Failed ${err.sqlMessage}`,
               description: err.message,
