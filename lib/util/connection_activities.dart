@@ -12,7 +12,8 @@ import 'buton.dart';
 import 'helpers/text_helper.dart';
 
 class ConnectionActivity extends StatelessWidget {
-  const ConnectionActivity({super.key});
+  final String? connectionMessage;
+  const ConnectionActivity({super.key,this.connectionMessage});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +24,7 @@ class ConnectionActivity extends StatelessWidget {
           children: <Widget>[
             Image(image: AssetImage("assets/connection.gif")),
             CText(
-              text: "No Internet Connection",
+              text: "No Internet Connection $connectionMessage",
               decorations: TextDecorations(
                   fontSize: 22,
                   family: "Poppins SemiBold",
