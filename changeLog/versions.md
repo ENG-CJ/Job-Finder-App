@@ -1,5 +1,6 @@
 ## V1.0.1 | CHANGLE LOG
 ### 2ND RELEASE 📢
+
 This is the 2nd major release of our new product, Job Finder. It includes all of the core features that you need to find a job, such as:
 - The ability to search jobs based on your requirements
 - The ability to save jobs to your favorites list
