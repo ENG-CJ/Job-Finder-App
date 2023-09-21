@@ -10,7 +10,7 @@ We are excited to release Job Finder to the public, and we hope that it will hel
 We will fix some bugs and we'll add other features such as social login
 
 Download Latest Version<br>
-[Click Here to download](app-release.apk)
+[Click Here to download](https://mega.nz/file/aOJg1Tya#h0lZMI5BbpQy423Vd5gRXu_ysWea7IPH2YgMAfiSYsg)
 
 ## V1.0.0 ✨ | CHANGE LOG ✅
 Initial feature <strong>(Job finder App) </strong><br>
