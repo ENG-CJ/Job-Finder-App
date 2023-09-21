@@ -24,17 +24,9 @@ class _ConnectionCheckerState extends State<ConnectionChecker> {
     // TODO: implement initState
 
     super.initState();
-    Provider.of<NetworkProvider>(context, listen: false)
-        .checkConnection(null)
-        .whenComplete(() {
-      if (Provider.of<NetworkProvider>(context, listen: false).hasConnection) {
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (_) => Login()));
-      } else {
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (_) => ConnectionActivity()));
-      }
-    });
+   Future.delayed(Duration(seconds: 4)).whenComplete((){
+     Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=>Login()));
+   });
   }
 
   @override
